@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.2.0.v20120611 Build &lt;4.2.0.v20120612-1721></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.2.1.v201209101448 Build &lt;4.2.1.v20120912-1721></property>
+    <list-property name="includeScripts">
+        <property>oira-reports.js</property>
+    </list-property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
@@ -2958,6 +2961,7 @@ group by answered.country order by answered.country]]></xml-property>
             <text-property name="text">Statistics</text-property>
         </label>
         <label id="1280">
+            <property name="style">heading1</property>
             <text-property name="text">EU-OSHA Overview</text-property>
         </label>
         <text-data id="1043">
@@ -2965,7 +2969,7 @@ group by answered.country order by answered.country]]></xml-property>
             <property name="contentType">html</property>
         </text-data>
         <text-data id="1282">
-            <property name="style">indented-1</property>
+            <property name="style">heading1</property>
             <expression name="valueExpr">(params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value)</expression>
             <property name="contentType">html</property>
         </text-data>
@@ -2975,6 +2979,7 @@ group by answered.country order by answered.country]]></xml-property>
             <text-property name="content"><![CDATA[This document presents usage statistics for the Online Risk assessment Tool (OiRA).]]></text-property>
         </text>
         <label id="1060">
+            <property name="style">heading1</property>
             <text-property name="text">Published Tools</text-property>
         </label>
         <table id="371">
@@ -2982,7 +2987,7 @@ group by answered.country order by answered.country]]></xml-property>
             <property name="borderLeftColor">#000000</property>
             <property name="borderRightColor">#000000</property>
             <property name="borderTopColor">#000000</property>
-            <property name="width">7.947916666666667in</property>
+            <property name="width">7.944444444444445in</property>
             <property name="dataSet">Tools Published</property>
             <list-property name="boundDataColumns">
                 <structure>
@@ -3000,7 +3005,7 @@ group by answered.country order by answered.country]]></xml-property>
                 <structure>
                     <property name="name">Country</property>
                     <text-property name="displayName">Country</text-property>
-                    <expression name="expression" type="javascript">row["zodb_path"].match(/^(..)\//)[1]</expression>
+                    <expression name="expression" type="javascript">getCountryNameByCode(row["zodb_path"].match(/^(..)\//)[1])</expression>
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
@@ -3021,11 +3026,17 @@ group by answered.country order by answered.country]]></xml-property>
                     <property name="allowExport">true</property>
                 </structure>
             </list-property>
+            <method name="onPrepare"><![CDATA[var countrycodes = {'cy': 'Cyprus'}
+
+function getCountryNameByCode(strValue) {
+    return countrycodes[strValue];
+    
+}]]></method>
             <column id="395">
-                <property name="width">6.416666666666667in</property>
+                <property name="width">6.5in</property>
             </column>
             <column id="396">
-                <property name="width">1.53125in</property>
+                <property name="width">1.4444444444444444in</property>
             </column>
             <header>
                 <row id="372">
@@ -3060,12 +3071,20 @@ group by answered.country order by answered.country]]></xml-property>
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <cell id="409">
+                            <property name="borderRightColor">#000000</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">medium</property>
                             <data id="414">
+                                <property name="fontWeight">bold</property>
+                                <property name="marginTop">10pt</property>
                                 <property name="resultSetColumn">Country</property>
                             </data>
                         </cell>
                         <cell id="410">
                             <data id="416">
+                                <property name="fontWeight">bold</property>
+                                <property name="marginTop">10pt</property>
+                                <property name="textAlign">center</property>
                                 <property name="resultSetColumn">country_count</property>
                             </data>
                         </cell>
@@ -3075,6 +3094,9 @@ group by answered.country order by answered.country]]></xml-property>
             <detail>
                 <row id="1056">
                     <cell id="1057">
+                        <property name="borderRightColor">#000000</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">medium</property>
                         <text-data id="1059">
                             <property name="style">indented-1</property>
                             <expression name="valueExpr">row["zodb_path"]</expression>
@@ -3092,6 +3114,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="1082">
+            <property name="style">heading1</property>
             <text-property name="text">Unpublished Tools</text-property>
         </label>
         <table id="1061">
@@ -3099,7 +3122,7 @@ group by answered.country order by answered.country]]></xml-property>
             <property name="borderLeftColor">#000000</property>
             <property name="borderRightColor">#000000</property>
             <property name="borderTopColor">#000000</property>
-            <property name="width">7.947916666666667in</property>
+            <property name="width">7.944444444444445in</property>
             <property name="dataSet">Tools Unpublished</property>
             <list-property name="boundDataColumns">
                 <structure>
@@ -3117,7 +3140,7 @@ group by answered.country order by answered.country]]></xml-property>
                 <structure>
                     <property name="name">Country</property>
                     <text-property name="displayName">Country</text-property>
-                    <expression name="expression" type="javascript">row["zodb_path"].match(/^(..)\//)[1]</expression>
+                    <expression name="expression" type="javascript">getCountryNameByCode(row["zodb_path"].match(/^(..)\//)[1])</expression>
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
@@ -3139,10 +3162,10 @@ group by answered.country order by answered.country]]></xml-property>
                 </structure>
             </list-property>
             <column id="1080">
-                <property name="width">6.416666666666667in</property>
+                <property name="width">6.5in</property>
             </column>
             <column id="1081">
-                <property name="width">1.53125in</property>
+                <property name="width">1.4444444444444444in</property>
             </column>
             <header>
                 <row id="1062">
@@ -3177,12 +3200,20 @@ group by answered.country order by answered.country]]></xml-property>
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <cell id="1069">
+                            <property name="borderRightColor">#000000</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">medium</property>
                             <data id="1070">
+                                <property name="fontWeight">bold</property>
+                                <property name="marginTop">10pt</property>
                                 <property name="resultSetColumn">Country</property>
                             </data>
                         </cell>
                         <cell id="1071">
                             <data id="1072">
+                                <property name="fontWeight">bold</property>
+                                <property name="marginTop">10pt</property>
+                                <property name="textAlign">center</property>
                                 <property name="resultSetColumn">country_count</property>
                             </data>
                         </cell>
@@ -3192,6 +3223,9 @@ group by answered.country order by answered.country]]></xml-property>
             <detail>
                 <row id="1073">
                     <cell id="1074">
+                        <property name="borderRightColor">#000000</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">medium</property>
                         <text-data id="1075">
                             <property name="style">indented-1</property>
                             <expression name="valueExpr">row["zodb_path"]</expression>
@@ -3209,6 +3243,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="1113">
+            <property name="style">heading1</property>
             <text-property name="text">User Accounts</text-property>
         </label>
         <table id="126">
@@ -3256,6 +3291,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="1108">
+            <property name="style">heading1</property>
             <text-property name="text">Account activity</text-property>
         </label>
         <table id="1091">
@@ -3324,6 +3360,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="481">
+            <property name="style">heading1</property>
             <text-property name="text">Countries by Sessions and Users</text-property>
         </label>
         <table id="109">
@@ -4296,6 +4333,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="1121">
+            <property name="style">heading1</property>
             <text-property name="text">Countries by Accumulated Sessions and Users</text-property>
         </label>
         <table id="1122">
@@ -5274,6 +5312,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="1278">
+            <property name="style">heading1</property>
             <text-property name="text">Countries by % Completed Sessions</text-property>
         </label>
         <table id="1307">
@@ -5420,6 +5459,7 @@ group by answered.country order by answered.country]]></xml-property>
             </footer>
         </table>
         <label id="1279">
+            <property name="style">heading1</property>
             <text-property name="text">Countries by Accumulated % Completed Sessions</text-property>
         </label>
         <table id="1340">
@@ -5567,6 +5607,7 @@ started sessions</text-property>
             </footer>
         </table>
         <label id="1149">
+            <property name="style">heading1</property>
             <text-property name="text">Number of Survey Responses per Country</text-property>
         </label>
         <table id="1150">
@@ -6509,6 +6550,7 @@ started sessions</text-property>
             </footer>
         </table>
         <label id="1168">
+            <property name="style">heading1</property>
             <text-property name="text">Number of Employees</text-property>
         </label>
         <table id="1169">
@@ -7502,6 +7544,7 @@ started sessions</text-property>
             </footer>
         </table>
         <label id="1194">
+            <property name="style">heading1</property>
             <text-property name="text">Assessment conducted by</text-property>
         </label>
         <table id="1196">
@@ -8495,6 +8538,7 @@ started sessions</text-property>
             </footer>
         </table>
         <label id="1223">
+            <property name="style">heading1</property>
             <text-property name="text">Learned about OiRA</text-property>
         </label>
         <table id="1225">
@@ -9481,6 +9525,7 @@ started sessions</text-property>
             </footer>
         </table>
         <label id="1251">
+            <property name="style">heading1</property>
             <text-property name="text">Workers were invited</text-property>
         </label>
         <table id="1253">
