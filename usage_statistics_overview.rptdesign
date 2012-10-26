@@ -5500,6 +5500,10 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1097">
                         <data id="1106">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
                             <property name="resultSetColumn">logins</property>
                         </data>
                     </cell>
@@ -5512,6 +5516,10 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1100">
                         <data id="1107">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
                             <property name="resultSetColumn">sessions</property>
                         </data>
                     </cell>
