@@ -65,6 +65,7 @@ ISO3166 = {
 	'DO': 'DOMINICAN REPUBLIC',
 	'EC': 'ECUADOR',
 	'EG': 'EGYPT',
+	'EU': 'EU',
 	'SV': 'EL SALVADOR',
 	'GQ': 'EQUATORIAL GUINEA',
 	'ER': 'ERITREA',
@@ -253,6 +254,10 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 function getCountryNameByCode(strValue) {
-    return ISO3166[strValue.toUpperCase()].toLowerCase().capitalize();
+    var key = strValue.toUpperCase();
+    if (ISO3166[key]) {
+        return ISO3166[key].toLowerCase().capitalize();
+    } 
+    return strValue;
     
 }
