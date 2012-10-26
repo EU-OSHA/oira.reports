@@ -1,6 +1,6 @@
 .text {
     font-family: sans-serif;
-    font-size: 10pt;
+    font-size: 11pt;
 }
 
 .label {
@@ -48,6 +48,8 @@
     font-family: sans-serif;
     font-size: 10pt;
     margin-bottom: 18px;
+    font-style: italic;
+    color: #666;
 }
 
 .parameter-table-heading {
@@ -72,7 +74,7 @@
 
 .table-header {
     text-align: left;
-    font-weight: bold;
+    font-weight: normal;
     color: white;
     background-color: #4F81BD;
     border-style: solid;
@@ -80,6 +82,7 @@
 
 .table-header-cell {
     border-style: solid;
+    padding: 6px 8px;
 }
 
 .table-header-cell-right {

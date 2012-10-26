@@ -17,6 +17,18 @@
             <property name="name">rowFetchSize</property>
             <property name="id">1387</property>
         </structure>
+        <structure>
+            <property name="name">queryText</property>
+            <property name="id">125</property>
+        </structure>
+        <structure>
+            <property name="name">queryTimeOut</property>
+            <property name="id">125</property>
+        </structure>
+        <structure>
+            <property name="name">rowFetchSize</property>
+            <property name="id">125</property>
+        </structure>
     </list-property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
@@ -684,6 +696,7 @@ order by count desc;]]></xml-property>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Number Of Accounts" id="125">
+            <property name="nullsOrdering">nulls lowest</property>
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">count</property>
@@ -712,8 +725,11 @@ order by count desc;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select count(*)
-from account]]></xml-property>
+            <xml-property name="queryText"><![CDATA[select distinct count(loginname)
+from account
+where
+	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
+	]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Tools" id="136">
             <list-property name="columnHints">
@@ -2954,6 +2970,13 @@ group by answered.country order by answered.country]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Tools Published Aggregated" id="1384">
             <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="computedColumns">
+                <structure>
+                    <property name="name">CCountry Name</property>
+                    <expression name="expression">if (row["numsurveys"]&lt;3) { 'Others' } else {row["country"]}</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">numsurveys</property>
@@ -2990,6 +3013,11 @@ group by answered.country order by answered.country]]></xml-property>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">country</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">CCountry Name</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
@@ -3095,6 +3123,13 @@ order by numsurveys desc]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Tools Unpublished Aggregated" id="1387">
             <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="computedColumns">
+                <structure>
+                    <property name="name">CCountry Name</property>
+                    <expression name="expression">if (row["numsurveys"]&lt;3) { 'Others' } else {row["country"]}</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">numsurveys</property>
@@ -3131,6 +3166,11 @@ order by numsurveys desc]]></xml-property>
                     <structure>
                         <property name="position">2</property>
                         <property name="name">country</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">CCountry Name</property>
                         <property name="dataType">string</property>
                     </structure>
                 </list-property>
@@ -3813,6 +3853,9 @@ order by numsurveys desc]]></xml-property>
     <SeriesDefinitions>
       <Query>
         <Definition></Definition>
+        <Grouping>
+          <GroupType>Numeric</GroupType>
+        </Grouping>
       </Query>
       <SeriesPalette>
         <Entries xsi:type="attribute:ColorDefinition">
@@ -4150,7 +4193,7 @@ order by numsurveys desc]]></xml-property>
         <Visible>false</Visible>
       </Label>
       <DataDefinition>
-        <Definition>row[&quot;country&quot;]</Definition>
+        <Definition>getCountryNameByCode(row[&quot;CCountry Name&quot;])</Definition>
       </DataDefinition>
       <SeriesIdentifier>Country</SeriesIdentifier>
       <DataPoint>
@@ -4186,6 +4229,11 @@ order by numsurveys desc]]></xml-property>
                 <structure>
                     <property name="name">country</property>
                     <expression name="expression" type="javascript">dataSetRow["country"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">CCountry Name</property>
+                    <expression name="expression" type="javascript">dataSetRow["CCountry Name"]</expression>
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
@@ -5083,7 +5131,7 @@ function getCountryNameByCode(strValue) {
             <AggregateExpression>Sum</AggregateExpression>
           </Grouping>
         </DataDefinition>
-        <SeriesIdentifier>Surveys published</SeriesIdentifier>
+        <SeriesIdentifier>Surveys unpublished</SeriesIdentifier>
         <DataPoint>
           <Components>
             <Type>Orthogonal_Value</Type>
@@ -5184,7 +5232,7 @@ function getCountryNameByCode(strValue) {
         <Visible>false</Visible>
       </Label>
       <DataDefinition>
-        <Definition>row[&quot;country&quot;]</Definition>
+        <Definition>getCountryNameByCode(row[&quot;CCountry Name&quot;])</Definition>
       </DataDefinition>
       <SeriesIdentifier>Country</SeriesIdentifier>
       <DataPoint>
@@ -5220,6 +5268,11 @@ function getCountryNameByCode(strValue) {
                 <structure>
                     <property name="name">country</property>
                     <expression name="expression" type="javascript">dataSetRow["country"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">CCountry Name</property>
+                    <expression name="expression" type="javascript">dataSetRow["CCountry Name"]</expression>
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
@@ -5353,6 +5406,11 @@ function getCountryNameByCode(strValue) {
             <property name="style">heading1</property>
             <text-property name="text">User Accounts</text-property>
         </label>
+        <text id="1390">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[The system does not store the time when an account is created. Therefore we can only state the total amount of accounts in the system. Also, all accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+        </text>
         <table id="126">
             <property name="width">2.4895833333333335in</property>
             <property name="dataSet">Number Of Accounts</property>
