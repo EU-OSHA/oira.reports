@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.2.1.v201209101448 Build &lt;4.2.1.v20120912-1721></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.2.0.v20120611 Build &lt;4.2.0.v20120612-1721></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -1680,18 +1680,31 @@ order by year,month,loginname;]]></xml-property>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Account Activity" id="1090">
-            <list-property name="columnHints">
+            <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="parameters">
                 <structure>
-                    <property name="columnName">logins</property>
-                    <property name="analysis">measure</property>
-                    <text-property name="displayName">logins</text-property>
-                    <text-property name="heading">logins</text-property>
+                    <property name="name">year</property>
+                    <property name="paramName">year</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="columnName">sessions</property>
-                    <property name="analysis">measure</property>
-                    <text-property name="displayName">sessions</text-property>
-                    <text-property name="heading">sessions</text-property>
+                    <property name="name">month</property>
+                    <property name="paramName">month</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">quarter</property>
+                    <property name="paramName">quarter</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
                 </structure>
             </list-property>
             <structure name="cachedMetaData">
@@ -1715,21 +1728,46 @@ order by year,month,loginname;]]></xml-property>
                     <property name="name">logins</property>
                     <property name="nativeName">logins</property>
                     <property name="dataType">float</property>
-                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">sessions</property>
                     <property name="nativeName">sessions</property>
                     <property name="dataType">float</property>
-                    <property name="nativeDataType">8</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select (cast(logins.count as float) / cast(accounts.count as float)) as logins, 
-       (cast(sessions.count as float) / cast(accounts.count as float)) as sessions 
-from (select count(*) from statistics_login) as logins, 
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+select (cast(logins.count as float) / cast(accounts.count as float)) as logins, 
+       (cast(sessions.count as float) / cast(accounts.count as float)) as sessions
+from (select count(*) from statistics_login, params 
+       where time >= '2012-10-01' 
+         and time >= cast(params.year::text || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then  1 else params.month           end)
+                                else 
+                                     params.quarter * 3 - 2 end), 'FM09') || 
+                       '-01' as date)
+         and time < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else 
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                       '-01' as date)) as logins, 
      (select count(*) from account) as accounts, 
-     (select count(*) from session) as sessions]]></xml-property>
+     (select count(*) from session, params 
+       where modified >= '2012-10-01'
+         and modified >= cast(params.year::text || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then  1 else params.month           end)
+                                else 
+                                     params.quarter * 3 - 2 end), 'FM09') || 
+                       '-01' as date)
+         and modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else 
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                       '-01' as date)) as sessions]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -3454,7 +3492,7 @@ order by numsurveys desc]]></xml-property>
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Surveys published</Value>
+          <Value>Published Tools</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -4488,7 +4526,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Surveys unpublished</Value>
+          <Value>Unpublished Tools</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -5459,7 +5497,7 @@ function getCountryNameByCode(strValue) {
         <text id="1390">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[The system does not store the time when an account is created. Therefore we can only state the total amount of accounts in the system. Also, all accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+            <text-property name="content"><![CDATA[Total number of accounts in the system at the time this report was generated (NOT limited to the report period). All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
         <table id="126">
             <property name="width">2.4895833333333335in</property>
@@ -5557,7 +5595,7 @@ function getCountryNameByCode(strValue) {
                         <data id="1106">
                             <structure name="numberFormat">
                                 <property name="category">Fixed</property>
-                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                                <property name="pattern">###0.0000{RoundingMode=HALF_UP}</property>
                             </structure>
                             <property name="resultSetColumn">logins</property>
                         </data>
@@ -5573,7 +5611,7 @@ function getCountryNameByCode(strValue) {
                         <data id="1107">
                             <structure name="numberFormat">
                                 <property name="category">Fixed</property>
-                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                                <property name="pattern">###0.0000{RoundingMode=HALF_UP}</property>
                             </structure>
                             <property name="resultSetColumn">sessions</property>
                         </data>
@@ -5581,6 +5619,12 @@ function getCountryNameByCode(strValue) {
                 </row>
             </detail>
         </table>
+        <text id="1453">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Visits per account: Average number of user logins to the OiRA client (recorded since October 2012)
+Sessions per account: Average number of risk assessments sessions that have been created per account]]></text-property>
+        </text>
         <label id="481">
             <property name="style">heading1</property>
             <text-property name="text">Countries by Sessions and Users</text-property>
@@ -5588,7 +5632,7 @@ function getCountryNameByCode(strValue) {
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does]]></text-property>
+            <text-property name="content"><![CDATA[All countries by number of sessions and users during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1391">
             <property name="dataSet">Sessions By Country</property>
@@ -5653,7 +5697,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Sessions by Country</Value>
+          <Value>Countries by Sessions and Users</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -7509,7 +7553,7 @@ function getCountryNameByCode(strValue) {
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does]]></text-property>
+            <text-property name="content"><![CDATA[All countries by number of accumulated sessions and users since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1122">
             <property name="dataSet">Sessions By Country Accumulated</property>
@@ -8497,7 +8541,7 @@ function getCountryNameByCode(strValue) {
         <text id="1423">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
+            <text-property name="content"><![CDATA[All countries by percentage completed sessions during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1307">
             <property name="dataSet">Completed Sessions 2</property>
@@ -8642,6 +8686,11 @@ function getCountryNameByCode(strValue) {
                 </row>
             </footer>
         </table>
+        <text id="1452">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO)]]></text-property>
+        </text>
         <label id="1279">
             <property name="style">heading1</property>
             <text-property name="text">Countries by Accumulated % Completed Sessions</text-property>
@@ -8649,7 +8698,7 @@ function getCountryNameByCode(strValue) {
         <text id="1424">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
+            <text-property name="content"><![CDATA[All countries by percentage completed sessions since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1340">
             <property name="dataSet">Completed Sessions 2 Accumulated</property>
@@ -8795,6 +8844,11 @@ started sessions</text-property>
                 </row>
             </footer>
         </table>
+        <text id="1454">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO)]]></text-property>
+        </text>
         <label id="1149">
             <property name="style">heading1</property>
             <text-property name="text">Number of Survey Responses per Country</text-property>
@@ -8802,7 +8856,7 @@ started sessions</text-property>
         <text id="1425">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
+            <text-property name="content"><![CDATA[All countries by number of responses.]]></text-property>
         </text>
         <table id="1150">
             <property name="dataSet">Survey Responses By Country</property>
@@ -9747,11 +9801,6 @@ started sessions</text-property>
             <property name="style">heading1</property>
             <text-property name="text">Number of Employees</text-property>
         </label>
-        <text id="1426">
-            <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
-        </text>
         <table id="1169">
             <property name="dataSet">Survey Employees</property>
             <list-property name="boundDataColumns">
@@ -10742,15 +10791,15 @@ started sessions</text-property>
                 </row>
             </footer>
         </table>
+        <text id="1426">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+        </text>
         <label id="1194">
             <property name="style">heading1</property>
             <text-property name="text">Assessment conducted by</text-property>
         </label>
-        <text id="1427">
-            <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
-        </text>
         <table id="1196">
             <property name="dataSet">Survey ConductedBy</property>
             <list-property name="boundDataColumns">
@@ -11741,15 +11790,15 @@ started sessions</text-property>
                 </row>
             </footer>
         </table>
+        <text id="1427">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+        </text>
         <label id="1223">
             <property name="style">heading1</property>
             <text-property name="text">Learned about OiRA</text-property>
         </label>
-        <text id="1428">
-            <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
-        </text>
         <table id="1225">
             <property name="dataSet">Survey Referer</property>
             <list-property name="boundDataColumns">
@@ -12733,15 +12782,15 @@ started sessions</text-property>
                 </row>
             </footer>
         </table>
+        <text id="1428">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+        </text>
         <label id="1251">
             <property name="style">heading1</property>
             <text-property name="text">Workers were invited</text-property>
         </label>
-        <text id="1429">
-            <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Explain what this does...]]></text-property>
-        </text>
         <table id="1253">
             <property name="dataSet">Survey WorkersParticipated</property>
             <list-property name="boundDataColumns">
@@ -13725,5 +13774,10 @@ started sessions</text-property>
                 </row>
             </footer>
         </table>
+        <text id="1429">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+        </text>
     </body>
 </report>
