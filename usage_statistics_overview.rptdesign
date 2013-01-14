@@ -204,6 +204,7 @@
             <property name="odaUser">euphorie2</property>
             <encrypted-property name="odaPassword" encryptionID="base64">ZXVwaG9yaWUy</encrypted-property>
         </oda-data-source>
+        <script-data-source name="Scriptamagic" id="1455"/>
     </data-sources>
     <data-sets>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Country Accumulated" id="1146">
@@ -1301,242 +1302,6 @@ and published = false]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions" id="444">
-            <property name="nullsOrdering">nulls lowest</property>
-            <list-property name="computedColumns">
-                <structure>
-                    <property name="name">percent_complete</property>
-                    <expression name="expression">!row["total_risks"] ? 0 : row["answered_risks"]/row["total_risks"]</expression>
-                    <property name="dataType">decimal</property>
-                </structure>
-            </list-property>
-            <list-property name="columnHints">
-                <structure>
-                    <property name="columnName">zodb_path</property>
-                    <property name="analysis">attribute</property>
-                    <text-property name="displayName">zodb_path</text-property>
-                    <text-property name="heading">zodb_path</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">answered_risks</property>
-                    <property name="analysis">measure</property>
-                    <text-property name="displayName">answered_risks</text-property>
-                    <text-property name="heading">answered_risks</text-property>
-                </structure>
-                <structure>
-                    <property name="columnName">total_risks</property>
-                    <property name="analysis">measure</property>
-                    <text-property name="displayName">total_risks</text-property>
-                    <text-property name="heading">total_risks</text-property>
-                </structure>
-            </list-property>
-            <list-property name="parameters">
-                <structure>
-                    <property name="name">param_1</property>
-                    <property name="paramName">sector</property>
-                    <property name="nativeName"></property>
-                    <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
-                    <property name="position">1</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-            </list-property>
-            <structure name="cachedMetaData">
-                <list-property name="resultSet">
-                    <structure>
-                        <property name="position">1</property>
-                        <property name="name">zodb_path</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">2</property>
-                        <property name="name">answered_risks</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                    <structure>
-                        <property name="position">3</property>
-                        <property name="name">total_risks</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                    <structure>
-                        <property name="position">4</property>
-                        <property name="name">percent_complete</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                </list-property>
-            </structure>
-            <property name="dataSource">OiRA Postgres DB</property>
-            <list-property name="resultSet">
-                <structure>
-                    <property name="position">1</property>
-                    <property name="name">zodb_path</property>
-                    <property name="nativeName">zodb_path</property>
-                    <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
-                </structure>
-                <structure>
-                    <property name="position">2</property>
-                    <property name="name">answered_risks</property>
-                    <property name="nativeName">answered_risks</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
-                </structure>
-                <structure>
-                    <property name="position">3</property>
-                    <property name="name">total_risks</property>
-                    <property name="nativeName">total_risks</property>
-                    <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
-                </structure>
-            </list-property>
-            <xml-property name="queryText"><![CDATA[select risks_a.zodb_path, risks_a.answered_risks, risks_t.total_risks                                                                            
-from (select session.id as session_id, max(session.zodb_path) as zodb_path, count(tree.id) as answered_risks
-  from session left outer join tree                                                                           
-  on tree.session_id = session.id and tree.type = 'risk'
-  group by session.id) as risks_a,
-  (select session_id, max(session_modules.session_path), sum(no_risks) as total_risks
-  from (select session.id as session_id, session.zodb_path as session_path, tree.zodb_path as tree_path from session left outer join tree on session.id = tree.session_id and tree.type = 'module' --- and tree.skip_children = false
-    order by session.id,tree.zodb_path) as session_modules 
-  left outer join statistics_modules on statistics_modules.zodb_path like (session_modules.session_path || '%/' || session_modules.tree_path)
-  group by session_id order by session_id) as risks_t
-where risks_a.session_id = risks_t.session_id
-and substring(zodb_path from '../(.*)/.*') like ?
-order by total_risks;]]></xml-property>
-            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
-  <Version>2.0</Version>
-  <DataSetParameters>
-    <parameter>
-      <design:ParameterDefinition>
-        <design:inOutMode>In</design:inOutMode>
-        <design:attributes>
-          <design:identifier>
-            <design:name></design:name>
-            <design:position>1</design:position>
-          </design:identifier>
-          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-          <design:precision>0</design:precision>
-          <design:scale>0</design:scale>
-          <design:nullability>Unknown</design:nullability>
-        </design:attributes>
-      </design:ParameterDefinition>
-    </parameter>
-  </DataSetParameters>
-  <design:ResultSets derivedMetaData="true">
-    <design:resultSetDefinitions>
-      <design:resultSetColumns>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>id</design:name>
-              <design:position>1</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>NotNullable</design:nullability>
-            <design:uiHints>
-              <design:displayName>id</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>id</design:label>
-            <design:formattingHints>
-              <design:displaySize>11</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>zodb_path</design:name>
-              <design:position>2</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-            <design:precision>128</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>NotNullable</design:nullability>
-            <design:uiHints>
-              <design:displayName>zodb_path</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>zodb_path</design:label>
-            <design:formattingHints>
-              <design:displaySize>128</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>risks_total</design:name>
-              <design:position>3</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Nullable</design:nullability>
-            <design:uiHints>
-              <design:displayName>risks_total</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>risks_total</design:label>
-            <design:formattingHints>
-              <design:displaySize>11</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>risks_answered</design:name>
-              <design:position>4</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>-5</design:nativeDataTypeCode>
-            <design:precision>19</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>risks_answered</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>risks_answered</design:label>
-            <design:formattingHints>
-              <design:displaySize>20</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>percent_answered</design:name>
-              <design:position>5</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
-            <design:precision>0</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>percent_answered</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>percent_answered</design:label>
-            <design:formattingHints>
-              <design:displaySize>131089</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-      </design:resultSetColumns>
-      <design:criteria/>
-    </design:resultSetDefinitions>
-  </design:ResultSets>
-</model:DesignValues>]]></xml-property>
-        </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Logins" id="497">
             <list-property name="columnHints">
                 <structure>
@@ -2603,409 +2368,6 @@ group by workers_participated order by workers_participated;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions 2" id="1306">
-            <list-property name="computedColumns">
-                <structure>
-                    <property name="name">percentage</property>
-                    <expression name="expression">row["completed"]/ row["total"]</expression>
-                    <property name="dataType">float</property>
-                </structure>
-            </list-property>
-            <list-property name="parameters">
-                <structure>
-                    <property name="name">param_1</property>
-                    <property name="paramName">year</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">1</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_2</property>
-                    <property name="paramName">month</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">2</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_3</property>
-                    <property name="paramName">quarter</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">3</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_4</property>
-                    <property name="paramName">sector</property>
-                    <property name="dataType">string</property>
-                    <property name="position">4</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_5</property>
-                    <property name="paramName">sector</property>
-                    <property name="dataType">string</property>
-                    <property name="position">5</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-            </list-property>
-            <structure name="cachedMetaData">
-                <list-property name="resultSet">
-                    <structure>
-                        <property name="position">1</property>
-                        <property name="name">country</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">2</property>
-                        <property name="name">completed</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                    <structure>
-                        <property name="position">3</property>
-                        <property name="name">total</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                    <structure>
-                        <property name="position">4</property>
-                        <property name="name">percentage</property>
-                        <property name="dataType">float</property>
-                    </structure>
-                </list-property>
-            </structure>
-            <property name="dataSource">OiRA Postgres DB</property>
-            <list-property name="resultSet">
-                <structure>
-                    <property name="position">1</property>
-                    <property name="name">country</property>
-                    <property name="nativeName">country</property>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="position">2</property>
-                    <property name="name">completed</property>
-                    <property name="nativeName">completed</property>
-                    <property name="dataType">decimal</property>
-                </structure>
-                <structure>
-                    <property name="position">3</property>
-                    <property name="name">total</property>
-                    <property name="nativeName">total</property>
-                    <property name="dataType">decimal</property>
-                </structure>
-            </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter),
-     answered as (select session.id as session_id, max(substring(session.zodb_path from E'^..')) as country, max(session.zodb_path) as survey_path, count(tree.id) as answered, max(modified) as modified
-                 from (session left outer join tree on tree.session_id = session.id and tree.type = 'risk') 
-                  join statistics_modules on session.zodb_path || '/' || substring(tree.zodb_path from '(.*/.*)/.*') = statistics_modules.zodb_path 
-                 where modified >= '2011-08-01'
-                   and substring(session.zodb_path from '../(.*)/.*') like ?
-                 group by session.id
-                 order by session.id),
-     total as (select session_id, max(substring(session.zodb_path from E'^..')) as country, max(session.zodb_path) as survey_path, sum(statistics_modules.no_risks) as total 
-                 from session, tree, statistics_modules 
-                where session.id = tree.session_id 
-                  and substring(session.zodb_path from '../(.*)/.*') like ?
-                  and type = 'module' 
-                  and session.zodb_path || '/' || tree.zodb_path = statistics_modules.zodb_path                      
-                  and modified >= '2011-08-01'
-               group by session_id)
-select answered.country, 
-       sum(case when cast(answered as float) / cast(total as float) > 0.7 then 1 else 0 end) as completed, 
-       count(answered.session_id) as total 
-  from answered, total, params 
- where answered.session_id = total.session_id 
-   and total != 0
-  and modified >= cast(params.year::text || '-' || 
-                       to_char((case when params.quarter=0 then
-                                     (case when params.month = 0 then  1 else params.month           end)
-                                else 
-                                     params.quarter * 3 - 2 end), 'FM09') || 
-                       '-01' as date)
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
-                       to_char((case when params.quarter=0 then
-                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
-                       '-01' as date)
-group by answered.country order by answered.country]]></xml-property>
-            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
-  <Version>2.0</Version>
-  <design:ResultSets derivedMetaData="true">
-    <design:resultSetDefinitions>
-      <design:resultSetColumns>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>country</design:name>
-              <design:position>1</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-            <design:precision>2147483647</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>country</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>country</design:label>
-            <design:formattingHints>
-              <design:displaySize>2147483647</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>completed</design:name>
-              <design:position>2</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>-5</design:nativeDataTypeCode>
-            <design:precision>19</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>completed</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>completed</design:label>
-            <design:formattingHints>
-              <design:displaySize>20</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>total</design:name>
-              <design:position>3</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>-5</design:nativeDataTypeCode>
-            <design:precision>19</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>total</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>total</design:label>
-            <design:formattingHints>
-              <design:displaySize>20</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-      </design:resultSetColumns>
-      <design:criteria/>
-    </design:resultSetDefinitions>
-  </design:ResultSets>
-</model:DesignValues>]]></xml-property>
-        </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions 2 Accumulated" id="1335">
-            <list-property name="computedColumns">
-                <structure>
-                    <property name="name">percentage</property>
-                    <expression name="expression">row["completed"]/ row["total"]</expression>
-                    <property name="dataType">float</property>
-                </structure>
-            </list-property>
-            <list-property name="parameters">
-                <structure>
-                    <property name="name">param_1</property>
-                    <property name="paramName">year</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">1</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_2</property>
-                    <property name="paramName">month</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">2</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_3</property>
-                    <property name="paramName">quarter</property>
-                    <property name="dataType">integer</property>
-                    <property name="position">3</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_4</property>
-                    <property name="paramName">sector</property>
-                    <property name="dataType">string</property>
-                    <property name="position">4</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-                <structure>
-                    <property name="name">param_5</property>
-                    <property name="paramName">sector</property>
-                    <property name="dataType">string</property>
-                    <property name="position">5</property>
-                    <property name="isInput">true</property>
-                    <property name="isOutput">false</property>
-                </structure>
-            </list-property>
-            <structure name="cachedMetaData">
-                <list-property name="resultSet">
-                    <structure>
-                        <property name="position">1</property>
-                        <property name="name">country</property>
-                        <property name="dataType">string</property>
-                    </structure>
-                    <structure>
-                        <property name="position">2</property>
-                        <property name="name">completed</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                    <structure>
-                        <property name="position">3</property>
-                        <property name="name">total</property>
-                        <property name="dataType">decimal</property>
-                    </structure>
-                    <structure>
-                        <property name="position">4</property>
-                        <property name="name">percentage</property>
-                        <property name="dataType">float</property>
-                    </structure>
-                </list-property>
-            </structure>
-            <property name="dataSource">OiRA Postgres DB</property>
-            <list-property name="resultSet">
-                <structure>
-                    <property name="position">1</property>
-                    <property name="name">country</property>
-                    <property name="nativeName">country</property>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="position">2</property>
-                    <property name="name">completed</property>
-                    <property name="nativeName">completed</property>
-                    <property name="dataType">decimal</property>
-                </structure>
-                <structure>
-                    <property name="position">3</property>
-                    <property name="name">total</property>
-                    <property name="nativeName">total</property>
-                    <property name="dataType">decimal</property>
-                </structure>
-            </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter),
-     answered as (select session.id as session_id, max(substring(session.zodb_path from E'^..')) as country, max(session.zodb_path) as survey_path, count(tree.id) as answered, max(modified) as modified
-                 from (session left outer join tree on tree.session_id = session.id and tree.type = 'risk') 
-                 where modified >= '2011-08-01'
-                   and substring(session.zodb_path from '../(.*)/.*') like ?
-                 group by session.id
-                 order by session.id),
-     total as (select session_id, max(substring(session.zodb_path from E'^..')) as country, max(session.zodb_path) as survey_path, sum(statistics_modules.no_risks) as total 
-                 from session, tree, statistics_modules 
-                where session.id = tree.session_id 
-                  and substring(session.zodb_path from '../(.*)/.*') like ?
-                  and type = 'module' 
-                  and session.zodb_path || '/' || tree.zodb_path = statistics_modules.zodb_path                      
-                  and modified >= '2011-08-01'
-               group by session_id)
-select answered.country, 
-       sum(case when cast(answered as float) / cast(total as float) > 0.7 then 1 else 0 end) as completed, 
-       count(answered.session_id) as total 
-  from answered, total, params 
- where answered.session_id = total.session_id 
-   and total != 0
-   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
-                       to_char((case when params.quarter=0 then
-                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
-                       '-01' as date)
-group by answered.country order by answered.country]]></xml-property>
-            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
-  <Version>2.0</Version>
-  <design:ResultSets derivedMetaData="true">
-    <design:resultSetDefinitions>
-      <design:resultSetColumns>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>country</design:name>
-              <design:position>1</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-            <design:precision>2147483647</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>country</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>country</design:label>
-            <design:formattingHints>
-              <design:displaySize>2147483647</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>completed</design:name>
-              <design:position>2</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>-5</design:nativeDataTypeCode>
-            <design:precision>19</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>completed</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>completed</design:label>
-            <design:formattingHints>
-              <design:displaySize>20</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>total</design:name>
-              <design:position>3</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>-5</design:nativeDataTypeCode>
-            <design:precision>19</design:precision>
-            <design:scale>0</design:scale>
-            <design:nullability>Unknown</design:nullability>
-            <design:uiHints>
-              <design:displayName>total</design:displayName>
-            </design:uiHints>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>total</design:label>
-            <design:formattingHints>
-              <design:displaySize>20</design:displaySize>
-            </design:formattingHints>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-      </design:resultSetColumns>
-      <design:criteria/>
-    </design:resultSetDefinitions>
-  </design:ResultSets>
-</model:DesignValues>]]></xml-property>
-        </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Tools Published Aggregated" id="1384">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="computedColumns">
@@ -3310,6 +2672,292 @@ order by numsurveys desc]]></xml-property>
       <design:criteria/>
     </design:resultSetDefinitions>
   </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions" id="1458">
+            <list-property name="computedColumns">
+                <structure>
+                    <property name="name">percentage</property>
+                    <expression name="expression">row["completed"] / row["total"]</expression>
+                    <property name="dataType">float</property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1_2</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">quarter</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_1_1</property>
+                    <property name="paramName">sector</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">country</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">completed</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">total</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">percentage</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">country</property>
+                    <property name="nativeName">country</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">completed</property>
+                    <property name="nativeName">completed</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">total</property>
+                    <property name="nativeName">total</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
+SELECT 
+    substring(session.zodb_path from E'^..') as country,
+	COUNT(
+		CASE answered_ratio>=0.7 AND action_ratio>=0.7
+			WHEN 't' THEN 't'
+			ELSE NULL
+		END) AS completed,
+	COUNT(session_id) AS total
+FROM session_statistics, session, params
+WHERE session_statistics.session_id = session.id 
+  AND substring(session.zodb_path from '../(.*)/.*') like ?
+  AND session.modified >= '2011-08-01'
+  AND modified >= cast(params.year::text || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then  1 else params.month           end)
+                                else 
+                                     params.quarter * 3 - 2 end), 'FM09') || 
+                       '-01' as date)
+  AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else 
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                       '-01' as date)
+GROUP BY country;
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+        <design:inputAttributes>
+          <design:elementAttributes/>
+        </design:inputAttributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions Accumulated" id="1459">
+            <list-property name="computedColumns">
+                <structure>
+                    <property name="name">percentage</property>
+                    <expression name="expression">row["completed"] / row["total"]</expression>
+                    <property name="dataType">float</property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_1_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">quarter</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_1_1</property>
+                    <property name="paramName">sector</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">country</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">completed</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">total</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">percentage</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">country</property>
+                    <property name="nativeName">country</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">completed</property>
+                    <property name="nativeName">completed</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">total</property>
+                    <property name="nativeName">total</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
+SELECT 
+    substring(session.zodb_path from E'^..') as country,
+	COUNT(
+		CASE answered_ratio>=0.7 AND action_ratio>=0.7
+			WHEN 't' THEN 't'
+			ELSE NULL
+		END) AS completed,
+	COUNT(session_id) AS total
+FROM session_statistics, session, params
+WHERE session_statistics.session_id = session.id 
+  AND substring(session.zodb_path from '../(.*)/.*') like ?
+  AND session.modified >= '2011-08-01'
+  AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else 
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                       '-01' as date)
+GROUP BY country;
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+        <design:inputAttributes>
+          <design:elementAttributes/>
+        </design:inputAttributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
     </data-sets>
@@ -8544,7 +8192,7 @@ Sessions per account: Average number of risk assessments sessions that have been
             <text-property name="content"><![CDATA[All countries by percentage completed sessions during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1307">
-            <property name="dataSet">Completed Sessions 2</property>
+            <property name="dataSet">Completed Sessions</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -8599,6 +8247,13 @@ Sessions per account: Average number of risk assessments sessions that have been
                     <expression name="expression" type="javascript">row["total completed"] / row["total total"]</expression>
                     <property name="dataType">float</property>
                     <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["percentage"]</expression>
+                    <property name="direction">desc</property>
+                    <property name="strength">-1</property>
                 </structure>
             </list-property>
             <column id="1331"/>
@@ -8689,7 +8344,7 @@ Sessions per account: Average number of risk assessments sessions that have been
         <text id="1452">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO)]]></text-property>
+            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1279">
             <property name="style">heading1</property>
@@ -8701,7 +8356,7 @@ Sessions per account: Average number of risk assessments sessions that have been
             <text-property name="content"><![CDATA[All countries by percentage completed sessions since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1340">
-            <property name="dataSet">Completed Sessions 2 Accumulated</property>
+            <property name="dataSet">Completed Sessions Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -8756,6 +8411,13 @@ Sessions per account: Average number of risk assessments sessions that have been
                     <expression name="expression" type="javascript">row["total completed"] / row["total total"]</expression>
                     <property name="dataType">float</property>
                     <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["percentage"]</expression>
+                    <property name="direction">desc</property>
+                    <property name="strength">-1</property>
                 </structure>
             </list-property>
             <column id="1364"/>
@@ -8847,8 +8509,12 @@ started sessions</text-property>
         <text id="1454">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO)]]></text-property>
+            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
+        <label id="1461">
+            <property name="style">report-heading</property>
+            <text-property name="text">Descriptive data based on survey results</text-property>
+        </label>
         <label id="1149">
             <property name="style">heading1</property>
             <text-property name="text">Number of Survey Responses per Country</text-property>
