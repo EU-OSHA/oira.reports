@@ -2775,7 +2775,7 @@ order by numsurveys desc]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
 SELECT 
-    date_part('year', session.modified) || '-' || date_part('month', session.modified) as month,
+    date_part('year', session.modified) || '-' || to_char(date_part('month', session.modified), 'FM00') as month,
 	COUNT(
 		CASE answered_ratio>=0.7 AND action_ratio>=0.7
 			WHEN 't' THEN 't'
@@ -2786,19 +2786,14 @@ FROM session_statistics, session, params
 WHERE session_statistics.session_id = session.id 
   AND session.zodb_path = ?
   AND session.modified >= '2011-08-01'
-  AND modified >= cast(params.year::text || '-' || 
-                       to_char((case when params.quarter=0 then
-                                     (case when params.month = 0 then  1 else params.month           end)
-                                else 
-                                     params.quarter * 3 - 2 end), 'FM09') || 
-                       '-01' as date)
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
                                 else 
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') || 
                        '-01' as date)
-GROUP BY date_part('year', session.modified) || '-' || date_part('month', session.modified);
+GROUP BY date_part('year', session.modified) || '-' || to_char(date_part('month', session.modified), 'FM00')
+ORDER BY month desc;
 ]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -3312,7 +3307,7 @@ Users refers to the number of users that have created these sessions (sometimes 
             <property name="style">heading1</property>
             <text-property name="text">Completed Sessions</text-property>
         </label>
-        <table id="1307">
+        <table id="1580">
             <property name="dataSet">Completed Sessions</property>
             <list-property name="boundDataColumns">
                 <structure>
@@ -3340,184 +3335,66 @@ Users refers to the number of users that have created these sessions (sometimes 
                     <property name="dataType">float</property>
                 </structure>
             </list-property>
-            <list-property name="sort">
-                <structure>
-                    <expression name="key" type="javascript">row["percentage"]</expression>
-                    <property name="direction">desc</property>
-                    <property name="strength">-1</property>
-                </structure>
-            </list-property>
-            <column id="1331"/>
-            <column id="1332"/>
-            <column id="1333"/>
-            <column id="1334"/>
+            <column id="1604"/>
+            <column id="1605"/>
+            <column id="1606"/>
+            <column id="1607"/>
             <header>
-                <row id="1308">
-                    <cell id="1309">
-                        <label id="1310">
+                <row id="1581">
+                    <cell id="1582">
+                        <label id="1583">
                             <text-property name="text">Month</text-property>
                         </label>
                     </cell>
-                    <cell id="1311">
-                        <label id="1312">
+                    <cell id="1584">
+                        <label id="1585">
                             <text-property name="text">Completed sessions</text-property>
                         </label>
                     </cell>
-                    <cell id="1313">
-                        <label id="1314">
+                    <cell id="1586">
+                        <label id="1587">
                             <text-property name="text">Total sessions</text-property>
                         </label>
                     </cell>
-                    <cell id="1315">
-                        <label id="1316">
+                    <cell id="1588">
+                        <label id="1589">
                             <text-property name="text">Completed sessions of the total</text-property>
                         </label>
                     </cell>
                 </row>
             </header>
             <detail>
-                <row id="1317">
-                    <cell id="1318">
-                        <data id="1319">
-                            <property name="dataSet">Completed Sessions</property>
-                            <list-property name="boundDataColumns">
-                                <structure>
-                                    <property name="name">month</property>
-                                    <text-property name="displayName">month</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["month"]</expression>
-                                    <property name="dataType">string</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">completed</property>
-                                    <text-property name="displayName">completed</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["completed"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">total</property>
-                                    <text-property name="displayName">total</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["total"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">percentage</property>
-                                    <text-property name="displayName">percentage</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["percentage"]</expression>
-                                    <property name="dataType">float</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">Column Binding</property>
-                                    <text-property name="displayName">month</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["month"]</expression>
-                                    <property name="dataType">string</property>
-                                    <property name="allowExport">true</property>
-                                </structure>
-                            </list-property>
-                            <property name="resultSetColumn">Column Binding</property>
+                <row id="1590">
+                    <cell id="1591">
+                        <data id="1592">
+                            <property name="resultSetColumn">month</property>
                         </data>
                     </cell>
-                    <cell id="1320">
-                        <data id="1321">
-                            <property name="dataSet">Completed Sessions</property>
-                            <list-property name="boundDataColumns">
-                                <structure>
-                                    <property name="name">month</property>
-                                    <text-property name="displayName">month</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["month"]</expression>
-                                    <property name="dataType">string</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">completed</property>
-                                    <text-property name="displayName">completed</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["completed"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">total</property>
-                                    <text-property name="displayName">total</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["total"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">percentage</property>
-                                    <text-property name="displayName">percentage</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["percentage"]</expression>
-                                    <property name="dataType">float</property>
-                                </structure>
-                            </list-property>
+                    <cell id="1593">
+                        <data id="1594">
                             <property name="resultSetColumn">completed</property>
                         </data>
                     </cell>
-                    <cell id="1322">
-                        <data id="1323">
-                            <property name="dataSet">Completed Sessions</property>
-                            <list-property name="boundDataColumns">
-                                <structure>
-                                    <property name="name">month</property>
-                                    <text-property name="displayName">month</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["month"]</expression>
-                                    <property name="dataType">string</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">completed</property>
-                                    <text-property name="displayName">completed</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["completed"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">total</property>
-                                    <text-property name="displayName">total</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["total"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">percentage</property>
-                                    <text-property name="displayName">percentage</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["percentage"]</expression>
-                                    <property name="dataType">float</property>
-                                </structure>
-                            </list-property>
+                    <cell id="1595">
+                        <data id="1596">
                             <property name="resultSetColumn">total</property>
                         </data>
                     </cell>
-                    <cell id="1324">
-                        <data id="1325">
-                            <structure name="numberFormat">
-                                <property name="category">Percent</property>
-                                <property name="pattern">###0.0%{RoundingMode=HALF_UP}</property>
-                            </structure>
-                            <property name="dataSet">Completed Sessions</property>
-                            <list-property name="boundDataColumns">
-                                <structure>
-                                    <property name="name">month</property>
-                                    <text-property name="displayName">month</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["month"]</expression>
-                                    <property name="dataType">string</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">completed</property>
-                                    <text-property name="displayName">completed</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["completed"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">total</property>
-                                    <text-property name="displayName">total</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["total"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">percentage</property>
-                                    <text-property name="displayName">percentage</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["percentage"]</expression>
-                                    <property name="dataType">float</property>
-                                </structure>
-                            </list-property>
+                    <cell id="1597">
+                        <data id="1598">
                             <property name="resultSetColumn">percentage</property>
                         </data>
                     </cell>
                 </row>
             </detail>
+            <footer>
+                <row id="1599">
+                    <cell id="1600"/>
+                    <cell id="1601"/>
+                    <cell id="1602"/>
+                    <cell id="1603"/>
+                </row>
+            </footer>
         </table>
         <text id="1452">
             <property name="style">description</property>
