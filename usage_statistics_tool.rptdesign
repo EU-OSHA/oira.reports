@@ -2782,8 +2782,8 @@ SELECT
 			ELSE NULL
 		END) AS completed,
 	COUNT(session_id) AS total
-FROM session_statistics, session, params
-WHERE session_statistics.session_id = session.id 
+FROM statistics_sessions, session, params
+WHERE statistics_sessions.session_id = session.id 
   AND session.zodb_path = ?
   AND session.modified >= '2011-08-01'
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
@@ -3060,6 +3060,7 @@ GROUP BY country;
                 <cell id="1439"/>
                 <cell id="1440">
                     <text-data id="1043">
+                        <property name="style">heading1</property>
                         <expression name="valueExpr">params["tool"].value</expression>
                         <property name="contentType">html</property>
                     </text-data>
@@ -3382,19 +3383,15 @@ Users refers to the number of users that have created these sessions (sometimes 
                     </cell>
                     <cell id="1597">
                         <data id="1598">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.0%{RoundingMode=HALF_UP}</property>
+                            </structure>
                             <property name="resultSetColumn">percentage</property>
                         </data>
                     </cell>
                 </row>
             </detail>
-            <footer>
-                <row id="1599">
-                    <cell id="1600"/>
-                    <cell id="1601"/>
-                    <cell id="1602"/>
-                    <cell id="1603"/>
-                </row>
-            </footer>
         </table>
         <text id="1452">
             <property name="style">description</property>
