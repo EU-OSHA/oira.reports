@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.2.0.v20120611 Build &lt;4.2.0.v20120612-1721></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.2.1.v201209101448 Build &lt;4.2.1.v20120912-1721></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -3042,10 +3042,10 @@ GROUP BY country;
                 <cell id="1435">
                     <property name="textAlign">center</property>
                     <image id="1446">
-                        <property name="height">50px</property>
-                        <property name="width">100px</property>
-                        <property name="source">url</property>
-                        <expression name="uri" type="constant">http://osha.europa.eu/en/topics/riskassessment/oira-logo-smaller.jpg</expression>
+                        <property name="height">0.722in</property>
+                        <property name="width">1.972in</property>
+                        <property name="source">file</property>
+                        <expression name="uri" type="constant">OiRA_logo-smaller.jpg</expression>
                     </image>
                 </cell>
                 <cell id="1436">
