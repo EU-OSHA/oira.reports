@@ -3402,6 +3402,11 @@ Users refers to the number of users that have created these sessions (sometimes 
             <property name="style">report-heading</property>
             <text-property name="text">Descriptive data based on survey results</text-property>
         </label>
+        <text id="1462">
+            <property name="style">heading2</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
+        </text>
         <label id="1149">
             <property name="style">heading1</property>
             <text-property name="text">Number of Survey Responses</text-property>
@@ -4314,11 +4319,6 @@ Users refers to the number of users that have created these sessions (sometimes 
                 </row>
             </detail>
         </table>
-        <text id="1462">
-            <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
-        </text>
         <label id="1168">
             <property name="style">heading1</property>
             <text-property name="text">Number of Employees</text-property>
@@ -5316,7 +5316,7 @@ Users refers to the number of users that have created these sessions (sometimes 
         <text id="1426">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
         </text>
         <table id="1608">
             <property name="dataSet">Survey Employees</property>
@@ -7305,7 +7305,7 @@ Users refers to the number of users that have created these sessions (sometimes 
         <text id="1427">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
         </text>
         <table id="1635">
             <property name="dataSet">Survey ConductedBy</property>
@@ -9287,7 +9287,7 @@ Users refers to the number of users that have created these sessions (sometimes 
         <text id="1428">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
         </text>
         <table id="1662">
             <property name="dataSet">Survey Referer</property>
@@ -11262,7 +11262,7 @@ Users refers to the number of users that have created these sessions (sometimes 
         <text id="1429">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
         </text>
         <table id="1689">
             <property name="dataSet">Survey WorkersParticipated</property>

@@ -62,7 +62,7 @@
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
             <property name="controlType">list-box</property>
-            <property name="mustMatch">true</property>
+            <property name="mustMatch">false</property>
             <property name="fixedOrder">false</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
@@ -3311,7 +3311,7 @@ function getCountryNameByCode(strValue) {
                 <row id="372">
                     <cell id="373">
                         <label id="374">
-                            <text-property name="text">Country and Tool</text-property>
+                            <text-property name="text">Tool</text-property>
                         </label>
                     </cell>
                     <cell id="375">
@@ -3325,7 +3325,6 @@ function getCountryNameByCode(strValue) {
                 <row id="1056">
                     <cell id="1057">
                         <text-data id="1059">
-                            <property name="style">indented-1</property>
                             <expression name="valueExpr">row["zodb_path"]</expression>
                             <property name="contentType">html</property>
                         </text-data>
@@ -3389,7 +3388,7 @@ function getCountryNameByCode(strValue) {
                 <row id="1062">
                     <cell id="1063">
                         <label id="1064">
-                            <text-property name="text">Country and Tool</text-property>
+                            <text-property name="text">Tool</text-property>
                         </label>
                     </cell>
                     <cell id="1065">
@@ -3403,7 +3402,6 @@ function getCountryNameByCode(strValue) {
                 <row id="1073">
                     <cell id="1074">
                         <text-data id="1075">
-                            <property name="style">indented-1</property>
                             <expression name="valueExpr">row["zodb_path"]</expression>
                             <property name="contentType">html</property>
                         </text-data>
@@ -4407,7 +4405,7 @@ function getCountryNameByCode(strValue) {
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Sessions and users for all tools during this month.]]></text-property>
+            <text-property name="content"><![CDATA[Sessions and users for all tools during the report period.]]></text-property>
         </text>
         <table id="1502">
             <property name="dataSet">Sessions By Tool</property>
@@ -5390,7 +5388,7 @@ function getCountryNameByCode(strValue) {
         <text id="1423">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All tools by percentage completed sessions during this month.]]></text-property>
+            <text-property name="content"><![CDATA[All tools by percentage completed sessions during the report period.]]></text-property>
         </text>
         <table id="1307">
             <property name="dataSet">Completed Sessions</property>
@@ -9500,7 +9498,7 @@ function getCountryNameByCode(strValue) {
         <text id="1426">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011.]]></text-property>
         </text>
         <table id="1569">
             <property name="dataSet">Survey Employees</property>
@@ -11489,7 +11487,7 @@ function getCountryNameByCode(strValue) {
         <text id="1427">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011.]]></text-property>
         </text>
         <table id="1596">
             <property name="dataSet">Survey ConductedBy</property>
@@ -13471,7 +13469,7 @@ function getCountryNameByCode(strValue) {
         <text id="1428">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011.]]></text-property>
         </text>
         <table id="1623">
             <property name="dataSet">Survey Referer</property>
@@ -15446,7 +15444,7 @@ function getCountryNameByCode(strValue) {
         <text id="1429">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011.]]></text-property>
         </text>
         <table id="1650">
             <property name="dataSet">Survey WorkersParticipated</property>
