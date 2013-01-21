@@ -4863,10 +4863,22 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="1113">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
             <text-property name="text">User Accounts</text-property>
         </label>
         <text id="1390">
             <property name="style">description</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
@@ -4911,6 +4923,12 @@ function getCountryNameByCode(strValue) {
         </table>
         <text id="1457">
             <property name="style">description</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
         </text>
