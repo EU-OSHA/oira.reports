@@ -2370,6 +2370,11 @@ function getCountryNameByCode(strValue) {
                 </row>
             </footer>
         </table>
+        <text id="1454">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
+        </text>
         <label id="481">
             <property name="style">heading1</property>
             <text-property name="text">Tools by Sessions and Users</text-property>
