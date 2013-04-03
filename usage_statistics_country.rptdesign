@@ -2071,6 +2071,42 @@ where substring(zodb_path from '(..)/.*/.*') like ?
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
         </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Number Of Accounts" id="125">
+            <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">count</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">count</text-property>
+                    <text-property name="heading">count</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters"/>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">count</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">count</property>
+                    <property name="nativeName">count</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[select distinct count(loginname)
+from account
+where
+	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
+	]]></xml-property>
+        </oda-data-set>
     </data-sets>
     <styles>
         <style name="report" id="4">
@@ -2374,6 +2410,77 @@ function getCountryNameByCode(strValue) {
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
+        </text>
+        <label id="1113">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">User Accounts</text-property>
+        </label>
+        <text id="1390">
+            <property name="style">description</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+        </text>
+        <table id="126">
+            <property name="width">2.4895833333333335in</property>
+            <property name="dataSet">Number Of Accounts</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">count</property>
+                    <text-property name="displayName">count</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["count"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="135">
+                <property name="width">2.4895833333333335in</property>
+            </column>
+            <header>
+                <row id="127">
+                    <cell id="128">
+                        <label id="129">
+                            <text-property name="text">Total Number Of Accounts Created</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="130">
+                    <cell id="131">
+                        <data id="132">
+                            <property name="resultSetColumn">count</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="1457">
+            <property name="style">description</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                </structure>
+            </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
         </text>
         <label id="481">
             <property name="style">heading1</property>
