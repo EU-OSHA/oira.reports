@@ -262,25 +262,31 @@
                     <property name="dataType">date-time</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with all_dates as (
-         select (year || '-' || to_char(month, 'FM00') || '-01')::timestamp as date 
-           from generate_series((extract(year from TIMESTAMP '2011-08-01')::int), 
-                                (extract(year from now())::int + 1)) as year 
+            <xml-property name="queryText"><![CDATA[with all_dates as (select to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') as month, 
+                         (to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
+                     from generate_series(
+                     2011, (extract(year from now())::int + 2)
+                                 ) as year 
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter)
-select count(session.id),
-       count(distinct(account_id)) as users, 
-       all_dates.date - interval '1 day' as month
-from session, params, all_dates
-where zodb_path = ?
-  and session.modified < all_dates.date
-  and modified >= '2011-08-01'
-  and all_dates.date <=  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+     params as (select ? as year, ? as month, ? as quarter),
+     session_tmp as (
+       select id,
+              account_id, 
+              modified, 
+              to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month 
+         from session
+        where zodb_path = ?
+          and modified >= timestamp '2011-08-01'
+     )
+select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
+from params, session_tmp right outer join all_dates on session_tmp.month <= all_dates.month
+where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
                                 else 
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') || 
                        '-01' as date)
+  and all_dates.date >= timestamp '2011-08-01'
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -434,9 +440,9 @@ order by all_dates.date desc;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with all_dates as (select to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') as month, 
-                         (to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') || '-01')::timestamp as date
+                         (to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
                      from generate_series(
-                     2011, (extract(year from now())::int + 1)
+                     2011, (extract(year from now())::int + 2)
                                  ) as year 
                 full outer join generate_series(1,12) as month on 't'),
      params as (select ? as year, ? as month, ? as quarter),
@@ -447,16 +453,17 @@ order by all_dates.date desc;]]></xml-property>
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month 
          from session
         where zodb_path = ?
+          and modified >= timestamp '2011-08-01'
      )
-select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date - interval '1 day' as month
+select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month = all_dates.month
-where modified >= '2011-08-01'
-  and all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
                                 else 
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') || 
                        '-01' as date)
+  and all_dates.date >= timestamp '2011-08-01'
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
