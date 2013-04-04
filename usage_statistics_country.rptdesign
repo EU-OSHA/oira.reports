@@ -2053,8 +2053,8 @@ GROUP BY zodb_path;
             </list-property>
             <xml-property name="queryText"><![CDATA[with all_dates as (
          select (year || '-' || to_char(month, 'FM00') || '-01')::timestamp as date 
-           from generate_series((extract(year from TIMESTAMP '2011-08-01')::int), 
-                                (extract(year from TIMESTAMP '2012-12-01')::int)) as year 
+           from generate_series(2011, 
+                                extract(year from now())::int + 2) as year 
                 full outer join generate_series(1,12) as month on 't'),
      params as (select ? as year, ? as month, ? as quarter)
 select count(*),count(distinct(account_id)) as users, all_dates.date - interval '1 day' as month
