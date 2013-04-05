@@ -3848,7 +3848,7 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="1082">
             <property name="style">heading1</property>
-            <text-property name="text">Unpublished Tools</text-property>
+            <text-property name="text">Not Published Tools</text-property>
         </label>
         <extended-item extensionName="Chart" id="1388">
             <xml-property name="xmlRepresentation"><![CDATA[<model:ChartWithoutAxes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:attribute="http://www.birt.eclipse.org/ChartModelAttribute" xmlns:layout="http://www.birt.eclipse.org/ChartModelLayout" xmlns:model="http://www.birt.eclipse.org/ChartModel" xmlns:type="http://www.birt.eclipse.org/ChartModelType">
@@ -3887,7 +3887,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Unpublished Tools</Value>
+          <Value>Not Published Tools</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -4741,7 +4741,7 @@ function getCountryNameByCode(strValue) {
         <text id="1419">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All unpublished tools by country.]]></text-property>
+            <text-property name="content"><![CDATA[All not published tools by country.]]></text-property>
         </text>
         <table id="1061">
             <property name="borderBottomColor">#000000</property>

@@ -2239,12 +2239,12 @@ where
         </grid>
         <label id="1060">
             <property name="style">heading1</property>
-            <text-property name="text">Published and Unpublished Tools</text-property>
+            <text-property name="text">Published and Not Published Tools</text-property>
         </label>
         <text id="1420">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All published and unpublished tools in the system.]]></text-property>
+            <text-property name="content"><![CDATA[All published and not published tools in the system.]]></text-property>
         </text>
         <label id="1462">
             <property name="style">heading2</property>
@@ -2331,7 +2331,7 @@ function getCountryNameByCode(strValue) {
         </table>
         <label id="1463">
             <property name="style">heading2</property>
-            <text-property name="text">Unpublished tools</text-property>
+            <text-property name="text">Not Published Tools</text-property>
         </label>
         <table id="1061">
             <property name="borderBottomColor">#000000</property>
