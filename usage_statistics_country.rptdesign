@@ -183,7 +183,7 @@
         <script-data-source name="Scriptamagic" id="1455"/>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Tool Accumulated" id="1146">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Tool Accumulated" id="1146">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
@@ -351,7 +351,7 @@ order by count desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Tool" id="108">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Tool" id="108">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
@@ -1830,7 +1830,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions" id="1458">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Assessments" id="1458">
             <list-property name="computedColumns">
                 <structure>
                     <property name="name">percentage</property>
@@ -1976,7 +1976,7 @@ GROUP BY zodb_path;
   </DataSetParameters>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Month Accumulated" id="1477">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Month Accumulated" id="1477">
             <list-property name="parameters">
                 <structure>
                     <property name="name">param_1</property>
@@ -2460,10 +2460,10 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="481">
             <property name="style">heading1</property>
-            <text-property name="text">Tools by Sessions and Users</text-property>
+            <text-property name="text">Tools by Assessments and Users</text-property>
         </label>
         <table id="109">
-            <property name="dataSet">Sessions By Tool</property>
+            <property name="dataSet">Assessments By Tool</property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
@@ -2555,7 +2555,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Tools by Sessions</Value>
+          <Value>Tools by Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -3527,7 +3527,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="113">
                         <label id="114">
-                            <text-property name="text">Sessions</text-property>
+                            <text-property name="text">Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1083">
@@ -3579,10 +3579,10 @@ function getCountryNameByCode(strValue) {
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Sessions and users for all tools during the report period.]]></text-property>
+            <text-property name="content"><![CDATA[Assessments and users for all tools during the report period.]]></text-property>
         </text>
         <table id="1502">
-            <property name="dataSet">Sessions By Tool</property>
+            <property name="dataSet">Assessments By Tool</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -3668,7 +3668,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Countries by Sessions</Value>
+          <Value>Countries by Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -4506,7 +4506,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1506">
                         <label id="1507">
-                            <text-property name="text">Sessions</text-property>
+                            <text-property name="text">Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1508">
@@ -4573,7 +4573,7 @@ function getCountryNameByCode(strValue) {
         </table>
         <label id="1278">
             <property name="style">heading1</property>
-            <text-property name="text">Tools by % Completed Sessions</text-property>
+            <text-property name="text">Tools by % Completed Assessments</text-property>
         </label>
         <text id="1423">
             <property name="style">description</property>
@@ -4581,7 +4581,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[All tools by percentage completed assessments during the report period.]]></text-property>
         </text>
         <table id="1307">
-            <property name="dataSet">Completed Sessions</property>
+            <property name="dataSet">Completed Assessments</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">completed</property>
@@ -4754,10 +4754,10 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="1121">
             <property name="style">heading1</property>
-            <text-property name="text">Tools by Accumulated Sessions and Users</text-property>
+            <text-property name="text">Tools by Accumulated Assessments and Users</text-property>
         </label>
         <table id="1122">
-            <property name="dataSet">Sessions By Tool Accumulated</property>
+            <property name="dataSet">Assessments By Tool Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -4843,7 +4843,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Tools by Accumulated Sessions</Value>
+          <Value>Tools by Accumulated Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -5680,7 +5680,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1126">
                         <label id="1127">
-                            <text-property name="text">Accumulated Sessions</text-property>
+                            <text-property name="text">Accumulated Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1128">
@@ -5735,7 +5735,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 per tool.]]></text-property>
         </text>
         <table id="1529">
-            <property name="dataSet">Sessions By Tool Accumulated</property>
+            <property name="dataSet">Assessments By Tool Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -5821,7 +5821,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>All Countries by Accumulated Sessions</Value>
+          <Value>All Countries by Accumulated Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -6658,7 +6658,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1533">
                         <label id="1534">
-                            <text-property name="text">Accumulated Sessions</text-property>
+                            <text-property name="text">Accumulated Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1535">
@@ -6709,7 +6709,7 @@ function getCountryNameByCode(strValue) {
         </table>
         <label id="1500">
             <property name="style">heading1</property>
-            <text-property name="text">Accumulated Sessions and Users for all tools</text-property>
+            <text-property name="text">Accumulated Assessments and Users for all tools</text-property>
         </label>
         <text id="1501">
             <property name="style">description</property>
@@ -6717,7 +6717,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 for all tools.]]></text-property>
         </text>
         <table id="1478">
-            <property name="dataSet">Sessions By Month Accumulated</property>
+            <property name="dataSet">Assessments By Month Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>

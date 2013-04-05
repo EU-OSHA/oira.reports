@@ -181,7 +181,7 @@
         <script-data-source name="Scriptamagic" id="1455"/>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions And Users By Month Accumulated" id="1146">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments And Users By Month Accumulated" id="1146">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
@@ -363,7 +363,7 @@ order by all_dates.date desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions And Users By Month" id="108">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments And Users By Month" id="108">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
@@ -1289,7 +1289,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions" id="1458">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Assessments" id="1458">
             <list-property name="computedColumns">
                 <structure>
                     <property name="name">percentage</property>
@@ -1645,16 +1645,16 @@ where
         </text>
         <label id="481">
             <property name="style">heading1</property>
-            <text-property name="text">Sessions and Users</text-property>
+            <text-property name="text">Assessments and Users</text-property>
         </label>
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Sessions refers to the number of assessments started during the month. 
+            <text-property name="content"><![CDATA[Assessments refers to the number of assessments started during the month. 
 Users refers to the number of users that have created these assessments (sometimes a user creates more than one session).]]></text-property>
         </text>
         <table id="1463">
-            <property name="dataSet">Sessions And Users By Month</property>
+            <property name="dataSet">Assessments And Users By Month</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -1723,7 +1723,7 @@ Users refers to the number of users that have created these assessments (sometim
                     </cell>
                     <cell id="1465">
                         <label id="1466">
-                            <text-property name="text">Sessions</text-property>
+                            <text-property name="text">Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1467">
@@ -1774,7 +1774,7 @@ Users refers to the number of users that have created these assessments (sometim
         </table>
         <label id="1121">
             <property name="style">heading1</property>
-            <text-property name="text">Accumulated Sessions and Users</text-property>
+            <text-property name="text">Accumulated Assessments and Users</text-property>
         </label>
         <text id="1417">
             <property name="style">description</property>
@@ -1782,7 +1782,7 @@ Users refers to the number of users that have created these assessments (sometim
             <text-property name="content"><![CDATA[Number of accumulated assessments and users since August 2011.]]></text-property>
         </text>
         <table id="1558">
-            <property name="dataSet">Sessions And Users By Month Accumulated</property>
+            <property name="dataSet">Assessments And Users By Month Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -1855,10 +1855,10 @@ Users refers to the number of users that have created these assessments (sometim
         </table>
         <label id="1278">
             <property name="style">heading1</property>
-            <text-property name="text">Completed Sessions</text-property>
+            <text-property name="text">Completed Assessments</text-property>
         </label>
         <table id="1580">
-            <property name="dataSet">Completed Sessions</property>
+            <property name="dataSet">Completed Assessments</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">month</property>

@@ -42,7 +42,7 @@
         </oda-data-source>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Cyprus Sessions" id="628">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Cyprus Assessments" id="628">
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">zodb_path</property>
@@ -237,10 +237,10 @@ and zodb_path like 'cy/%';]]></xml-property>
             <text-property name="text">OiRA Usage Statistics: Cyprus</text-property>
         </label>
         <label id="629">
-            <text-property name="text">Cyprus: Sessions by Tool and User</text-property>
+            <text-property name="text">Cyprus: Assessments by Tool and User</text-property>
         </label>
         <table id="630">
-            <property name="dataSet">Cyprus Sessions</property>
+            <property name="dataSet">Cyprus Assessments</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">zodb_path</property>
@@ -318,7 +318,7 @@ and zodb_path like 'cy/%';]]></xml-property>
                 <row id="631">
                     <cell id="632">
                         <label id="633">
-                            <text-property name="text">Month > Account > No Sessions > Tools used</text-property>
+                            <text-property name="text">Month > Account > No Assessments > Tools used</text-property>
                         </label>
                     </cell>
                     <cell id="636">

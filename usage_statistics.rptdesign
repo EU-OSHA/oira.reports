@@ -73,8 +73,8 @@
         </oda-data-source>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Zodb-Path" id="8"
- extends="oira.Sessions By Zodb-Path">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Zodb-Path" id="8"
+ extends="oira.Assessments By Zodb-Path">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="columnHints">
                 <structure>
@@ -239,9 +239,9 @@ order by count desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions by Country" id="9"
- extends="oira.Sessions by Country"/>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Sector" id="86">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments by Country" id="9"
+ extends="oira.Assessments by Country"/>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Sector" id="86">
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">sector</property>
@@ -375,7 +375,7 @@ order by count desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Country" id="108">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Country" id="108">
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">country</property>
@@ -733,7 +733,7 @@ where substring(zodb_path from '../(.*)/.*') like ?]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions" id="444">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Assessments" id="444">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="computedColumns">
                 <structure>
@@ -1111,7 +1111,7 @@ order by year,month,loginname;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Language" id="598">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Language" id="598">
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">language</property>
@@ -3767,7 +3767,7 @@ group by substring(zodb_path from '^..'), workers_participated order by country,
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions by Zodb-Path" id="1052">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments by Zodb-Path" id="1052">
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">zodb_path</property>
@@ -4523,7 +4523,7 @@ order by count desc;]]></xml-property>
             <text-property name="text">Number of assessments per tool</text-property>
         </label>
         <table id="25">
-            <property name="dataSet">Sessions by Zodb-Path</property>
+            <property name="dataSet">Assessments by Zodb-Path</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">zodb_path</property>
@@ -4604,7 +4604,7 @@ order by count desc;]]></xml-property>
             <text-property name="text">Number of assessments per language</text-property>
         </label>
         <table id="599">
-            <property name="dataSet">Sessions By Language</property>
+            <property name="dataSet">Assessments By Language</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">language</property>
@@ -4677,7 +4677,7 @@ order by count desc;]]></xml-property>
             <text-property name="text">Number of assessments per sector</text-property>
         </label>
         <table id="87">
-            <property name="dataSet">Sessions By Sector</property>
+            <property name="dataSet">Assessments By Sector</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">sector</property>
@@ -4754,7 +4754,7 @@ order by count desc;]]></xml-property>
             <text-property name="text">Number of assessments per country</text-property>
         </label>
         <table id="109">
-            <property name="dataSet">Sessions By Country</property>
+            <property name="dataSet">Assessments By Country</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -4815,7 +4815,7 @@ order by count desc;]]></xml-property>
             <property name="borderRightColor">#000000</property>
             <property name="borderTopColor">#000000</property>
             <property name="width">7.979166666666667in</property>
-            <property name="dataSet">Completed Sessions</property>
+            <property name="dataSet">Completed Assessments</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">session_path</property>

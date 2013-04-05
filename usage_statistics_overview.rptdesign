@@ -206,7 +206,7 @@
         </oda-data-source>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Country Accumulated" id="1146">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Country Accumulated" id="1146">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
@@ -374,7 +374,7 @@ order by count desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions By Country" id="108">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Country" id="108">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
                 <structure>
@@ -1995,7 +1995,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions 2" id="1306">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Assessments 2" id="1306">
             <list-property name="computedColumns">
                 <structure>
                     <property name="name">percentage</property>
@@ -2184,7 +2184,7 @@ GROUP BY country;
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Sessions 2 Accumulated" id="1335">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Completed Assessments 2 Accumulated" id="1335">
             <list-property name="computedColumns">
                 <structure>
                     <property name="name">percentage</property>
@@ -4934,10 +4934,10 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="481">
             <property name="style">heading1</property>
-            <text-property name="text">Countries by Sessions and Users</text-property>
+            <text-property name="text">Countries by Assessments and Users</text-property>
         </label>
         <table id="1391">
-            <property name="dataSet">Sessions By Country</property>
+            <property name="dataSet">Assessments By Country</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -4999,7 +4999,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Countries by Sessions</Value>
+          <Value>Countries by Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -5879,7 +5879,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[All countries by number of assessments and users during this month. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="109">
-            <property name="dataSet">Sessions By Country</property>
+            <property name="dataSet">Assessments By Country</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -5966,7 +5966,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>Countries by Sessions</Value>
+          <Value>Countries by Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -6804,7 +6804,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="113">
                         <label id="114">
-                            <text-property name="text">Sessions</text-property>
+                            <text-property name="text">Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1083">
@@ -6855,10 +6855,10 @@ function getCountryNameByCode(strValue) {
         </table>
         <label id="1121">
             <property name="style">heading1</property>
-            <text-property name="text">Countries by Accumulated Sessions and Users</text-property>
+            <text-property name="text">Countries by Accumulated Assessments and Users</text-property>
         </label>
         <table id="1122">
-            <property name="dataSet">Sessions By Country Accumulated</property>
+            <property name="dataSet">Assessments By Country Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -6950,7 +6950,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>All Countries by Accumulated Sessions</Value>
+          <Value>All Countries by Accumulated Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -7787,7 +7787,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1126">
                         <label id="1127">
-                            <text-property name="text">Accumulated Sessions</text-property>
+                            <text-property name="text">Accumulated Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1128">
@@ -7842,7 +7842,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[All countries by number of accumulated assessments and users since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1494">
-            <property name="dataSet">Sessions By Country Accumulated</property>
+            <property name="dataSet">Assessments By Country Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -7935,7 +7935,7 @@ function getCountryNameByCode(strValue) {
       <Visible>true</Visible>
       <Label>
         <Caption>
-          <Value>All Countries by Accumulated Sessions</Value>
+          <Value>All Countries by Accumulated Assessments</Value>
           <Font>
             <Size>16.0</Size>
             <Bold>true</Bold>
@@ -8772,7 +8772,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1498">
                         <label id="1499">
-                            <text-property name="text">Accumulated Sessions</text-property>
+                            <text-property name="text">Accumulated Assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1500">
@@ -8823,7 +8823,7 @@ function getCountryNameByCode(strValue) {
         </table>
         <label id="1278">
             <property name="style">heading1</property>
-            <text-property name="text">Countries by % Completed Sessions</text-property>
+            <text-property name="text">Countries by % Completed Assessments</text-property>
         </label>
         <text id="1423">
             <property name="style">description</property>
@@ -8831,7 +8831,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[All countries by percentage completed assessments during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1307">
-            <property name="dataSet">Completed Sessions 2</property>
+            <property name="dataSet">Completed Assessments 2</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
@@ -8988,7 +8988,7 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="1279">
             <property name="style">heading1</property>
-            <text-property name="text">Countries by Accumulated % Completed Sessions</text-property>
+            <text-property name="text">Countries by Accumulated % Completed Assessments</text-property>
         </label>
         <text id="1424">
             <property name="style">description</property>
@@ -8996,7 +8996,7 @@ function getCountryNameByCode(strValue) {
             <text-property name="content"><![CDATA[All countries by percentage completed assessments since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1340">
-            <property name="dataSet">Completed Sessions 2 Accumulated</property>
+            <property name="dataSet">Completed Assessments 2 Accumulated</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">country</property>
