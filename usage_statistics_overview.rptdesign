@@ -2801,7 +2801,7 @@ order by numsurveys desc]]></xml-property>
                     <text id="11">
                         <property name="style">description</property>
                         <property name="contentType">auto</property>
-                        <text-property name="content"><![CDATA[This document presents usage statistics for the Online Risk assessment Tool (OiRA).]]></text-property>
+                        <text-property name="content"><![CDATA[This document presents usage statistics for the Online interactive Risk Assessment Tool (OiRA).]]></text-property>
                     </text>
                 </cell>
                 <cell id="1451"/>
