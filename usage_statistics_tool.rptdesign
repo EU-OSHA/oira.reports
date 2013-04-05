@@ -1779,7 +1779,7 @@ Users refers to the number of users that have created these assessments (sometim
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Number of accumulated assessments and users since August 2011.]]></text-property>
+            <text-property name="content"><![CDATA[Number of accumulated assessments and users since August 2011. Every assessment that has been started between August 2011 and the end of the given month using this tool is counted.]]></text-property>
         </text>
         <table id="1558">
             <property name="dataSet">Assessments And Users By Month Accumulated</property>

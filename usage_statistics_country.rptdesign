@@ -5732,7 +5732,7 @@ function getCountryNameByCode(strValue) {
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 per tool.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 per tool. Every assessment that has been started between August 2011 and the end of the report period is counted.]]></text-property>
         </text>
         <table id="1529">
             <property name="dataSet">Assessments By Tool Accumulated</property>
@@ -6714,7 +6714,7 @@ function getCountryNameByCode(strValue) {
         <text id="1501">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 for all tools.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 for all tools. Every assessment that has been started between August 2011 and the end of the given month using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1478">
             <property name="dataSet">Assessments By Month Accumulated</property>
