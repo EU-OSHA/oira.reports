@@ -1118,10 +1118,10 @@ and published = false]]></xml-property>
                     <text-property name="heading">logins</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">sessions</property>
+                    <property name="columnName">assessments</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">sessions</text-property>
-                    <text-property name="heading">sessions</text-property>
+                    <text-property name="displayName">assessments</text-property>
+                    <text-property name="heading">assessments</text-property>
                 </structure>
             </list-property>
             <structure name="cachedMetaData">
@@ -1133,7 +1133,7 @@ and published = false]]></xml-property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">sessions</property>
+                        <property name="name">assessments</property>
                         <property name="dataType">float</property>
                     </structure>
                 </list-property>
@@ -1149,17 +1149,17 @@ and published = false]]></xml-property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
-                    <property name="name">sessions</property>
-                    <property name="nativeName">sessions</property>
+                    <property name="name">assessments</property>
+                    <property name="nativeName">assessments</property>
                     <property name="dataType">float</property>
                     <property name="nativeDataType">8</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select (cast(logins.count as float) / cast(accounts.count as float)) as logins, 
-       (cast(sessions.count as float) / cast(accounts.count as float)) as sessions 
+       (cast(assessments.count as float) / cast(accounts.count as float)) as assessments 
 from (select count(*) from statistics_login) as logins, 
      (select count(*) from account) as accounts, 
-     (select count(*) from session) as sessions]]></xml-property>
+     (select count(*) from session) as assessments]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -1190,7 +1190,7 @@ from (select count(*) from statistics_login) as logins,
         <design:resultColumnDefinitions>
           <design:attributes>
             <design:identifier>
-              <design:name>sessions</design:name>
+              <design:name>assessments</design:name>
               <design:position>2</design:position>
             </design:identifier>
             <design:nativeDataTypeCode>8</design:nativeDataTypeCode>
@@ -1198,11 +1198,11 @@ from (select count(*) from statistics_login) as logins,
             <design:scale>17</design:scale>
             <design:nullability>Unknown</design:nullability>
             <design:uiHints>
-              <design:displayName>sessions</design:displayName>
+              <design:displayName>assessments</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>sessions</design:label>
+            <design:label>assessments</design:label>
             <design:formattingHints>
               <design:displaySize>25</design:displaySize>
             </design:formattingHints>
@@ -5876,7 +5876,7 @@ function getCountryNameByCode(strValue) {
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by number of sessions and users during this month. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
+            <text-property name="content"><![CDATA[All countries by number of assessments and users during this month. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="109">
             <property name="dataSet">Sessions By Country</property>
@@ -7839,7 +7839,7 @@ function getCountryNameByCode(strValue) {
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by number of accumulated sessions and users since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
+            <text-property name="content"><![CDATA[All countries by number of accumulated assessments and users since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1494">
             <property name="dataSet">Sessions By Country Accumulated</property>
@@ -8828,7 +8828,7 @@ function getCountryNameByCode(strValue) {
         <text id="1423">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by percentage completed sessions during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
+            <text-property name="content"><![CDATA[All countries by percentage completed assessments during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1307">
             <property name="dataSet">Completed Sessions 2</property>
@@ -8909,17 +8909,17 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1311">
                         <label id="1312">
-                            <text-property name="text">Completed sessions</text-property>
+                            <text-property name="text">Completed assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1313">
                         <label id="1314">
-                            <text-property name="text">Total sessions</text-property>
+                            <text-property name="text">Total assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1315">
                         <label id="1316">
-                            <text-property name="text">Completed sessions of the total</text-property>
+                            <text-property name="text">Completed assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
@@ -8984,7 +8984,7 @@ function getCountryNameByCode(strValue) {
         <text id="1452">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
+            <text-property name="content"><![CDATA[Completed assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1279">
             <property name="style">heading1</property>
@@ -8993,7 +8993,7 @@ function getCountryNameByCode(strValue) {
         <text id="1424">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by percentage completed sessions since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
+            <text-property name="content"><![CDATA[All countries by percentage completed assessments since August 2011. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1340">
             <property name="dataSet">Completed Sessions 2 Accumulated</property>
@@ -9074,18 +9074,18 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1344">
                         <label id="1345">
-                            <text-property name="text">Accumulated completed sessions</text-property>
+                            <text-property name="text">Accumulated completed assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1346">
                         <label id="1347">
                             <text-property name="text">Accumulated 
-started sessions</text-property>
+started assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1348">
                         <label id="1349">
-                            <text-property name="text">Completed sessions of the total</text-property>
+                            <text-property name="text">Completed assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
@@ -9150,7 +9150,7 @@ started sessions</text-property>
         <text id="1453">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
+            <text-property name="content"><![CDATA[Completed assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1463">
             <property name="style">report-heading</property>

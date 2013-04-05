@@ -4520,7 +4520,7 @@ order by count desc;]]></xml-property>
             </footer>
         </table>
         <label id="479">
-            <text-property name="text">Number of sessions per tool</text-property>
+            <text-property name="text">Number of assessments per tool</text-property>
         </label>
         <table id="25">
             <property name="dataSet">Sessions by Zodb-Path</property>
@@ -4601,7 +4601,7 @@ order by count desc;]]></xml-property>
             </footer>
         </table>
         <label id="482">
-            <text-property name="text">Number of sessions per language</text-property>
+            <text-property name="text">Number of assessments per language</text-property>
         </label>
         <table id="599">
             <property name="dataSet">Sessions By Language</property>
@@ -4674,7 +4674,7 @@ order by count desc;]]></xml-property>
             </footer>
         </table>
         <label id="480">
-            <text-property name="text">Number of sessions per sector</text-property>
+            <text-property name="text">Number of assessments per sector</text-property>
         </label>
         <table id="87">
             <property name="dataSet">Sessions By Sector</property>
@@ -4751,7 +4751,7 @@ order by count desc;]]></xml-property>
             </footer>
         </table>
         <label id="481">
-            <text-property name="text">Number of sessions per country</text-property>
+            <text-property name="text">Number of assessments per country</text-property>
         </label>
         <table id="109">
             <property name="dataSet">Sessions By Country</property>
@@ -4807,7 +4807,7 @@ order by count desc;]]></xml-property>
             </footer>
         </table>
         <label id="483">
-            <text-property name="text">Number of completed sessions</text-property>
+            <text-property name="text">Number of completed assessments</text-property>
         </label>
         <table id="445">
             <property name="borderBottomColor">#000000</property>

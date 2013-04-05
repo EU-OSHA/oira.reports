@@ -2413,34 +2413,16 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="1113">
             <property name="style">heading1</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
             <text-property name="text">User Accounts</text-property>
         </label>
         <text id="1390">
             <property name="style">description</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
         <table id="126">
             <property name="width">2.4895833333333335in</property>
             <property name="dataSet">Number Of Accounts</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -2473,12 +2455,6 @@ function getCountryNameByCode(strValue) {
         </table>
         <text id="1457">
             <property name="style">description</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
         </text>
@@ -4550,7 +4526,7 @@ function getCountryNameByCode(strValue) {
                     <cell id="1680">
                         <text id="1682">
                             <property name="contentType">auto</property>
-                            <text-property name="content"><![CDATA[No sessions were started in the report period.]]></text-property>
+                            <text-property name="content"><![CDATA[No assessments were started in the report period.]]></text-property>
                         </text>
                     </cell>
                     <cell id="1681"/>
@@ -4602,7 +4578,7 @@ function getCountryNameByCode(strValue) {
         <text id="1423">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All tools by percentage completed sessions during the report period.]]></text-property>
+            <text-property name="content"><![CDATA[All tools by percentage completed assessments during the report period.]]></text-property>
         </text>
         <table id="1307">
             <property name="dataSet">Completed Sessions</property>
@@ -4682,17 +4658,17 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1311">
                         <label id="1312">
-                            <text-property name="text">Completed sessions</text-property>
+                            <text-property name="text">Completed assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1313">
                         <label id="1314">
-                            <text-property name="text">Total sessions</text-property>
+                            <text-property name="text">Total assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1315">
                         <label id="1316">
-                            <text-property name="text">Completed sessions of the total</text-property>
+                            <text-property name="text">Completed assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
@@ -4707,7 +4683,7 @@ function getCountryNameByCode(strValue) {
                     <cell id="1685">
                         <text id="1688">
                             <property name="contentType">auto</property>
-                            <text-property name="content"><![CDATA[No sessions were started in the report period.]]></text-property>
+                            <text-property name="content"><![CDATA[No assessments were started in the report period.]]></text-property>
                         </text>
                     </cell>
                     <cell id="1686"/>
@@ -4774,7 +4750,7 @@ function getCountryNameByCode(strValue) {
         <text id="1452">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed sessions is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
+            <text-property name="content"><![CDATA[Completed assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1121">
             <property name="style">heading1</property>
@@ -5756,7 +5732,7 @@ function getCountryNameByCode(strValue) {
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated sessions and users since August 2011 per tool.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 per tool.]]></text-property>
         </text>
         <table id="1529">
             <property name="dataSet">Sessions By Tool Accumulated</property>
@@ -6738,7 +6714,7 @@ function getCountryNameByCode(strValue) {
         <text id="1501">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated sessions and users since August 2011 for all tools.]]></text-property>
+            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 for all tools.]]></text-property>
         </text>
         <table id="1478">
             <property name="dataSet">Sessions By Month Accumulated</property>
@@ -6778,7 +6754,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1480">
                         <label id="1481">
-                            <text-property name="text">Accumulated sessions</text-property>
+                            <text-property name="text">Accumulated assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1482">
