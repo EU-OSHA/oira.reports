@@ -3844,7 +3844,7 @@ function getCountryNameByCode(strValue) {
         <text id="1454">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
+            <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the report period!]]></text-property>
         </text>
         <label id="1082">
             <property name="style">heading1</property>
@@ -4859,7 +4859,7 @@ function getCountryNameByCode(strValue) {
         <text id="1456">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
+            <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the report period!]]></text-property>
         </text>
         <label id="1113">
             <property name="style">heading1</property>
@@ -4930,7 +4930,7 @@ function getCountryNameByCode(strValue) {
                 </structure>
             </list-property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the reporting period!]]></text-property>
+            <text-property name="content"><![CDATA[Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
         </text>
         <label id="481">
             <property name="style">heading1</property>
