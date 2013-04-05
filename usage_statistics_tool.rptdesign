@@ -1565,9 +1565,14 @@ where
             <row id="1438">
                 <cell id="1439"/>
                 <cell id="1440">
+                    <text-data id="1717">
+                        <property name="style">heading1</property>
+                        <expression name="valueExpr">getCountryNameByCode(params["tool"].value.match(/^[^\/]*/)[0])</expression>
+                        <property name="contentType">html</property>
+                    </text-data>
                     <text-data id="1043">
                         <property name="style">heading1</property>
-                        <expression name="valueExpr">params["tool"].value</expression>
+                        <expression name="valueExpr">params["tool"].value.replace(/[^\/]*\//,'')</expression>
                         <property name="contentType">html</property>
                     </text-data>
                 </cell>

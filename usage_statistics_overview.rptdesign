@@ -809,7 +809,7 @@ where
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select 
-	zodb_path, 
+	substring(zodb_path from '../(.*/.*)') as zodb_path, 
 	language,
 	substring(zodb_path from '(..)/.*/.*') as country
 from 
@@ -992,7 +992,7 @@ order by
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select zodb_path, language
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '../(.*/.*)') as zodb_path, language
 from statistics_surveys
 where substring(zodb_path from '../(.*)/.*') like ?
 and published = false]]></xml-property>
