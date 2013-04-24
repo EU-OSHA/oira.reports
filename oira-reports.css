@@ -23,25 +23,27 @@
     font-size: 34px;
     font-weight: normal;
     margin-bottom: 18px;
-    color: #4F81BD;
+    color: #003399;
+    text-align: left;
 }
 
 .heading1 { 
     font-family: sans-serif;
     font-size: 22px;
-    color: #4F81BD;
+    font-style: italic;
+    color: #967ea7;
     margin-top:18px;
     margin-bottom:12px;
 }
 .heading2 {
     font-family: sans-serif;
     font-size: 18px;
-    color: #4F81BD;
+    color: #003399;
 }
 .heading3 {
     font-family: sans-serif;
     font-size: 12px;
-    color: #4F81BD;
+    color: #003399;
 }
 
 .description {
@@ -146,4 +148,12 @@ a:link {
 .indented-2 {
     padding-left: 32pt;
 }
-
+/* Why does this not work?
+.cover {
+    background-image: url(cover_bg.png);
+}
+*/
+.coverimage {
+    vertical-align: bottom;
+    text-align: center;
+}

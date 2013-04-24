@@ -948,6 +948,12 @@ order by
                     <text-property name="displayName">language</text-property>
                     <text-property name="heading">language</text-property>
                 </structure>
+                <structure>
+                    <property name="columnName">country</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">country</text-property>
+                    <text-property name="heading">country</text-property>
+                </structure>
             </list-property>
             <list-property name="parameters">
                 <structure>
@@ -973,6 +979,11 @@ order by
                         <property name="name">language</property>
                         <property name="dataType">string</property>
                     </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">country</property>
+                        <property name="dataType">string</property>
+                    </structure>
                 </list-property>
             </structure>
             <property name="dataSource">OiRA Postgres DB</property>
@@ -991,8 +1002,15 @@ order by
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">country</property>
+                    <property name="nativeName">country</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '../(.*/.*)') as zodb_path, language
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '../(.*/.*)') as zodb_path, language, substring(zodb_path from '(..)/.*/.*') as country
 from statistics_surveys
 where substring(zodb_path from '../(.*)/.*') like ?
 and published = false]]></xml-property>
@@ -2737,45 +2755,60 @@ order by numsurveys desc]]></xml-property>
         </simple-master-page>
     </page-setup>
     <body>
+        <text id="1654">
+            <property name="style">heading3</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[European Agancy for Safety and Health at Work]]></text-property>
+        </text>
         <grid id="1430">
             <property name="marginTop">3in</property>
             <property name="masterPage">Simple MasterPage</property>
             <property name="pageBreakAfter">always</property>
-            <property name="width">7.930555555555555in</property>
+            <property name="height">6.197916666666667in</property>
+            <property name="width">7.927083333333333in</property>
             <column id="1431">
-                <property name="width">2.5694444444444446in</property>
+                <property name="width">2.2708333333333335in</property>
             </column>
             <column id="1432">
-                <property name="width">3.5833333333333335in</property>
+                <property name="width">3.5729166666666665in</property>
             </column>
             <column id="1433">
-                <property name="width">1.7777777777777777in</property>
+                <property name="width">2.0833333333333335in</property>
             </column>
+            <row id="1650">
+                <property name="height">1.6875in</property>
+                <cell id="1651">
+                    <property name="colSpan">3</property>
+                    <property name="rowSpan">1</property>
+                    <property name="textAlign">center</property>
+                    <label id="1649">
+                        <property name="style">report-heading</property>
+                        <text-property name="text">Online interactive Risk Assessment</text-property>
+                    </label>
+                </cell>
+            </row>
             <row id="1434">
+                <property name="height">0.5208333333333334in</property>
                 <cell id="1435">
                     <property name="textAlign">center</property>
-                    <image id="1446">
-                        <property name="height">0.7222222222222222in</property>
-                        <property name="width">1.9722222222222223in</property>
-                        <property name="source">file</property>
-                        <expression name="uri" type="constant">OiRA_logo-smaller.jpg</expression>
-                    </image>
-                </cell>
-                <cell id="1436">
                     <label id="10">
                         <property name="style">report-heading</property>
                         <text-property name="text">Statistics</text-property>
                     </label>
                 </cell>
+                <cell id="1436"/>
                 <cell id="1437"/>
             </row>
             <row id="1438">
-                <cell id="1439"/>
-                <cell id="1440">
-                    <label id="1280">
+                <property name="height">2.1458333333333335in</property>
+                <cell id="1439">
+                    <property name="colSpan">2</property>
+                    <property name="rowSpan">1</property>
+                    <text-data id="1282">
                         <property name="style">heading1</property>
-                        <text-property name="text">EU-OSHA Overview</text-property>
-                    </label>
+                        <expression name="valueExpr">'EU-OSHA Overview - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value)</expression>
+                        <property name="contentType">auto</property>
+                    </text-data>
                 </cell>
                 <cell id="1441">
                     <text-data id="1043">
@@ -2784,27 +2817,65 @@ order by numsurveys desc]]></xml-property>
                     </text-data>
                 </cell>
             </row>
-            <row id="1442">
-                <cell id="1443"/>
-                <cell id="1444">
-                    <text-data id="1282">
-                        <property name="style">heading1</property>
-                        <expression name="valueExpr">(params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value)</expression>
-                        <property name="contentType">html</property>
-                    </text-data>
+            <row id="1655">
+                <property name="height">0.3229166666666667in</property>
+                <cell id="1656">
+                    <property name="colSpan">1</property>
+                    <property name="rowSpan">3</property>
+                    <property name="style">coverimage</property>
+                    <image id="1662">
+                        <property name="height">1.1458333333333333in</property>
+                        <property name="width">1.8125in</property>
+                        <property name="source">file</property>
+                        <expression name="uri" type="constant">logo.gif</expression>
+                    </image>
                 </cell>
-                <cell id="1445"/>
+                <cell id="1657"/>
+                <cell id="1658"/>
+            </row>
+            <row id="1663">
+                <property name="height">0.010416666666666666in</property>
+                <cell id="1665"/>
+                <cell id="1666"/>
             </row>
             <row id="1448">
-                <cell id="1449"/>
+                <property name="height">0.9895833333333334in</property>
                 <cell id="1450">
+                    <property name="style">coverimage</property>
+                    <image id="1661">
+                        <property name="height">0.4375in</property>
+                        <property name="width">0.65625in</property>
+                        <property name="source">file</property>
+                        <expression name="uri" type="constant">headereurope.gif</expression>
+                    </image>
+                </cell>
+                <cell id="1451">
+                    <property name="style">coverimage</property>
+                    <image id="1446">
+                        <property name="height">75px</property>
+                        <property name="width">159px</property>
+                        <property name="source">file</property>
+                        <expression name="uri" type="constant">OiRA_logo-smaller.jpg</expression>
+                    </image>
+                </cell>
+            </row>
+            <row id="1669">
+                <property name="height">0.2604166666666667in</property>
+                <cell id="1670"/>
+                <cell id="1671"/>
+                <cell id="1672"/>
+            </row>
+            <row id="1667">
+                <property name="height">0.2604166666666667in</property>
+                <cell id="1668">
+                    <property name="colSpan">3</property>
+                    <property name="rowSpan">1</property>
                     <text id="11">
-                        <property name="style">description</property>
+                        <property name="style">heading3</property>
                         <property name="contentType">auto</property>
-                        <text-property name="content"><![CDATA[This document presents usage statistics for the Online interactive Risk Assessment Tool (OiRA).]]></text-property>
+                        <text-property name="content"><![CDATA[Safety and health at work is everyone's concern. It's good for you. It's good for business.]]></text-property>
                     </text>
                 </cell>
-                <cell id="1451"/>
             </row>
         </grid>
         <label id="1060">
@@ -3763,12 +3834,6 @@ order by numsurveys desc]]></xml-property>
                     <property name="allowExport">true</property>
                 </structure>
             </list-property>
-            <method name="onPrepare"><![CDATA[var countrycodes = {'cy': 'Cyprus'}
-
-function getCountryNameByCode(strValue) {
-    return countrycodes[strValue];
-    
-}]]></method>
             <column id="395">
                 <property name="width">6.5in</property>
             </column>
@@ -4766,7 +4831,7 @@ function getCountryNameByCode(strValue) {
                 <structure>
                     <property name="name">Country</property>
                     <text-property name="displayName">Country</text-property>
-                    <expression name="expression" type="javascript">getCountryNameByCode(row["zodb_path"].match(/^(..)\//)[1])</expression>
+                    <expression name="expression" type="javascript">getCountryNameByCode(row["country"])</expression>
                     <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
@@ -4784,6 +4849,12 @@ function getCountryNameByCode(strValue) {
                             <expression name="value" type="javascript">row["zodb_path"]</expression>
                         </structure>
                     </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">country</property>
+                    <expression name="expression" type="javascript">dataSetRow["country"]</expression>
+                    <property name="dataType">string</property>
                     <property name="allowExport">true</property>
                 </structure>
             </list-property>
