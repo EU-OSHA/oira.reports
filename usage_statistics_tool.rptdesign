@@ -1524,7 +1524,10 @@ where
                     <property name="borderTopWidth">thin</property>
                     <property name="paddingTop">10pt</property>
                     <property name="contentType">html</property>
-                    <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                    <text-property name="content"><![CDATA[<table style="width: 100%;"><tr>
+<td><value-of>new Date()</value-of></td>
+<td style="text-align: right;"><viewtime-value-of>pageNumber</viewtime-value-of></td>
+</tr></table>]]></text-property>
                 </text>
             </page-footer>
         </simple-master-page>
