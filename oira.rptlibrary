@@ -16,9 +16,9 @@
                 </ex-property>
             </list-property>
             <property name="odaDriverClass">org.postgresql.Driver</property>
-            <property name="odaURL">jdbc:postgresql://birtserver/euphorie2</property>
-            <property name="odaUser">euphorie2</property>
-            <encrypted-property name="odaPassword" encryptionID="base64">bnVyd2ly</encrypted-property>
+            <property name="odaURL">jdbc:{{component.database_url}}</property>
+            <property name="odaUser">{{component.database_user}}</property>
+	    <encrypted-property name="odaPassword" encryptionID="base64">{{component.database_password}}</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
