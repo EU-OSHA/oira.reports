@@ -2390,7 +2390,7 @@ GROUP BY country;
             <list-property name="computedColumns">
                 <structure>
                     <property name="name">CCountry Name</property>
-                    <expression name="expression">if (row["numsurveys"]&lt;3) { 'Others' } else {row["country"]}</expression>
+                    <expression name="expression">if (row["numsurveys"]&lt;3) { 'Others' } else {row["country"]}</expression>
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
