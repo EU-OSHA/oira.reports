@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.2.0.v20120611 Build &lt;4.2.0.v20120612-1721></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.2.1.v201209101448 Build &lt;4.2.1.v20120912-1721></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -4630,12 +4630,12 @@ function getCountryNameByCode(strValue) {
         </table>
         <label id="1278">
             <property name="style">heading1</property>
-            <text-property name="text">Tools by % Completed Assessments</text-property>
+            <text-property name="text">Tools by % Top Assessments</text-property>
         </label>
         <text id="1423">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All tools by percentage completed assessments during the report period.]]></text-property>
+            <text-property name="content"><![CDATA[All tools by percentage top assessments during the report period.]]></text-property>
         </text>
         <table id="1307">
             <property name="dataSet">Completed Assessments</property>
@@ -4715,7 +4715,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1311">
                         <label id="1312">
-                            <text-property name="text">Completed assessments</text-property>
+                            <text-property name="text">Top assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1313">
@@ -4725,7 +4725,7 @@ function getCountryNameByCode(strValue) {
                     </cell>
                     <cell id="1315">
                         <label id="1316">
-                            <text-property name="text">Completed assessments of the total</text-property>
+                            <text-property name="text">Top assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
@@ -4807,7 +4807,7 @@ function getCountryNameByCode(strValue) {
         <text id="1452">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
+            <text-property name="content"><![CDATA[Top assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1121">
             <property name="style">heading1</property>

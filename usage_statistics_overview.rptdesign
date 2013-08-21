@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.2.0.v20120611 Build &lt;4.2.0.v20120612-1721></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.2.1.v201209101448 Build &lt;4.2.1.v20120912-1721></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -8897,12 +8897,12 @@ order by numsurveys desc]]></xml-property>
         </table>
         <label id="1278">
             <property name="style">heading1</property>
-            <text-property name="text">Countries by % Completed Assessments</text-property>
+            <text-property name="text">Countries by % Top Assessments</text-property>
         </label>
         <text id="1423">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by percentage completed assessments during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
+            <text-property name="content"><![CDATA[All countries by percentage top assessments during the report period. Every session that has been started using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1307">
             <property name="dataSet">Completed Assessments 2</property>
@@ -8983,7 +8983,7 @@ order by numsurveys desc]]></xml-property>
                     </cell>
                     <cell id="1311">
                         <label id="1312">
-                            <text-property name="text">Completed assessments</text-property>
+                            <text-property name="text">Top assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1313">
@@ -8993,7 +8993,7 @@ order by numsurveys desc]]></xml-property>
                     </cell>
                     <cell id="1315">
                         <label id="1316">
-                            <text-property name="text">Completed assessments of the total</text-property>
+                            <text-property name="text">Top assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
@@ -9058,16 +9058,16 @@ order by numsurveys desc]]></xml-property>
         <text id="1452">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
+            <text-property name="content"><![CDATA[Top assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1279">
             <property name="style">heading1</property>
-            <text-property name="text">Countries by Accumulated % Completed Assessments</text-property>
+            <text-property name="text">Countries by Accumulated % Top Assessments</text-property>
         </label>
         <text id="1424">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by percentage completed assessments since August 2011. Every assessment that has been started between August 2011 and the end of the report period using a tool that belongs to the country is counted.]]></text-property>
+            <text-property name="content"><![CDATA[All countries by percentage top assessments since August 2011. Every assessment that has been started between August 2011 and the end of the report period using a tool that belongs to the country is counted.]]></text-property>
         </text>
         <table id="1340">
             <property name="dataSet">Completed Assessments 2 Accumulated</property>
@@ -9148,7 +9148,7 @@ order by numsurveys desc]]></xml-property>
                     </cell>
                     <cell id="1344">
                         <label id="1345">
-                            <text-property name="text">Accumulated completed assessments</text-property>
+                            <text-property name="text">Accumulated top assessments</text-property>
                         </label>
                     </cell>
                     <cell id="1346">
@@ -9159,7 +9159,7 @@ started assessments</text-property>
                     </cell>
                     <cell id="1348">
                         <label id="1349">
-                            <text-property name="text">Completed assessments of the total</text-property>
+                            <text-property name="text">Top assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
@@ -9224,7 +9224,7 @@ started assessments</text-property>
         <text id="1453">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Completed assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
+            <text-property name="content"><![CDATA[Top assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
         <label id="1463">
             <property name="style">report-heading</property>
