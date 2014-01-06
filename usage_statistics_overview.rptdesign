@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.2.1.v201209101448 Build &lt;4.2.1.v20120912-1721></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -65,7 +65,7 @@
             <parameters>
                 <scalar-parameter name="year" id="1114">
                     <property name="valueType">static</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">string</property>
                     <property name="distinct">true</property>
                     <simple-property-list name="defaultValue">
                         <value type="constant">2012</value>
@@ -142,7 +142,7 @@
                 </scalar-parameter>
                 <scalar-parameter name="quarter" id="1118">
                     <property name="valueType">static</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">string</property>
                     <property name="distinct">true</property>
                     <simple-property-list name="defaultValue">
                         <value type="constant">0</value>
@@ -2690,6 +2690,84 @@ order by numsurveys desc]]></xml-property>
     </design:resultSetDefinitions>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey Responses per Assessment" id="1673">
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">year</property>
+                    <property name="paramName">year</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">month</property>
+                    <property name="paramName">month</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">quarter</property>
+                    <property name="paramName">quarter</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">sector</property>
+                    <property name="paramName">sector</property>
+                    <property name="dataType">string</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">responses</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">assessments</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">responses</property>
+                    <property name="nativeName">responses</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">assessments</property>
+                    <property name="nativeName">assessments</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+select count(company.id) as responses,
+       count(session.id) as assessments
+from company right outer join session
+  on company.session_id = session.id, params
+where substring(zodb_path from '../(.*)/.*') like ?
+  and modified >= '2011-08-01'
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else 
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                       '-01' as date)]]></xml-property>
         </oda-data-set>
     </data-sets>
     <styles>
@@ -9229,6 +9307,82 @@ started assessments</text-property>
         <label id="1463">
             <property name="style">report-heading</property>
             <text-property name="text">Descriptive data based on survey results</text-property>
+        </label>
+        <label id="1696">
+            <property name="style">heading1</property>
+            <text-property name="text">Number of Survey Responses</text-property>
+        </label>
+        <table id="1674">
+            <property name="dataSet">Survey Responses per Assessment</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">responses</property>
+                    <text-property name="displayName">responses</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["responses"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">assessments</property>
+                    <text-property name="displayName">assessments</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["assessments"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">Percentage</property>
+                    <expression name="expression" type="javascript">dataSetRow["responses"]/dataSetRow["assessments"]</expression>
+                    <property name="dataType">float</property>
+                    <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <column id="1688"/>
+            <column id="1689"/>
+            <column id="1693"/>
+            <header>
+                <row id="1675">
+                    <cell id="1676">
+                        <label id="1677">
+                            <text-property name="text">Responses</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1678">
+                        <label id="1679">
+                            <text-property name="text">Total Assessments</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1690">
+                        <label id="1694">
+                            <text-property name="text">Percentage</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="1680">
+                    <cell id="1681">
+                        <data id="1682">
+                            <property name="resultSetColumn">responses</property>
+                        </data>
+                    </cell>
+                    <cell id="1683">
+                        <data id="1684">
+                            <property name="resultSetColumn">assessments</property>
+                        </data>
+                    </cell>
+                    <cell id="1691">
+                        <data id="1695">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.0%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">Percentage</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <label id="1697">
+            <property name="style">description</property>
+            <text-property name="text">Accumulated data since August 2011.</text-property>
         </label>
         <label id="1149">
             <property name="style">heading1</property>
