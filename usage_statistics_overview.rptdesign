@@ -9934,6 +9934,11 @@ started assessments</text-property>
             <property name="style">heading1</property>
             <text-property name="text">Countries by Assessments with at least one preventive measure</text-property>
         </label>
+        <text id="1834">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[All countries by number of assessments with at least one preventive measure during this month. Every assessment with at least one preventive measure using a tool that belongs to the country is counted.]]></text-property>
+        </text>
         <table id="1816">
             <property name="dataSet">Assessments With Measures By Country</property>
             <list-property name="boundDataColumns">

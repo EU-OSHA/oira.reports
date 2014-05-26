@@ -2257,7 +2257,7 @@ order by all_dates.date desc;]]></xml-property>
         <text id="1899">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Number of times a user who has used this tool before has logged in during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+            <text-property name="content"><![CDATA[Number of times a user with an existing assessment using this tool has logged in during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
         <table id="1887">
             <property name="width">2.5in</property>
@@ -2294,6 +2294,11 @@ order by all_dates.date desc;]]></xml-property>
                 </row>
             </detail>
         </table>
+        <text id="1920">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[This only counts the number of logins. A user may or may not have accessed the tool while he/she was logged in.]]></text-property>
+        </text>
         <label id="481">
             <property name="style">heading1</property>
             <text-property name="text">Assessments and Users</text-property>
@@ -2602,6 +2607,11 @@ Users refers to the number of users that have created these assessments (sometim
             <property name="style">heading1</property>
             <text-property name="text">Assessments with at least one preventive measure</text-property>
         </label>
+        <text id="1921">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Assessments with at least one preventive measure during the report period.]]></text-property>
+        </text>
         <table id="1901">
             <property name="dataSet">Assessments With Measures By Month</property>
             <list-property name="boundDataColumns">

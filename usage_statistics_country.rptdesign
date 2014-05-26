@@ -7482,6 +7482,11 @@ function getCountryNameByCode(strValue) {
             <property name="style">heading1</property>
             <text-property name="text">Tools by Assessments with at least one preventive measure</text-property>
         </label>
+        <text id="1876">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Assessments with at least one preventive measure for all tools during the report period.]]></text-property>
+        </text>
         <table id="1856">
             <property name="dataSet">Assessments With Measures By Tool</property>
             <list-property name="boundDataColumns">
