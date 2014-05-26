@@ -1857,6 +1857,155 @@ where session.account_id = statistics_login.account_id
                        '-01' as date)
 ]]></xml-property>
         </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments With Measures By Month" id="1900">
+            <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="dataType">string</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">count</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">month</property>
+                        <property name="dataType">date-time</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">count</property>
+                    <property name="nativeName">count</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">month</property>
+                    <property name="nativeName">month</property>
+                    <property name="dataType">date-time</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with all_dates as (select to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') as month, 
+                         (to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
+                     from generate_series(
+                     2011, (extract(year from now())::int + 2)
+                                 ) as year 
+                full outer join generate_series(1,12) as month on 't'),
+     params as (select ? as year, ? as month, ? as quarter),
+     session_tmp as (
+           select session.id,
+                  session.modified,
+                  to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month,
+                  count(risk_id) as measures
+            from action_plan,tree,session
+           where action_plan.risk_id = tree.id
+             and tree.session_id = session.id
+             and session.zodb_path = ?
+             and modified >= timestamp '2011-08-01'
+        group by session.id
+     )
+select count(session_tmp.id), all_dates.date as month
+from params, session_tmp right outer join all_dates on session_tmp.month = all_dates.month
+where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else 
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                       '-01' as date)
+  and all_dates.date >= timestamp '2011-08-01'
+group by all_dates.date
+order by all_dates.date desc;]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>country</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>2147483647</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>country</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>country</design:label>
+            <design:formattingHints>
+              <design:displaySize>2147483647</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>count</design:name>
+              <design:position>2</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>-5</design:nativeDataTypeCode>
+            <design:precision>19</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>count</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>count</design:label>
+            <design:formattingHints>
+              <design:displaySize>20</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
     </data-sets>
     <styles>
         <style name="report" id="4">
@@ -2449,6 +2598,91 @@ Users refers to the number of users that have created these assessments (sometim
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Top assessments is calculated as: At least 70% of the Identification phase (= risks answered YES or NO) + at least 70% of the Action plan phase (= 70% of the risks answered NO have at least 1 measure)]]></text-property>
         </text>
+        <label id="1917">
+            <property name="style">heading1</property>
+            <text-property name="text">Assessments with at least one preventive measure</text-property>
+        </label>
+        <table id="1901">
+            <property name="dataSet">Assessments With Measures By Month</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">count</property>
+                    <text-property name="displayName">count</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["count"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">month</property>
+                    <text-property name="displayName">month</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["month"]</expression>
+                    <property name="dataType">date-time</property>
+                </structure>
+                <structure>
+                    <property name="name">total_count</property>
+                    <property name="dataType">integer</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["count"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <column id="1916">
+                <property name="repeat">1</property>
+            </column>
+            <column id="1915">
+                <property name="repeat">1</property>
+            </column>
+            <header>
+                <row id="1902">
+                    <cell id="1905">
+                        <label id="1906">
+                            <text-property name="text">Month</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1903">
+                        <label id="1904">
+                            <text-property name="text">Assessments with at least one preventive measure</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="1907">
+                    <cell id="1910">
+                        <data id="1911">
+                            <structure name="dateTimeFormat">
+                                <property name="category">Custom</property>
+                                <property name="pattern">y-MM</property>
+                            </structure>
+                            <property name="resultSetColumn">month</property>
+                        </data>
+                    </cell>
+                    <cell id="1908">
+                        <data id="1909">
+                            <property name="resultSetColumn">count</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="1912">
+                    <cell id="1914">
+                        <label id="1918">
+                            <text-property name="text">Total</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1913">
+                        <data id="1919">
+                            <property name="resultSetColumn">total_count</property>
+                        </data>
+                    </cell>
+                </row>
+            </footer>
+        </table>
         <label id="1461">
             <property name="style">report-heading</property>
             <text-property name="text">Descriptive data based on survey results</text-property>
