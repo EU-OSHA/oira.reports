@@ -2230,7 +2230,7 @@ order by all_dates.date desc;]]></xml-property>
                 <row id="127">
                     <cell id="128">
                         <label id="129">
-                            <text-property name="text">Total Number Of Accounts Created</text-property>
+                            <text-property name="text">Total Number Of Accounts Created (For the complete OiRA platform)</text-property>
                         </label>
                     </cell>
                 </row>
@@ -2248,7 +2248,8 @@ order by all_dates.date desc;]]></xml-property>
         <text id="1457">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
+            <text-property name="content"><![CDATA[Accounts are not linked to a country or sector, therefore the total number of all accounts in the OiRA platform is shown here.
+Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
         </text>
         <label id="1898">
             <property name="style">heading1</property>
