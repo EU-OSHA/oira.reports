@@ -291,6 +291,7 @@
 select substring(zodb_path from E'^..') as country,count(*),count(distinct(account_id)) as users
 from session, params
 where substring(zodb_path from '../(.*)/.*') like ?
+  and not zodb_path like '%/preview'
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
                        to_char((case when params.quarter=0 then
@@ -462,6 +463,7 @@ order by count desc;]]></xml-property>
 select substring(zodb_path from E'^..') as country,count(*),count(distinct(account_id)) as users
 from session, params
 where substring(zodb_path from '../(.*)/.*') like ?
+  and not zodb_path like '%/preview'
   and modified >= '2011-08-01'
   and modified >= cast(params.year::text || '-' || 
                        to_char((case when params.quarter=0 then
@@ -816,6 +818,7 @@ from
 	statistics_surveys
 where 
 	substring(zodb_path from '../(.*)/.*') like ? and 
+	not zodb_path like '%/preview' and 
 	published = true
 	
 order by 
@@ -1142,6 +1145,7 @@ and published = false]]></xml-property>
                     <text-property name="heading">assessments</text-property>
                 </structure>
             </list-property>
+            <list-property name="parameters"/>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
@@ -1177,7 +1181,7 @@ and published = false]]></xml-property>
        (cast(assessments.count as float) / cast(accounts.count as float)) as assessments 
 from (select count(*) from statistics_login) as logins, 
      (select count(*) from account) as accounts, 
-     (select count(*) from session) as assessments]]></xml-property>
+     (select count(*) from session where not zodb_path like '%/preview') as assessments]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -2111,6 +2115,7 @@ SELECT
 	COUNT(session_id) AS total
 FROM statistics_sessions, session, params
 WHERE statistics_sessions.session_id = session.id 
+  AND not session.zodb_path like '%/preview'
   AND substring(session.zodb_path from '../(.*)/.*') like ?
   AND session.modified >= '2011-08-01'
   AND modified >= cast(params.year::text || '-' || 
@@ -2300,6 +2305,7 @@ SELECT
 	COUNT(session_id) AS total
 FROM statistics_sessions, session, params
 WHERE statistics_sessions.session_id = session.id 
+  AND not session.zodb_path like '%/preview'
   AND substring(session.zodb_path from '../(.*)/.*') like ?
   AND session.modified >= '2011-08-01'
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
@@ -2463,6 +2469,7 @@ from
 	statistics_surveys
 where 
 	published = true and
+	not zodb_path like '%/preview' and 
 	substring(zodb_path from '../(.*)/.*') like ?
 group by 
 	country 
@@ -3160,6 +3167,7 @@ select count(risk_id) as measures,session.zodb_path
  from action_plan,tree,session,params
 where action_plan.risk_id = tree.id
   and tree.session_id = session.id
+  and not session.zodb_path like '%/preview'
   and substring(session.zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
   and modified >= cast(params.year::text || '-' || 
