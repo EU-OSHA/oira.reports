@@ -1931,8 +1931,8 @@ where session.account_id = statistics_login.account_id
      params as (select ? as year, ? as month, ? as quarter),
      session_tmp as (
            select session.id,
-                  session.modified,
-                  to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month,
+                  max(session.modified) as modified,
+                  to_char(date_part('year', max(modified)), 'FM0000') || '-' || to_char(date_part('month', max(modified)), 'FM00') as month,
                   count(risk_id) as measures
             from action_plan,tree,session
            where action_plan.risk_id = tree.id

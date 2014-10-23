@@ -3163,7 +3163,7 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[select substring(sessions_with_measures.zodb_path from '^..') as country,count(zodb_path) as sessions from (
 with params as (select ? as year, ? as month, ? as quarter)
-select count(risk_id) as measures,session.zodb_path
+select count(risk_id) as measures,max(session.zodb_path) as zodb_path
  from action_plan,tree,session,params
 where action_plan.risk_id = tree.id
   and tree.session_id = session.id
