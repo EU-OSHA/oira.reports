@@ -2826,7 +2826,7 @@ group by zodb_path order by sessions desc;]]></xml-property>
         <text id="1727">
             <property name="style">heading3</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[European Agancy for Safety and Health at Work]]></text-property>
+            <text-property name="content"><![CDATA[European Agency for Safety and Health at Work]]></text-property>
         </text>
         <grid id="1689">
             <property name="marginTop">3in</property>

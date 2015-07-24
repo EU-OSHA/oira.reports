@@ -3473,7 +3473,7 @@ group by country order by sessions desc;]]></xml-property>
         <text id="1654">
             <property name="style">heading3</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[European Agancy for Safety and Health at Work]]></text-property>
+            <text-property name="content"><![CDATA[European Agency for Safety and Health at Work]]></text-property>
         </text>
         <grid id="1430">
             <property name="marginTop">3in</property>
