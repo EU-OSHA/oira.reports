@@ -293,11 +293,11 @@ from session, params
 where substring(zodb_path from '../(.*)/.*') like ?
   and not zodb_path like '%/preview'
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by country
 order by count desc;]]></xml-property>
@@ -465,17 +465,17 @@ from session, params
 where substring(zodb_path from '../(.*)/.*') like ?
   and not zodb_path like '%/preview'
   and modified >= '2011-08-01'
-  and modified >= cast(params.year::text || '-' || 
+  and modified >= cast(params.year::text || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then  1 else params.month           end)
-                                else 
-                                     params.quarter * 3 - 2 end), 'FM09') || 
+                                else
+                                     params.quarter * 3 - 2 end), 'FM09') ||
                        '-01' as date)
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by country
 order by count desc;]]></xml-property>
@@ -810,18 +810,18 @@ where
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select 
-	substring(zodb_path from '../(.*/.*)') as zodb_path, 
+            <xml-property name="queryText"><![CDATA[select
+	substring(zodb_path from '../(.*/.*)') as zodb_path,
 	language,
 	substring(zodb_path from '(..)/.*/.*') as country
-from 
+from
 	statistics_surveys
-where 
-	substring(zodb_path from '../(.*)/.*') like ? and 
-	not zodb_path like '%/preview' and 
+where
+	substring(zodb_path from '../(.*)/.*') like ? and
+	not zodb_path like '%/preview' and
 	published = true
-	
-order by 
+
+order by
 	substring(zodb_path from '(..)/.*/.*')
 	]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1177,10 +1177,10 @@ and published = false]]></xml-property>
                     <property name="nativeDataType">8</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select (cast(logins.count as float) / cast(accounts.count as float)) as logins, 
-       (cast(assessments.count as float) / cast(accounts.count as float)) as assessments 
-from (select count(*) from statistics_login) as logins, 
-     (select count(*) from account) as accounts, 
+            <xml-property name="queryText"><![CDATA[select (cast(logins.count as float) / cast(accounts.count as float)) as logins,
+       (cast(assessments.count as float) / cast(accounts.count as float)) as assessments
+from (select count(*) from statistics_login) as logins,
+     (select count(*) from account) as accounts,
      (select count(*) from session where not zodb_path like '%/preview') as assessments]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -1306,18 +1306,18 @@ from (select count(*) from statistics_login) as logins,
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select substring(zodb_path from '^..') as country, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select substring(zodb_path from '^..') as country, count(session_id)
+from company,session,params
+where company.session_id = session.id
   and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
-group by substring(zodb_path from '^..') 
+group by substring(zodb_path from '^..')
 order by count desc]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -1463,16 +1463,16 @@ order by count desc]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select employees, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select employees, count(session_id)
+from company,session,params
+where company.session_id = session.id
   and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by employees order by employees;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1619,16 +1619,16 @@ group by employees order by employees;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select conductor, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select conductor, count(session_id)
+from company,session,params
+where company.session_id = session.id
   and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by conductor order by conductor;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1775,16 +1775,16 @@ group by conductor order by conductor;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select referer, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select referer, count(session_id)
+from company,session,params
+where company.session_id = session.id
   and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by referer order by referer;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1931,16 +1931,16 @@ group by referer order by referer;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select workers_participated, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select workers_participated, count(session_id)
+from company,session,params
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by workers_participated order by workers_participated;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2105,7 +2105,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
-SELECT 
+SELECT
     substring(session.zodb_path from '^..') as country,
 	COUNT(
 		CASE answered_ratio>=0.7 AND action_ratio>=0.7
@@ -2114,21 +2114,21 @@ SELECT
 		END) AS completed,
 	COUNT(session_id) AS total
 FROM statistics_sessions, session, params
-WHERE statistics_sessions.session_id = session.id 
+WHERE statistics_sessions.session_id = session.id
   AND not session.zodb_path like '%/preview'
   AND substring(session.zodb_path from '../(.*)/.*') like ?
   AND session.modified >= '2011-08-01'
-  AND modified >= cast(params.year::text || '-' || 
+  AND modified >= cast(params.year::text || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then  1 else params.month           end)
-                                else 
-                                     params.quarter * 3 - 2 end), 'FM09') || 
+                                else
+                                     params.quarter * 3 - 2 end), 'FM09') ||
                        '-01' as date)
-  AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 GROUP BY country;
 ]]></xml-property>
@@ -2295,7 +2295,7 @@ GROUP BY country;
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
-SELECT 
+SELECT
     substring(session.zodb_path from '^..') as country,
 	COUNT(
 		CASE answered_ratio>=0.7 AND action_ratio>=0.7
@@ -2304,15 +2304,15 @@ SELECT
 		END) AS completed,
 	COUNT(session_id) AS total
 FROM statistics_sessions, session, params
-WHERE statistics_sessions.session_id = session.id 
+WHERE statistics_sessions.session_id = session.id
   AND not session.zodb_path like '%/preview'
   AND substring(session.zodb_path from '../(.*)/.*') like ?
   AND session.modified >= '2011-08-01'
-  AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 GROUP BY country;
 ]]></xml-property>
@@ -2462,17 +2462,17 @@ GROUP BY country;
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[Select 
+            <xml-property name="queryText"><![CDATA[Select
 	count(*) as numsurveys,
 	substring(zodb_path from '(..)/.*/.*') as country
-from 
+from
 	statistics_surveys
-where 
+where
 	published = true and
-	not zodb_path like '%/preview' and 
+	not zodb_path like '%/preview' and
 	substring(zodb_path from '../(.*)/.*') like ?
-group by 
-	country 
+group by
+	country
 order by numsurveys desc]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -2616,16 +2616,16 @@ order by numsurveys desc]]></xml-property>
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[Select 
+            <xml-property name="queryText"><![CDATA[Select
 	count(*) as numsurveys,
 	substring(zodb_path from '(..)/.*/.*') as country
-from 
+from
 	statistics_surveys
-where 
+where
 	published = false and
 	substring(zodb_path from '../(.*)/.*') like ?
-group by 
-	country 
+group by
+	country
 order by numsurveys desc]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -2769,11 +2769,11 @@ from company right outer join session
   on company.session_id = session.id, params
 where substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey NeedsMet" id="1702">
@@ -2846,16 +2846,16 @@ where substring(zodb_path from '../(.*)/.*') like ?
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select needs_met, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select needs_met, count(session_id)
+from company,session,params
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by needs_met order by needs_met;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -3002,16 +3002,16 @@ group by needs_met order by needs_met;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select recommend_tool, count(session_id) 
-from company,session,params 
-where company.session_id = session.id 
+select recommend_tool, count(session_id)
+from company,session,params
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
 group by recommend_tool order by recommend_tool;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -3170,17 +3170,17 @@ where action_plan.risk_id = tree.id
   and not session.zodb_path like '%/preview'
   and substring(session.zodb_path from '../(.*)/.*') like ?
   and modified >= '2011-08-01'
-  and modified >= cast(params.year::text || '-' || 
+  and modified >= cast(params.year::text || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then  1 else params.month           end)
-                                else 
-                                     params.quarter * 3 - 2 end), 'FM09') || 
+                                else
+                                     params.quarter * 3 - 2 end), 'FM09') ||
                        '-01' as date)
-  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' || 
+  and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
-                                else 
-                                     (params.quarter * 3) % 12 + 1 end), 'FM09') || 
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
  group by session.id)
  as sessions_with_measures
@@ -9866,7 +9866,7 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                     <cell id="1346">
                         <label id="1347">
-                            <text-property name="text">Accumulated 
+                            <text-property name="text">Accumulated
 started assessments</text-property>
                         </label>
                     </cell>

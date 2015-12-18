@@ -822,14 +822,14 @@ where substring(zodb_path from '../(.*)/.*') like ?]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select risks_a.zodb_path, risks_a.answered_risks, risks_t.total_risks                                                                            
+            <xml-property name="queryText"><![CDATA[select risks_a.zodb_path, risks_a.answered_risks, risks_t.total_risks
 from (select session.id as session_id, max(session.zodb_path) as zodb_path, count(tree.id) as answered_risks
-  from session left outer join tree                                                                           
+  from session left outer join tree
   on tree.session_id = session.id and tree.type = 'risk'
   group by session.id) as risks_a,
   (select session_id, max(session_modules.session_path), sum(no_risks) as total_risks
   from (select session.id as session_id, session.zodb_path as session_path, tree.zodb_path as tree_path from session left outer join tree on session.id = tree.session_id and tree.type = 'module' --- and tree.skip_children = false
-    order by session.id,tree.zodb_path) as session_modules 
+    order by session.id,tree.zodb_path) as session_modules
   left outer join statistics_modules on statistics_modules.zodb_path like (session_modules.session_path || '%/' || session_modules.tree_path)
   group by session_id order by session_id) as risks_t
 where risks_a.session_id = risks_t.session_id
@@ -1052,9 +1052,9 @@ order by total_risks;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select loginname, date_part('month', time) as month, date_part('year', time) as year, count(statistics_login.id) 
-from statistics_login, account 
-where account.id = statistics_login.account_id 
+            <xml-property name="queryText"><![CDATA[select loginname, date_part('month', time) as month, date_part('year', time) as year, count(statistics_login.id)
+from statistics_login, account
+where account.id = statistics_login.account_id
 group by year,month,loginname
 order by year,month,loginname;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1170,7 +1170,7 @@ order by year,month,loginname;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select language,count(session.*)
-from session left join statistics_surveys on session.zodb_path = statistics_surveys.zodb_path 
+from session left join statistics_surveys on session.zodb_path = statistics_surveys.zodb_path
 where substring(session.zodb_path from '../(.*)/.*') like ?
 group by language
 order by count desc;]]></xml-property>
@@ -1321,9 +1321,9 @@ order by count desc;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select zodb_path, employees, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select zodb_path, employees, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by zodb_path, employees order by zodb_path, employees;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1494,9 +1494,9 @@ group by zodb_path, employees order by zodb_path, employees;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, employees, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, employees, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by sector, employees order by sector, employees;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1667,9 +1667,9 @@ group by sector, employees order by sector, employees;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, employees, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, employees, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by substring(zodb_path from '^..'), employees order by country, employees;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1840,9 +1840,9 @@ group by substring(zodb_path from '^..'), employees order by country, employees;
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select zodb_path, country as country_company, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select zodb_path, country as country_company, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by zodb_path, country order by zodb_path, count desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2013,9 +2013,9 @@ group by zodb_path, country order by zodb_path, count desc;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, country as country_company, count(session_id) 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, country as country_company, count(session_id)
 from company,session
-where company.session_id = session.id 
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by sector, country_company order by sector, country_company;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2116,9 +2116,9 @@ group by sector, country_company order by sector, country_company;]]></xml-prope
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country_path, country as country_company, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country_path, country as country_company, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by substring(zodb_path from '^..'), country order by country_path, count desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2289,8 +2289,8 @@ group by substring(zodb_path from '^..'), country order by country_path, count d
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select zodb_path, conductor, count(session_id) from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select zodb_path, conductor, count(session_id) from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by zodb_path, conductor order by zodb_path, conductor;
 ]]></xml-property>
@@ -2462,9 +2462,9 @@ group by zodb_path, conductor order by zodb_path, conductor;
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, conductor, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, conductor, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by sector, conductor order by sector, conductor;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2635,7 +2635,7 @@ group by sector, conductor order by sector, conductor;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, conductor, count(session_id) 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, conductor, count(session_id)
 from company,session where company.session_id = session.id and substring(zodb_path from '../(.*)/.*') like ? group by substring(zodb_path from '^..'), conductor order by country, conductor;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -2805,9 +2805,9 @@ from company,session where company.session_id = session.id and substring(zodb_pa
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select zodb_path, referer, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select zodb_path, referer, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by zodb_path, referer order by zodb_path, referer;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2978,9 +2978,9 @@ group by zodb_path, referer order by zodb_path, referer;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, referer, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, referer, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by sector, referer order by sector, referer;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -3151,9 +3151,9 @@ group by sector, referer order by sector, referer;]]></xml-property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, referer, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, referer, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by substring(zodb_path from '^..'), referer order by country, referer;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -3324,9 +3324,9 @@ group by substring(zodb_path from '^..'), referer order by country, referer;]]><
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select zodb_path, workers_participated, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select zodb_path, workers_participated, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by zodb_path, workers_participated order by zodb_path, workers_participated;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -3497,9 +3497,9 @@ group by zodb_path, workers_participated order by zodb_path, workers_participate
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, workers_participated, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from E'../\([^/]*\)/') as sector, workers_participated, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by sector, workers_participated order by sector, workers_participated;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -3670,9 +3670,9 @@ group by sector, workers_participated order by sector, workers_participated;]]><
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, workers_participated, count(session_id) 
-from company,session 
-where company.session_id = session.id 
+            <xml-property name="queryText"><![CDATA[select substring(zodb_path from '^..') as country, workers_participated, count(session_id)
+from company,session
+where company.session_id = session.id
 and substring(zodb_path from '../(.*)/.*') like ?
 group by substring(zodb_path from '^..'), workers_participated order by country, workers_participated;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
