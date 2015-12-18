@@ -270,13 +270,15 @@
                 full outer join generate_series(1,12) as month on 't'),
      params as (select ? as year, ? as month, ? as quarter),
      session_tmp as (
-       select id,
+       select session.id,
               account_id,
               modified,
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
+         join account on session.account_id = account.id
         where zodb_path = ?
           and modified >= timestamp '2011-08-01'
+          and (account_type is Null or (account_type is not Null and account_type!='guest'))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month <= all_dates.month
@@ -447,13 +449,15 @@ order by all_dates.date desc;]]></xml-property>
                 full outer join generate_series(1,12) as month on 't'),
      params as (select ? as year, ? as month, ? as quarter),
      session_tmp as (
-       select id,
+       select session.id,
               account_id,
               modified,
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
+         join account on session.account_id = account.id
         where zodb_path = ?
           and modified >= timestamp '2011-08-01'
+          and (account_type is Null or (account_type is not Null and account_type!='guest'))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month = all_dates.month
@@ -593,9 +597,11 @@ order by all_dates.date desc;]]></xml-property>
 select count(company.id) as responses,
        count(session.id) as assessments
 from company right outer join session
-  on company.session_id = session.id, params
+  on company.session_id = session.id
+  join account on session.account_id = account.id, params
   where zodb_path = ?
   and modified >= '2011-08-01'
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -747,9 +753,11 @@ from company right outer join session
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select employees, count(session_id)
-from company,session,params
+from company,session
+join account on session.account_id = account.id, params
 where company.session_id = session.id
   and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -903,9 +911,11 @@ group by employees order by employees;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select conductor, count(session_id)
-from company,session,params
+from company,session
+ join account on session.account_id = account.id ,params
 where company.session_id = session.id
   and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1059,9 +1069,11 @@ group by conductor order by conductor;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select referer, count(session_id)
-from company,session,params
+from company,session
+ join account on session.account_id = account.id ,params
 where company.session_id = session.id
   and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1215,9 +1227,11 @@ group by referer order by referer;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select workers_participated, count(session_id)
-from company,session,params
+from company,session
+ join account on session.account_id = account.id, params
 where company.session_id = session.id
 and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1403,9 +1417,11 @@ SELECT
 			ELSE NULL
 		END) AS completed,
 	COUNT(session_id) AS total
-FROM statistics_sessions, session, params
+FROM statistics_sessions, session
+ join account on session.account_id = account.id, params
 WHERE statistics_sessions.session_id = session.id
   AND session.zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   AND session.modified >= '2011-08-01'
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1475,6 +1491,7 @@ ORDER BY month desc;
 from account
 where
 	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
+    and (account_type is Null or (account_type is not Null and account_type!='guest'))
 	]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey NeedsMet" id="1830">
@@ -1545,9 +1562,11 @@ where
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select needs_met, count(session_id)
-from company,session,params
+from company,session
+ join account on session.account_id = account.id, params
 where company.session_id = session.id
 and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1698,9 +1717,11 @@ group by needs_met order by needs_met;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select recommend_tool, count(session_id)
-from company,session,params
+from company,session
+ join account on session.account_id = account.id, params
 where company.session_id = session.id
 and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1837,10 +1858,12 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select count(time) from session,statistics_login,account,params
+select count(time) from session
+  join account on session.account_id = account.id, statistics_login,account,params
 where session.account_id = statistics_login.account_id
   and account.id = statistics_login.account_id
   and zodb_path = ?
+  and (account_type is Null or (account_type is not Null and account_type!='guest'))
   and substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
   and statistics_login.time >= '2011-08-01'
   and statistics_login.time <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
@@ -1935,10 +1958,12 @@ where session.account_id = statistics_login.account_id
                   to_char(date_part('year', max(modified)), 'FM0000') || '-' || to_char(date_part('month', max(modified)), 'FM00') as month,
                   count(risk_id) as measures
             from action_plan,tree,session
+            join account on session.account_id = account.id
            where action_plan.risk_id = tree.id
              and tree.session_id = session.id
              and session.zodb_path = ?
              and modified >= timestamp '2011-08-01'
+             and (account_type is Null or (account_type is not Null and account_type!='guest'))
         group by session.id
      )
 select count(session_tmp.id), all_dates.date as month
