@@ -2249,7 +2249,7 @@ order by all_dates.date desc;]]></xml-property>
 from account
 where
 	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
-    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+    and (account_type is Null or (account_type is not Null and account_type!='guest'))
 	]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey NeedsMet" id="1799">
