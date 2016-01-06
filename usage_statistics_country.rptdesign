@@ -240,7 +240,7 @@
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -288,7 +288,7 @@
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select substring(zodb_path from '../(.*/.*)') as zodb_path,count(*),count(distinct(account_id)) as users
 from session join account on session.account_id = account.id, params
 where substring(zodb_path from '(..)/.*/.*') like params.country
@@ -421,7 +421,7 @@ order by count desc;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -469,7 +469,7 @@ order by count desc;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select substring(zodb_path from '../(.*/.*)') as zodb_path,count(*),count(distinct(account_id)) as users
 from session join account on session.account_id = account.id, params
 where substring(zodb_path from '(..)/.*/.*') like params.country
@@ -748,7 +748,7 @@ order by count desc;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -774,7 +774,7 @@ order by count desc;]]></xml-property>
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select
 	substring(zodb_path from '../(.*/.*)') as zodb_path
 from
@@ -951,7 +951,7 @@ order by
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -977,7 +977,7 @@ order by
                     <property name="dataType">string</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select
 	substring(zodb_path from '../(.*/.*)') as zodb_path
 from
@@ -1157,7 +1157,7 @@ order by
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -1194,7 +1194,7 @@ order by
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select count(company.id) as responses,
        count(session.id) as assessments
 from company right outer join session
@@ -1324,7 +1324,7 @@ from company right outer join session
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -1361,7 +1361,7 @@ from company right outer join session
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select employees, count(session_id)
 from company,session
   join account on session.account_id = account.id,params
@@ -1491,7 +1491,7 @@ group by employees order by employees;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -1528,7 +1528,7 @@ group by employees order by employees;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select conductor, count(session_id)
 from company,session
   join account on session.account_id = account.id,params
@@ -1658,7 +1658,7 @@ group by conductor order by conductor;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -1695,7 +1695,7 @@ group by conductor order by conductor;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select referer, count(session_id)
 from company,session
   join account on session.account_id = account.id, params
@@ -1825,7 +1825,7 @@ group by referer order by referer;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -1862,7 +1862,7 @@ group by referer order by referer;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select workers_participated, count(session_id)
 from company,session
   join account on session.account_id = account.id, params
@@ -2001,7 +2001,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -2054,7 +2054,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter, ? as country, ? as testsessions)
 SELECT
     substring(session.zodb_path from '../(.*/.*)') as zodb_path,
 	COUNT(
@@ -2144,7 +2144,7 @@ GROUP BY zodb_path;
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -2197,7 +2197,7 @@ GROUP BY zodb_path;
            from generate_series(2011,
                                 extract(year from now())::int + 2) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter, ? as country)
+     params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select count(*),count(distinct(account_id)) as users, all_dates.date - interval '1 day' as month
 from session
   join account on session.account_id = account.id, params, all_dates
@@ -2289,7 +2289,7 @@ where
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -2326,7 +2326,7 @@ where
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select needs_met, count(session_id)
 from company,session
   join account on session.account_id = account.id,params
@@ -2453,7 +2453,7 @@ group by needs_met order by needs_met;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -2490,7 +2490,7 @@ group by needs_met order by needs_met;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country)
+            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select recommend_tool, count(session_id)
 from company,session
   join account on session.account_id = account.id, params
@@ -2624,7 +2624,7 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
                 <structure>
-                    <property name="name">param_5</property>
+                    <property name="name">testsessions</property>
                     <property name="paramName">testsessions</property>
                     <property name="dataType">integer</property>
                     <property name="position">5</property>
@@ -2662,7 +2662,7 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select substring(zodb_path from '../(.*/.*)') as zodb_path,count(zodb_path) as sessions from (
-with params as (select ? as year, ? as month, ? as quarter, ? as country)
+with params as (select ? as year, ? as month, ? as quarter, ? as country, ? as testsessions)
 select count(risk_id) as measures,max(session.zodb_path) as zodb_path
  from action_plan,tree,session
    join account on session.account_id = account.id,params
