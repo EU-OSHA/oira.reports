@@ -293,7 +293,7 @@ select substring(zodb_path from '../(.*/.*)') as zodb_path,count(*),count(distin
 from session join account on session.account_id = account.id, params
 where substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -474,7 +474,7 @@ select substring(zodb_path from '../(.*/.*)') as zodb_path,count(*),count(distin
 from session join account on session.account_id = account.id, params
 where substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified >= cast(params.year::text || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1202,7 +1202,7 @@ from company right outer join session
   join account on session.account_id = account.id, params
   where substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1368,7 +1368,7 @@ from company,session
 where company.session_id = session.id
   and not zodb_path like '%/preview'
   and substring(zodb_path from '(..)/.*/.*') like params.country
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1535,7 +1535,7 @@ from company,session
 where company.session_id = session.id
   and not zodb_path like '%/preview'
   and substring(zodb_path from '(..)/.*/.*') like params.country
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1701,7 +1701,7 @@ from company,session
   join account on session.account_id = account.id, params
 where company.session_id = session.id
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and substring(zodb_path from '(..)/.*/.*') like params.country
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
@@ -1869,7 +1869,7 @@ from company,session
 where company.session_id = session.id
 and substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -2067,7 +2067,7 @@ FROM statistics_sessions, session
   join account on session.account_id = account.id, params
 WHERE statistics_sessions.session_id = session.id
   AND not session.zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   AND substring(session.zodb_path from '(..)/.*/.*') like params.country
   AND session.modified >= '2011-08-01'
   AND modified >= cast(params.year::text || '-' ||
@@ -2203,7 +2203,7 @@ from session
   join account on session.account_id = account.id, params, all_dates
 where substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and session.modified < all_dates.date
   and modified >= '2011-08-01'
   and all_dates.date <=  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
@@ -2249,7 +2249,7 @@ order by all_dates.date desc;]]></xml-property>
 from account
 where
 	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
-    and (account_type is Null or (account_type is not Null and account_type!='guest'))
+    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
 	]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey NeedsMet" id="1799">
@@ -2333,7 +2333,7 @@ from company,session
 where company.session_id = session.id
 and substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -2497,7 +2497,7 @@ from company,session
 where company.session_id = session.id
 and substring(zodb_path from '(..)/.*/.*') like params.country
   and not zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -2669,7 +2669,7 @@ select count(risk_id) as measures,max(session.zodb_path) as zodb_path
 where action_plan.risk_id = tree.id
   and tree.session_id = session.id
   and not session.zodb_path like '%/preview'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and substring(session.zodb_path from '(..)/.*/.*') like params.country
   and modified >= '2011-08-01'
   and modified >= cast(params.year::text || '-' ||
