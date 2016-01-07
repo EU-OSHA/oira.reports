@@ -297,7 +297,7 @@
               modified,
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
-         join account on session.account_id = account.id
+         join account on session.account_id = account.id, params
         where zodb_path = params.tool
           and modified >= timestamp '2011-08-01'
           and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
@@ -484,7 +484,7 @@ order by all_dates.date desc;]]></xml-property>
               modified,
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
-         join account on session.account_id = account.id
+         join account on session.account_id = account.id, params
         where zodb_path = params.tool
           and modified >= timestamp '2011-08-01'
           and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
@@ -1961,7 +1961,7 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select count(time) from session
-  join account on session.account_id = account.id, statistics_login,account,params
+  join account on session.account_id = account.id, statistics_login, params
 where session.account_id = statistics_login.account_id
   and account.id = statistics_login.account_id
   and zodb_path = params.tool
@@ -2067,7 +2067,7 @@ where session.account_id = statistics_login.account_id
                   max(session.modified) as modified,
                   to_char(date_part('year', max(modified)), 'FM0000') || '-' || to_char(date_part('month', max(modified)), 'FM00') as month,
                   count(risk_id) as measures
-            from action_plan,tree,session
+            from action_plan,tree,session,params
             join account on session.account_id = account.id
            where action_plan.risk_id = tree.id
              and tree.session_id = session.id
