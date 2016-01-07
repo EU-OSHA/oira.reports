@@ -35,6 +35,20 @@
                 <property name="category">Unformatted</property>
             </structure>
         </scalar-parameter>
+        <scalar-parameter name="testsessions" id="1999">
+            <property name="valueType">static</property>
+            <property name="dataType">integer</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">0</value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
         <parameter-group name="timespan" id="1116">
             <parameters>
                 <scalar-parameter name="year" id="1114">
@@ -221,6 +235,14 @@
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -268,7 +290,7 @@
                      2011, (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter),
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
        select session.id,
               account_id,
@@ -276,9 +298,9 @@
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
          join account on session.account_id = account.id
-        where zodb_path = ?
+        where zodb_path = params.tool
           and modified >= timestamp '2011-08-01'
-          and (account_type is Null or (account_type is not Null and account_type!='guest'))
+          and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month <= all_dates.month
@@ -400,6 +422,14 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -447,7 +477,7 @@ order by all_dates.date desc;]]></xml-property>
                      2011, (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter),
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
        select session.id,
               account_id,
@@ -455,9 +485,9 @@ order by all_dates.date desc;]]></xml-property>
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
          join account on session.account_id = account.id
-        where zodb_path = ?
+        where zodb_path = params.tool
           and modified >= timestamp '2011-08-01'
-          and (account_type is Null or (account_type is not Null and account_type!='guest'))
+          and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month = all_dates.month
@@ -563,6 +593,14 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -593,15 +631,15 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select count(company.id) as responses,
        count(session.id) as assessments
 from company right outer join session
   on company.session_id = session.id
   join account on session.account_id = account.id, params
-  where zodb_path = ?
+  where zodb_path = params.tool
   and modified >= '2011-08-01'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -721,6 +759,14 @@ from company right outer join session
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -751,13 +797,13 @@ from company right outer join session
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select employees, count(session_id)
 from company,session
 join account on session.account_id = account.id, params
 where company.session_id = session.id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -879,6 +925,14 @@ group by employees order by employees;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -909,13 +963,13 @@ group by employees order by employees;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select conductor, count(session_id)
 from company,session
  join account on session.account_id = account.id ,params
 where company.session_id = session.id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1037,6 +1091,14 @@ group by conductor order by conductor;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1067,13 +1129,13 @@ group by conductor order by conductor;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select referer, count(session_id)
 from company,session
  join account on session.account_id = account.id ,params
 where company.session_id = session.id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1195,6 +1257,14 @@ group by referer order by referer;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1225,13 +1295,13 @@ group by referer order by referer;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select workers_participated, count(session_id)
 from company,session
  join account on session.account_id = account.id, params
 where company.session_id = session.id
-and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1362,6 +1432,14 @@ group by workers_participated order by workers_participated;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1408,7 +1486,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
+            <xml-property name="queryText"><![CDATA[WITH params AS (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 SELECT
     date_part('year', session.modified) || '-' || to_char(date_part('month', session.modified), 'FM00') as month,
 	COUNT(
@@ -1420,8 +1498,8 @@ SELECT
 FROM statistics_sessions, session
  join account on session.account_id = account.id, params
 WHERE statistics_sessions.session_id = session.id
-  AND session.zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  AND session.zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   AND session.modified >= '2011-08-01'
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1491,7 +1569,7 @@ ORDER BY month desc;
 from account
 where
 	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
-    and (account_type is Null or (account_type is not Null and account_type!='guest'))
+    and ((account_type is not Null and account_type!='guest') or account_type is Null)
 	]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey NeedsMet" id="1830">
@@ -1530,6 +1608,14 @@ where
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1560,13 +1646,13 @@ where
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select needs_met, count(session_id)
 from company,session
  join account on session.account_id = account.id, params
 where company.session_id = session.id
-and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1685,6 +1771,14 @@ group by needs_met order by needs_met;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1715,13 +1809,13 @@ group by needs_met order by needs_met;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select recommend_tool, count(session_id)
 from company,session
  join account on session.account_id = account.id, params
 where company.session_id = session.id
-and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1838,6 +1932,14 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1857,13 +1959,13 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select count(time) from session
   join account on session.account_id = account.id, statistics_login,account,params
 where session.account_id = statistics_login.account_id
   and account.id = statistics_login.account_id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
   and statistics_login.time >= '2011-08-01'
   and statistics_login.time <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
@@ -1915,6 +2017,14 @@ where session.account_id = statistics_login.account_id
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1951,7 +2061,7 @@ where session.account_id = statistics_login.account_id
                      2011, (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter),
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
            select session.id,
                   max(session.modified) as modified,
@@ -1961,9 +2071,9 @@ where session.account_id = statistics_login.account_id
             join account on session.account_id = account.id
            where action_plan.risk_id = tree.id
              and tree.session_id = session.id
-             and session.zodb_path = ?
+             and session.zodb_path = params.tool
              and modified >= timestamp '2011-08-01'
-             and (account_type is Null or (account_type is not Null and account_type!='guest'))
+             and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
         group by session.id
      )
 select count(session_tmp.id), all_dates.date as month
@@ -2150,7 +2260,7 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="rowSpan">1</property>
                     <text-data id="1756">
                         <property name="style">heading1</property>
-                        <expression name="valueExpr">getCountryNameByCode(params["tool"].value.match(/^[^\/]*/)[0]) + ' - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value)</expression>
+                        <expression name="valueExpr">getCountryNameByCode(params["tool"].value.match(/^[^\/]*/)[0]) + ' - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value) (params["testsessions"].value == 1 ? ' ONLY test sessions are considered' : '')</expression>
                         <property name="contentType">html</property>
                     </text-data>
                 </cell>
