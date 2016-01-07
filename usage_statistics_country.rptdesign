@@ -3024,7 +3024,7 @@ group by zodb_path order by sessions desc;]]></xml-property>
                     <property name="rowSpan">1</property>
                     <text-data id="1729">
                         <property name="style">heading1</property>
-                        <expression name="valueExpr">getCountryNameByCode(params["country"].value) + ' - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value) + '--' +  (params["testsessions"].value == 0 ? 'no test sessions' : 'only test sessions') </expression>
+                        <expression name="valueExpr">getCountryNameByCode(params["country"].value) + ' - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value) + (params["testsessions"].value == 1 ? ' ONLY test sessions are considered' : '') </expression>
                         <property name="contentType">html</property>
                     </text-data>
                 </cell>
