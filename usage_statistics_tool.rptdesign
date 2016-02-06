@@ -1859,7 +1859,7 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
 select count(time) from session
-  join account on session.account_id = account.id, statistics_login,account,params
+  join account on session.account_id = account.id, statistics_login,params
 where session.account_id = statistics_login.account_id
   and account.id = statistics_login.account_id
   and zodb_path = ?
