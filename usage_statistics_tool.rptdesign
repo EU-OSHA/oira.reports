@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.5.0.v201506092134 Build &lt;@BUILD@></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -17,12 +17,14 @@
     <list-property name="cssStyleSheets">
         <structure>
             <property name="fileName">oira-reports.css</property>
+            <property name="useExternalCss">false</property>
         </structure>
     </list-property>
     <parameters>
         <scalar-parameter name="tool" id="1041">
             <text-property name="promptText">Tool to generate statistics for</text-property>
             <property name="valueType">static</property>
+            <property name="isRequired">true</property>
             <property name="dataType">string</property>
             <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
@@ -2141,6 +2143,276 @@ order by all_dates.date desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Risk Identification Overview" id="2000">
+            <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">not_present</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">not_present</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">not_present</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">_identified</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">_identified</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">_identified</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">postponed</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">postponed</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">postponed</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">unanswered</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">unanswered</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">unanswered</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">year</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">0</property>
+                    <property name="position">1</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">month</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">0</property>
+                    <property name="position">2</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">quarter</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">0</property>
+                    <property name="position">3</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">tool</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">0</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">0</property>
+                    <property name="position">5</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">not_present</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">_identified</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">postponed</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">unanswered</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">not_present</property>
+                    <property name="nativeName">not_present</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">_identified</property>
+                    <property name="nativeName">_identified</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">postponed</property>
+                    <property name="nativeName">postponed</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">unanswered</property>
+                    <property name="nativeName">unanswered</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select avg(cast(not_present as numeric)) as not_present,
+       avg(cast(_identified as numeric)) as _identified,
+       avg(cast(postponed as numeric)) as postponed,
+       avg(cast(unanswered as numeric)) as unanswered
+  from (
+    select case when count(risk.id)!=0 then cast(count(risk.identification=ANY('{yes,n/a}'::text[]) or NULL) as numeric) / count(risk.id) else 0 end as not_present,
+           case when count(risk.id)!=0 then cast(count(risk.identification='no' or NULL) as numeric) / count(risk.id) else 0 end as _identified,
+           case when count(risk.id)!=0 then cast(count((risk.identification IS NULL and tree.postponed) or NULL) as numeric) / count(risk.id) else 0 end as postponed, 
+           case when count(risk.id)!=0 then cast(count((risk.identification IS NULL and not tree.postponed) or NULL) as numeric) / count(risk.id) else 0 end as unanswered
+      from tree, risk, params, session, account
+     where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
+       and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+       AND session.modified >= '2011-08-01'
+       AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                            to_char((case when params.quarter=0 then
+                                          (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                     else
+                                          (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                            '-01' as date)
+       AND NOT (EXISTS (
+            SELECT tree_parent.id
+              FROM tree tree_parent
+             WHERE tree.session_id = tree_parent.session_id
+               AND tree.depth > tree_parent.depth
+               AND tree.path::text ~~ (tree_parent.path::text || '%'::text)
+               AND tree_parent.skip_children = true
+       ))
+  ) as identification_ratios;
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>yes</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>yes</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>yes</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>no</design:name>
+              <design:position>2</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>no</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>no</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>n_a</design:name>
+              <design:position>3</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>n_a</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>n_a</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>_null</design:name>
+              <design:position>4</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>_null</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>_null</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
     </data-sets>
     <styles>
         <style name="report" id="4">
@@ -2826,6 +3098,104 @@ Users refers to the number of users that have created these assessments (sometim
                             <property name="resultSetColumn">total_count</property>
                         </data>
                     </cell>
+                </row>
+            </footer>
+        </table>
+        <label id="2057">
+            <property name="style">heading1</property>
+            <text-property name="text">Risk identification</text-property>
+        </label>
+        <text id="2058">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Ratio of not present, identified, postponed and unanswered risks. Average over all assessments in the report period.]]></text-property>
+        </text>
+        <table id="2029">
+            <property name="dataSet">Risk Identification Overview</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">not_present</property>
+                    <text-property name="displayName">not_present</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["not_present"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">_identified</property>
+                    <text-property name="displayName">_identified</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["_identified"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">postponed</property>
+                    <text-property name="displayName">postponed</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["postponed"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">unanswered</property>
+                    <text-property name="displayName">unanswered</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["unanswered"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2053"/>
+            <column id="2054"/>
+            <column id="2055"/>
+            <column id="2056"/>
+            <header>
+                <row id="2030">
+                    <cell id="2031">
+                        <label id="2032">
+                            <text-property name="text">Not present</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2033">
+                        <label id="2034">
+                            <text-property name="text">Identified</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2035">
+                        <label id="2036">
+                            <text-property name="text">Postponed</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2037">
+                        <label id="2038">
+                            <text-property name="text">Unanswered</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2039">
+                    <cell id="2040">
+                        <data id="2041">
+                            <property name="resultSetColumn">not_present</property>
+                        </data>
+                    </cell>
+                    <cell id="2042">
+                        <data id="2043">
+                            <property name="resultSetColumn">_identified</property>
+                        </data>
+                    </cell>
+                    <cell id="2044">
+                        <data id="2045">
+                            <property name="resultSetColumn">postponed</property>
+                        </data>
+                    </cell>
+                    <cell id="2046">
+                        <data id="2047">
+                            <property name="resultSetColumn">unanswered</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="2048">
+                    <cell id="2049"/>
+                    <cell id="2050"/>
+                    <cell id="2051"/>
+                    <cell id="2052"/>
                 </row>
             </footer>
         </table>
