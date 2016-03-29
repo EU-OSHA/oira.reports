@@ -5025,6 +5025,10 @@ Users refers to the number of users that have created these assessments (sometim
                 <row id="2067">
                     <cell id="2068">
                         <data id="2069">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
                             <property name="resultSetColumn">_identified</property>
                         </data>
                     </cell>
@@ -5321,6 +5325,10 @@ Only assessments that were modified within the reporting period are counted.]]><
                 <row id="2163">
                     <cell id="2164">
                         <data id="2165">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
                             <property name="resultSetColumn">case</property>
                         </data>
                     </cell>
