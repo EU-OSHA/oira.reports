@@ -5068,7 +5068,7 @@ Users refers to the number of users that have created these assessments (sometim
                 <row id="2081">
                     <cell id="2082">
                         <label id="2083">
-                            <text-property name="text">risks_with_measures</text-property>
+                            <text-property name="text">Risks With Measures</text-property>
                         </label>
                     </cell>
                 </row>
