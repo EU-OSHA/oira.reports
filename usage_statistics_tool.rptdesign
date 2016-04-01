@@ -3000,7 +3000,7 @@ select case when count(id)!=0 then cast(count(num_measures>0 or NULL) as numeric
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
-select case when count(created)!=0 then count(((modified - created) > '1 day'::interval) or null) / count(created)::numeric else 0 end as continued
+select case when count(created)!=0 then count(((modified - created) > '01:00:00'::interval) or null) / count(created)::numeric else 0 end as continued
   from params, session, account
  where session.zodb_path = params.tool and session.account_id = account.id
    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
