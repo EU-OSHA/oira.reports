@@ -3306,7 +3306,7 @@ select case when count(created)!=0 then count(((modified - created) > '01:00:00'
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select '2016'::integer as year, 0::integer as month, 0::integer as quarter, 'cy/kernel/sources'::text as tool, 0::integer as testsessions)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select max(tree.title) as title, count(tree.id) as num_unanswered
   from tree, risk, session, params, account
  where risk.identification IS NULL and tree.session_id = session.id and tree.id = risk.id and session.zodb_path = params.tool and session.account_id = account.id
@@ -3351,9 +3351,6 @@ group by tree.zodb_path order by num_unanswered desc;
           <design:scale>0</design:scale>
           <design:nullability>Unknown</design:nullability>
         </design:attributes>
-        <design:inputAttributes>
-          <design:elementAttributes/>
-        </design:inputAttributes>
       </design:ParameterDefinition>
     </parameter>
     <parameter>
@@ -3369,9 +3366,6 @@ group by tree.zodb_path order by num_unanswered desc;
           <design:scale>0</design:scale>
           <design:nullability>Unknown</design:nullability>
         </design:attributes>
-        <design:inputAttributes>
-          <design:elementAttributes/>
-        </design:inputAttributes>
       </design:ParameterDefinition>
     </parameter>
     <parameter>
@@ -3387,9 +3381,6 @@ group by tree.zodb_path order by num_unanswered desc;
           <design:scale>0</design:scale>
           <design:nullability>Unknown</design:nullability>
         </design:attributes>
-        <design:inputAttributes>
-          <design:elementAttributes/>
-        </design:inputAttributes>
       </design:ParameterDefinition>
     </parameter>
     <parameter>
@@ -3405,9 +3396,6 @@ group by tree.zodb_path order by num_unanswered desc;
           <design:scale>0</design:scale>
           <design:nullability>Unknown</design:nullability>
         </design:attributes>
-        <design:inputAttributes>
-          <design:elementAttributes/>
-        </design:inputAttributes>
       </design:ParameterDefinition>
     </parameter>
     <parameter>
@@ -3423,9 +3411,6 @@ group by tree.zodb_path order by num_unanswered desc;
           <design:scale>0</design:scale>
           <design:nullability>Unknown</design:nullability>
         </design:attributes>
-        <design:inputAttributes>
-          <design:elementAttributes/>
-        </design:inputAttributes>
       </design:ParameterDefinition>
     </parameter>
   </DataSetParameters>
