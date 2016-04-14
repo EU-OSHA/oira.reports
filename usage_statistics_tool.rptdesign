@@ -5505,6 +5505,10 @@ Only assessments that were modified within the reporting period are counted.]]><
                 <row id="2149">
                     <cell id="2150">
                         <data id="2151">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
                             <property name="resultSetColumn">case</property>
                         </data>
                     </cell>
