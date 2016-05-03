@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.5.0.v201506092134 Build &lt;@BUILD@></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
     </list-property>
@@ -17,6 +17,7 @@
     <list-property name="cssStyleSheets">
         <structure>
             <property name="fileName">oira-reports.css</property>
+            <property name="useExternalCss">false</property>
         </structure>
     </list-property>
     <parameters>
@@ -2905,6 +2906,186 @@ group by zodb_path order by sessions desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
+        <joint-data-set name="Completed + With Measures" id="2000">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">Completed Assessments::total</property>
+                    <property name="alias">total</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">Completed Assessments::total</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">Assessments With Measures By Tool::sessions</property>
+                    <property name="alias">sessions</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">Assessments With Measures By Tool::sessions</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">Assessments With Measures By Tool::zodb_path</property>
+                    <property name="alias">Assessments With Measures By Tool::zodb_path</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">Assessments With Measures By Tool::zodb_path</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">Completed Assessments::percentage</property>
+                    <property name="alias">percentage</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">Completed Assessments::percentage</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">Completed Assessments::completed</property>
+                    <property name="alias">completed</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">Completed Assessments::completed</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">Completed Assessments::zodb_path</property>
+                    <property name="alias">Completed Assessments::zodb_path</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">Completed Assessments::zodb_path</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">Completed Assessments::param_1</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">0</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Completed Assessments::param_1_2</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">1</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Completed Assessments::param_4</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">2</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Completed Assessments::param_1_1</property>
+                    <property name="dataType">string</property>
+                    <property name="position">3</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Completed Assessments::testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Assessments With Measures By Tool::param_1</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Assessments With Measures By Tool::param_2</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">6</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Assessments With Measures By Tool::param_3</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">7</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Assessments With Measures By Tool::param_4</property>
+                    <property name="dataType">string</property>
+                    <property name="position">8</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">Assessments With Measures By Tool::testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">9</property>
+                    <property name="isOptional">false</property>
+                    <property name="allowNull">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">Completed Assessments::zodb_path</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">completed</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">total</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">percentage</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">Assessments With Measures By Tool::zodb_path</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">sessions</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <simple-property-list name="dataSets">
+                <value>Completed Assessments</value>
+                <value>Assessments With Measures By Tool</value>
+            </simple-property-list>
+            <list-property name="joinConditions">
+                <structure>
+                    <property name="joinType">full-out</property>
+                    <property name="joinOperator">eq</property>
+                    <property name="leftDataSet">Completed Assessments</property>
+                    <property name="rightDataSet">Assessments With Measures By Tool</property>
+                    <expression name="leftExpression">dataSetRow["zodb_path"]</expression>
+                    <expression name="rightExpression">dataSetRow["zodb_path"]</expression>
+                </structure>
+            </list-property>
+        </joint-data-set>
     </data-sets>
     <styles>
         <style name="report" id="4">
@@ -5434,30 +5615,43 @@ Account creation time is not recorded in the system. This number represents the 
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[All tools by percentage top assessments during the report period.]]></text-property>
         </text>
-        <table id="1307">
-            <property name="dataSet">Completed Assessments</property>
+        <table id="2001">
+            <property name="dataSet">Completed + With Measures</property>
             <list-property name="boundDataColumns">
                 <structure>
+                    <property name="name">Completed Assessments::zodb_path</property>
+                    <text-property name="displayName">Completed Assessments::zodb_path</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["Completed Assessments::zodb_path"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
                     <property name="name">completed</property>
-                    <text-property name="displayName">completed</text-property>
+                    <text-property name="displayName">Completed Assessments::completed</text-property>
                     <expression name="expression" type="javascript">dataSetRow["completed"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
                 <structure>
                     <property name="name">total</property>
-                    <text-property name="displayName">total</text-property>
+                    <text-property name="displayName">Completed Assessments::total</text-property>
                     <expression name="expression" type="javascript">dataSetRow["total"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
                 <structure>
                     <property name="name">percentage</property>
-                    <text-property name="displayName">percentage</text-property>
+                    <text-property name="displayName">Completed Assessments::percentage</text-property>
                     <expression name="expression" type="javascript">dataSetRow["percentage"]</expression>
                     <property name="dataType">float</property>
                 </structure>
                 <structure>
+                    <property name="name">sessions</property>
+                    <text-property name="displayName">Assessments With Measures By Tool::sessions</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["sessions"] | 0</expression>
+                    <property name="dataType">decimal</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
                     <property name="name">total completed</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                     <property name="aggregateFunction">SUM</property>
                     <list-property name="arguments">
                         <structure>
@@ -5469,7 +5663,7 @@ Account creation time is not recorded in the system. This number represents the 
                 </structure>
                 <structure>
                     <property name="name">total total</property>
-                    <property name="dataType">integer</property>
+                    <property name="dataType">float</property>
                     <property name="aggregateFunction">SUM</property>
                     <list-property name="arguments">
                         <structure>
@@ -5480,15 +5674,21 @@ Account creation time is not recorded in the system. This number represents the 
                     <property name="allowExport">true</property>
                 </structure>
                 <structure>
-                    <property name="name">total percentage</property>
-                    <expression name="expression" type="javascript">row["total completed"] / row["total total"]</expression>
+                    <property name="name">total with measures</property>
                     <property name="dataType">float</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["sessions"]</expression>
+                        </structure>
+                    </list-property>
                     <property name="allowExport">true</property>
                 </structure>
                 <structure>
-                    <property name="name">tool</property>
-                    <expression name="expression" type="javascript">dataSetRow["zodb_path"]</expression>
-                    <property name="dataType">string</property>
+                    <property name="name">total percentage</property>
+                    <expression name="expression" type="javascript">row["total completed"] / row["total total"]</expression>
+                    <property name="dataType">float</property>
                     <property name="allowExport">true</property>
                 </structure>
             </list-property>
@@ -5499,70 +5699,84 @@ Account creation time is not recorded in the system. This number represents the 
                     <property name="strength">-1</property>
                 </structure>
             </list-property>
-            <column id="1331"/>
-            <column id="1332"/>
-            <column id="1333"/>
-            <column id="1334"/>
+            <column id="2030"/>
+            <column id="2031"/>
+            <column id="2032"/>
+            <column id="2034"/>
+            <column id="2033">
+                <property name="repeat">1</property>
+            </column>
             <header>
-                <row id="1308">
-                    <cell id="1309">
-                        <label id="1310">
+                <row id="2002">
+                    <cell id="2003">
+                        <label id="2004">
                             <text-property name="text">Tool</text-property>
                         </label>
                     </cell>
-                    <cell id="1311">
-                        <label id="1312">
+                    <cell id="2005">
+                        <label id="2006">
                             <text-property name="text">Top assessments</text-property>
                         </label>
                     </cell>
-                    <cell id="1313">
-                        <label id="1314">
+                    <cell id="2007">
+                        <label id="2008">
                             <text-property name="text">Total assessments</text-property>
                         </label>
                     </cell>
-                    <cell id="1315">
-                        <label id="1316">
+                    <cell id="2011">
+                        <label id="2012">
+                            <text-property name="text">Assessments with at least one preventive measure</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2009">
+                        <label id="2010">
                             <text-property name="text">Top assessments of the total</text-property>
                         </label>
                     </cell>
                 </row>
-                <row id="1683">
+                <row id="2041">
                     <list-property name="visibility">
                         <structure>
                             <property name="format">all</property>
-                            <expression name="valueExpr" type="javascript">row["total total"] != null</expression>
+                            <expression name="valueExpr" type="javascript">row["total"] != null</expression>
                         </structure>
                     </list-property>
-                    <cell id="1684"/>
-                    <cell id="1685">
-                        <text id="1688">
+                    <cell id="2042"/>
+                    <cell id="2043">
+                        <text id="2047">
                             <property name="contentType">auto</property>
                             <text-property name="content"><![CDATA[No assessments were started in the report period.]]></text-property>
                         </text>
                     </cell>
-                    <cell id="1686"/>
-                    <cell id="1687"/>
+                    <cell id="2044"/>
+                    <cell id="2045"/>
+                    <cell id="2046"/>
                 </row>
             </header>
             <detail>
-                <row id="1317">
-                    <cell id="1318">
-                        <data id="1319">
-                            <property name="resultSetColumn">tool</property>
+                <row id="2013">
+                    <cell id="2014">
+                        <data id="2015">
+                            <property name="resultSetColumn">Completed Assessments::zodb_path</property>
                         </data>
                     </cell>
-                    <cell id="1320">
-                        <data id="1321">
+                    <cell id="2016">
+                        <data id="2017">
                             <property name="resultSetColumn">completed</property>
                         </data>
                     </cell>
-                    <cell id="1322">
-                        <data id="1323">
+                    <cell id="2018">
+                        <data id="2019">
                             <property name="resultSetColumn">total</property>
                         </data>
                     </cell>
-                    <cell id="1324">
-                        <data id="1325">
+                    <cell id="2022">
+                        <data id="2023">
+                            <property name="resultSetColumn">sessions</property>
+                        </data>
+                    </cell>
+                    <cell id="2020">
+                        <data id="2021">
                             <structure name="numberFormat">
                                 <property name="category">Percent</property>
                                 <property name="pattern">###0.0%{RoundingMode=HALF_UP}</property>
@@ -5573,24 +5787,29 @@ Account creation time is not recorded in the system. This number represents the 
                 </row>
             </detail>
             <footer>
-                <row id="1326">
-                    <cell id="1327">
-                        <label id="1336">
+                <row id="2024">
+                    <cell id="2025">
+                        <label id="2048">
                             <text-property name="text">Total</text-property>
                         </label>
                     </cell>
-                    <cell id="1328">
-                        <data id="1337">
+                    <cell id="2026">
+                        <data id="2052">
                             <property name="resultSetColumn">total completed</property>
                         </data>
                     </cell>
-                    <cell id="1329">
-                        <data id="1338">
+                    <cell id="2027">
+                        <data id="2053">
                             <property name="resultSetColumn">total total</property>
                         </data>
                     </cell>
-                    <cell id="1330">
-                        <data id="1339">
+                    <cell id="2029">
+                        <data id="2057">
+                            <property name="resultSetColumn">total with measures</property>
+                        </data>
+                    </cell>
+                    <cell id="2028">
+                        <data id="2054">
                             <structure name="numberFormat">
                                 <property name="category">Percent</property>
                                 <property name="pattern">###0.0%{RoundingMode=HALF_UP}</property>
@@ -7641,88 +7860,6 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                 </row>
             </detail>
-        </table>
-        <label id="1872">
-            <property name="style">heading1</property>
-            <text-property name="text">Tools by Assessments with at least one preventive measure</text-property>
-        </label>
-        <text id="1876">
-            <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Assessments with at least one preventive measure for all tools during the report period.]]></text-property>
-        </text>
-        <table id="1856">
-            <property name="dataSet">Assessments With Measures By Tool</property>
-            <list-property name="boundDataColumns">
-                <structure>
-                    <property name="name">zodb_path</property>
-                    <text-property name="displayName">zodb_path</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["zodb_path"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">sessions</property>
-                    <text-property name="displayName">sessions</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["sessions"]</expression>
-                    <property name="dataType">decimal</property>
-                </structure>
-                <structure>
-                    <property name="name">Aggregation</property>
-                    <property name="dataType">integer</property>
-                    <property name="aggregateFunction">SUM</property>
-                    <list-property name="arguments">
-                        <structure>
-                            <property name="name">Expression</property>
-                            <expression name="value" type="javascript">row["sessions"]</expression>
-                        </structure>
-                    </list-property>
-                    <property name="allowExport">true</property>
-                </structure>
-            </list-property>
-            <column id="1870"/>
-            <column id="1871"/>
-            <header>
-                <row id="1857">
-                    <cell id="1858">
-                        <label id="1859">
-                            <text-property name="text">Tool</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1860">
-                        <label id="1861">
-                            <text-property name="text">Assessments with at least one preventive measure</text-property>
-                        </label>
-                    </cell>
-                </row>
-            </header>
-            <detail>
-                <row id="1862">
-                    <cell id="1863">
-                        <data id="1864">
-                            <property name="resultSetColumn">zodb_path</property>
-                        </data>
-                    </cell>
-                    <cell id="1865">
-                        <data id="1866">
-                            <property name="resultSetColumn">sessions</property>
-                        </data>
-                    </cell>
-                </row>
-            </detail>
-            <footer>
-                <row id="1867">
-                    <cell id="1868">
-                        <label id="1874">
-                            <text-property name="text">Total</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1869">
-                        <data id="1875">
-                            <property name="resultSetColumn">Aggregation</property>
-                        </data>
-                    </cell>
-                </row>
-            </footer>
         </table>
         <label id="1461">
             <property name="style">report-heading</property>
