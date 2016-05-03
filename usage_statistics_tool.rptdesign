@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.5.0.v201506092134 Build &lt;@BUILD@></property>
     <list-property name="includeScripts">
         <property>oira-reports.js</property>
+    </list-property>
+    <list-property name="propertyBindings">
+        <structure>
+            <property name="name">queryText</property>
+            <property name="id">2106</property>
+        </structure>
+        <structure>
+            <property name="name">queryTimeOut</property>
+            <property name="id">2106</property>
+        </structure>
+        <structure>
+            <property name="name">rowFetchSize</property>
+            <property name="id">2106</property>
+        </structure>
     </list-property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
@@ -17,12 +31,14 @@
     <list-property name="cssStyleSheets">
         <structure>
             <property name="fileName">oira-reports.css</property>
+            <property name="useExternalCss">false</property>
         </structure>
     </list-property>
     <parameters>
         <scalar-parameter name="tool" id="1041">
             <text-property name="promptText">Tool to generate statistics for</text-property>
             <property name="valueType">static</property>
+            <property name="isRequired">true</property>
             <property name="dataType">string</property>
             <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
@@ -30,6 +46,23 @@
             </simple-property-list>
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
+            <property name="concealValue">false</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="testsessions" id="1999">
+            <property name="valueType">static</property>
+            <property name="isRequired">true</property>
+            <property name="dataType">integer</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">0</value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="concealValue">false</property>
             <property name="controlType">text-box</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
@@ -39,6 +72,7 @@
             <parameters>
                 <scalar-parameter name="year" id="1114">
                     <property name="valueType">static</property>
+                    <property name="isRequired">true</property>
                     <property name="dataType">string</property>
                     <property name="distinct">true</property>
                     <simple-property-list name="defaultValue">
@@ -46,6 +80,7 @@
                     </simple-property-list>
                     <list-property name="selectionList"/>
                     <property name="paramType">simple</property>
+                    <property name="concealValue">false</property>
                     <property name="controlType">text-box</property>
                     <structure name="format">
                         <property name="category">Unformatted</property>
@@ -53,6 +88,7 @@
                 </scalar-parameter>
                 <scalar-parameter name="month" id="1117">
                     <property name="valueType">static</property>
+                    <property name="isRequired">true</property>
                     <property name="sortBy">value</property>
                     <property name="sortDirection">asc</property>
                     <property name="dataType">integer</property>
@@ -107,7 +143,8 @@
                         </structure>
                     </list-property>
                     <property name="paramType">simple</property>
-                    <property name="controlType">list-box</property>
+                    <property name="concealValue">false</property>
+                    <property name="controlType">text-box</property>
                     <property name="mustMatch">true</property>
                     <property name="fixedOrder">false</property>
                     <structure name="format">
@@ -116,6 +153,7 @@
                 </scalar-parameter>
                 <scalar-parameter name="quarter" id="1118">
                     <property name="valueType">static</property>
+                    <property name="isRequired">true</property>
                     <property name="dataType">integer</property>
                     <property name="distinct">true</property>
                     <simple-property-list name="defaultValue">
@@ -144,7 +182,8 @@
                         </structure>
                     </list-property>
                     <property name="paramType">simple</property>
-                    <property name="controlType">list-box</property>
+                    <property name="concealValue">false</property>
+                    <property name="controlType">text-box</property>
                     <property name="mustMatch">true</property>
                     <property name="fixedOrder">true</property>
                     <structure name="format">
@@ -221,6 +260,14 @@
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -268,17 +315,17 @@
                      2011, (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter),
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
        select session.id,
               account_id,
               modified,
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
-         join account on session.account_id = account.id
-        where zodb_path = ?
+         join account on session.account_id = account.id, params
+        where zodb_path = params.tool
           and modified >= timestamp '2011-08-01'
-          and (account_type is Null or (account_type is not Null and account_type!='guest'))
+          and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month <= all_dates.month
@@ -400,6 +447,14 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -447,17 +502,17 @@ order by all_dates.date desc;]]></xml-property>
                      2011, (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter),
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
        select session.id,
               account_id,
               modified,
               to_char(date_part('year', modified), 'FM0000') || '-' || to_char(date_part('month', modified), 'FM00') as month
          from session
-         join account on session.account_id = account.id
-        where zodb_path = ?
+         join account on session.account_id = account.id, params
+        where zodb_path = params.tool
           and modified >= timestamp '2011-08-01'
-          and (account_type is Null or (account_type is not Null and account_type!='guest'))
+          and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
 from params, session_tmp right outer join all_dates on session_tmp.month = all_dates.month
@@ -563,6 +618,14 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -593,15 +656,15 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select count(company.id) as responses,
        count(session.id) as assessments
 from company right outer join session
   on company.session_id = session.id
   join account on session.account_id = account.id, params
-  where zodb_path = ?
+  where zodb_path = params.tool
   and modified >= '2011-08-01'
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -721,6 +784,14 @@ from company right outer join session
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -751,13 +822,13 @@ from company right outer join session
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select employees, count(session_id)
 from company,session
 join account on session.account_id = account.id, params
 where company.session_id = session.id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -879,6 +950,14 @@ group by employees order by employees;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -909,13 +988,13 @@ group by employees order by employees;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select conductor, count(session_id)
 from company,session
  join account on session.account_id = account.id ,params
 where company.session_id = session.id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1037,6 +1116,14 @@ group by conductor order by conductor;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1067,13 +1154,13 @@ group by conductor order by conductor;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select referer, count(session_id)
 from company,session
  join account on session.account_id = account.id ,params
 where company.session_id = session.id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1195,6 +1282,14 @@ group by referer order by referer;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1225,13 +1320,13 @@ group by referer order by referer;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select workers_participated, count(session_id)
 from company,session
  join account on session.account_id = account.id, params
 where company.session_id = session.id
-and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1362,6 +1457,14 @@ group by workers_participated order by workers_participated;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1408,7 +1511,7 @@ group by workers_participated order by workers_participated;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[WITH params AS (SELECT ? AS year, ? AS month, ? AS quarter)
+            <xml-property name="queryText"><![CDATA[WITH params AS (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 SELECT
     date_part('year', session.modified) || '-' || to_char(date_part('month', session.modified), 'FM00') as month,
 	COUNT(
@@ -1420,8 +1523,8 @@ SELECT
 FROM statistics_sessions, session
  join account on session.account_id = account.id, params
 WHERE statistics_sessions.session_id = session.id
-  AND session.zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  AND session.zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   AND session.modified >= '2011-08-01'
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1461,10 +1564,22 @@ ORDER BY month desc;
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">count</property>
+                    <property name="columnName">regular</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">count</text-property>
-                    <text-property name="heading">count</text-property>
+                    <text-property name="displayName">regular</text-property>
+                    <text-property name="heading">regular</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">guest</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">guest</text-property>
+                    <text-property name="heading">guest</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">converted</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">converted</text-property>
+                    <text-property name="heading">converted</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters"/>
@@ -1472,7 +1587,17 @@ ORDER BY month desc;
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">count</property>
+                        <property name="name">regular</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">guest</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">converted</property>
                         <property name="dataType">decimal</property>
                     </structure>
                 </list-property>
@@ -1481,18 +1606,32 @@ ORDER BY month desc;
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">count</property>
-                    <property name="nativeName">count</property>
+                    <property name="name">regular</property>
+                    <property name="nativeName">regular</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">guest</property>
+                    <property name="nativeName">guest</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">converted</property>
+                    <property name="nativeName">converted</property>
                     <property name="dataType">decimal</property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select distinct count(loginname)
+            <xml-property name="queryText"><![CDATA[select count(account_type is Null or null) as regular,
+       count(account_type = 'guest' or null) as guest,
+       count(account_type = 'converted' or null) as converted
 from account
 where
-	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
-    and (account_type is Null or (account_type is not Null and account_type!='guest'))
-	]]></xml-property>
+	strpos(loginname, '@') = 0 or substring(loginname from '.*@(.*)') not in ('syslab.com', 'osha.europa.eu')]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Survey NeedsMet" id="1830">
             <list-property name="parameters">
@@ -1530,6 +1669,14 @@ where
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1560,13 +1707,13 @@ where
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select needs_met, count(session_id)
 from company,session
  join account on session.account_id = account.id, params
 where company.session_id = session.id
-and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1685,6 +1832,14 @@ group by needs_met order by needs_met;]]></xml-property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
@@ -1715,13 +1870,13 @@ group by needs_met order by needs_met;]]></xml-property>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select recommend_tool, count(session_id)
 from company,session
  join account on session.account_id = account.id, params
 where company.session_id = session.id
-and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+and zodb_path = params.tool
+  and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -1805,11 +1960,27 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Logins" id="1886">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">converted</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">converted</text-property>
+                    <text-property name="heading">converted</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">regular</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">regular</text-property>
+                    <text-property name="heading">regular</text-property>
+                </structure>
+            </list-property>
             <list-property name="parameters">
                 <structure>
                     <property name="name">param_1</property>
                     <property name="paramName">year</property>
+                    <property name="nativeName"></property>
                     <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
                     <property name="position">1</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
@@ -1817,7 +1988,9 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                 <structure>
                     <property name="name">param_2</property>
                     <property name="paramName">month</property>
+                    <property name="nativeName"></property>
                     <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
                     <property name="position">2</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
@@ -1825,7 +1998,9 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                 <structure>
                     <property name="name">param_3</property>
                     <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
                     <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
                     <property name="position">3</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
@@ -1833,8 +2008,20 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                 <structure>
                     <property name="name">param_4</property>
                     <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
                     <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
                     <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -1843,7 +2030,12 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">count</property>
+                        <property name="name">converted</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">regular</property>
                         <property name="dataType">decimal</property>
                     </structure>
                 </list-property>
@@ -1852,18 +2044,26 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">count</property>
-                    <property name="nativeName">count</property>
+                    <property name="name">converted</property>
+                    <property name="nativeName">converted</property>
                     <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">regular</property>
+                    <property name="nativeName">regular</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with params as (select ? as year, ? as month, ? as quarter)
-select count(time) from session
-  join account on session.account_id = account.id, statistics_login,params
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select count(account_type = 'converted' or null) as converted,
+       count(account_type is null or null) as regular
+  from session join account on session.account_id = account.id, statistics_login, params
 where session.account_id = statistics_login.account_id
   and account.id = statistics_login.account_id
-  and zodb_path = ?
-  and (account_type is Null or (account_type is not Null and account_type!='guest'))
+  and zodb_path = params.tool
   and substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
   and statistics_login.time >= '2011-08-01'
   and statistics_login.time <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
@@ -1877,8 +2077,7 @@ where session.account_id = statistics_login.account_id
                                      (case when params.month = 0 then  1 else params.month           end)
                                 else
                                      params.quarter * 3 - 2 end), 'FM09') ||
-                       '-01' as date)
-]]></xml-property>
+                       '-01' as date)]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments With Measures By Month" id="1900">
             <property name="nullsOrdering">nulls lowest</property>
@@ -1912,6 +2111,14 @@ where session.account_id = statistics_login.account_id
                     <property name="paramName">tool</property>
                     <property name="dataType">string</property>
                     <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">5</property>
                     <property name="isInput">true</property>
                     <property name="isOutput">false</property>
                 </structure>
@@ -1951,19 +2158,19 @@ where session.account_id = statistics_login.account_id
                      2011, (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ? as year, ? as month, ? as quarter),
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
            select session.id,
                   max(session.modified) as modified,
                   to_char(date_part('year', max(modified)), 'FM0000') || '-' || to_char(date_part('month', max(modified)), 'FM00') as month,
                   count(risk_id) as measures
             from action_plan,tree,session
-            join account on session.account_id = account.id
+            join account on session.account_id = account.id, params
            where action_plan.risk_id = tree.id
              and tree.session_id = session.id
-             and session.zodb_path = ?
+             and session.zodb_path = params.tool
              and modified >= timestamp '2011-08-01'
-             and (account_type is Null or (account_type is not Null and account_type!='guest'))
+             and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
         group by session.id
      )
 select count(session_tmp.id), all_dates.date as month
@@ -2022,6 +2229,2088 @@ order by all_dates.date desc;]]></xml-property>
             <design:label>count</design:label>
             <design:formattingHints>
               <design:displaySize>20</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Risk Identification Overview" id="2000">
+            <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">not_present</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">not_present</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">not_present</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">_identified</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">_identified</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">_identified</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">postponed</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">postponed</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">postponed</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">unanswered</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">unanswered</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">unanswered</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">year</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">month</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">quarter</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">tool</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">not_present</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">_identified</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">postponed</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">unanswered</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">not_present</property>
+                    <property name="nativeName">not_present</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">_identified</property>
+                    <property name="nativeName">_identified</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">postponed</property>
+                    <property name="nativeName">postponed</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">unanswered</property>
+                    <property name="nativeName">unanswered</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select avg(cast(not_present as numeric)) as not_present,
+       avg(cast(_identified as numeric)) as _identified,
+       avg(cast(postponed as numeric)) as postponed,
+       avg(cast(unanswered as numeric)) as unanswered
+  from (
+    select case when count(risk.id)!=0 then cast(count(risk.identification=ANY('{yes,n/a}'::text[]) or NULL) as numeric) / count(risk.id) else 0 end as not_present,
+           case when count(risk.id)!=0 then cast(count(risk.identification='no' or NULL) as numeric) / count(risk.id) else 0 end as _identified,
+           case when count(risk.id)!=0 then cast(count((risk.identification IS NULL and tree.postponed) or NULL) as numeric) / count(risk.id) else 0 end as postponed,
+           case when count(risk.id)!=0 then cast(count((risk.identification IS NULL and not tree.postponed) or NULL) as numeric) / count(risk.id) else 0 end as unanswered
+      from tree, risk, params, session, account
+     where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
+       and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+       AND session.modified >= '2011-08-01'
+       AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                            to_char((case when params.quarter=0 then
+                                          (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                     else
+                                          (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                            '-01' as date)
+       and session.modified >= cast(params.year::text || '-' ||
+                            to_char((case when params.quarter=0 then
+                                          (case when params.month = 0 then  1 else params.month end)
+                                     else
+                                          params.quarter * 3 - 2 end), 'FM09') ||
+                            '-01' as date)
+       AND NOT (EXISTS (
+            SELECT tree_parent.id
+              FROM tree tree_parent
+             WHERE tree.session_id = tree_parent.session_id
+               AND tree.depth > tree_parent.depth
+               AND tree.path::text ~~ (tree_parent.path::text || '%'::text)
+               AND tree_parent.skip_children = true
+       ))
+  ) as identification_ratios;
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>yes</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>yes</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>yes</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>no</design:name>
+              <design:position>2</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>no</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>no</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>n_a</design:name>
+              <design:position>3</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>n_a</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>n_a</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>_null</design:name>
+              <design:position>4</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>_null</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>_null</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Risks and Measures Per Session" id="2060">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">_identified</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">_identified</text-property>
+                    <text-property name="heading">_identified</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">measures</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">measures</text-property>
+                    <text-property name="heading">measures</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">_identified</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">measures</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">_identified</property>
+                    <property name="nativeName">_identified</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">measures</property>
+                    <property name="nativeName">measures</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select case when count(distinct session.id)!=0 then cast(count(risk.identification='no' or NULL) as numeric) / count(distinct session.id) else 0 end as _identified,
+       case when count(distinct session.id)!=0 then cast(count(action_plan.id) as numeric) / count(distinct session.id) else 0 end as measures
+  from tree left join action_plan on action_plan.risk_id = tree.id, risk, params, session, account
+ where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
+   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+   AND session.modified >= '2011-08-01'
+   AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                 else
+                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                        '-01' as date)
+   and session.modified >= cast(params.year::text || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then  1 else params.month end)
+                                 else
+                                      params.quarter * 3 - 2 end), 'FM09') ||
+                        '-01' as date)
+   AND NOT (EXISTS (
+        SELECT tree_parent.id
+          FROM tree tree_parent
+         WHERE tree.session_id = tree_parent.session_id
+           AND tree.depth > tree_parent.depth
+           AND tree.path::text ~~ (tree_parent.path::text || '%'::text)
+           AND tree_parent.skip_children = true
+   ));
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>_identified</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>_identified</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>_identified</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>measures</design:name>
+              <design:position>2</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Risks with Measures" id="2079">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">risks_with_measures</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">risks_with_measures</text-property>
+                    <text-property name="heading">risks_with_measures</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">risks_with_measures</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">risks_with_measures</property>
+                    <property name="nativeName">risks_with_measures</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select case when count(id)!=0 then cast(count(num_measures>0 or NULL) as numeric) / count(id) else 0 end as risks_with_measures
+  from (
+    select tree.id, count(action_plan.id) as num_measures
+      from tree left join action_plan on action_plan.risk_id = tree.id, risk, params, session, account
+     where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
+       and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+       AND session.modified >= '2011-08-01'
+       AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                            to_char((case when params.quarter=0 then
+                                          (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                     else
+                                          (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                            '-01' as date)
+       and session.modified >= cast(params.year::text || '-' ||
+                            to_char((case when params.quarter=0 then
+                                          (case when params.month = 0 then  1 else params.month end)
+                                     else
+                                          params.quarter * 3 - 2 end), 'FM09') ||
+                            '-01' as date)
+       AND NOT (EXISTS (
+            SELECT tree_parent.id
+              FROM tree tree_parent
+             WHERE tree.session_id = tree_parent.session_id
+               AND tree.depth > tree_parent.depth
+               AND tree.path::text ~~ (tree_parent.path::text || '%'::text)
+               AND tree_parent.skip_children = true
+       ))
+  group by tree.id
+  ) as num_measures;]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Continued Sessions" id="2092">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">continued</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">continued</text-property>
+                    <text-property name="heading">continued</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">continued</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">continued</property>
+                    <property name="nativeName">continued</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select case when count(created)!=0 then count(((modified - created) > '01:00:00'::interval) or null) / count(created)::numeric else 0 end as continued
+  from params, session, account
+ where session.zodb_path = params.tool and session.account_id = account.id
+   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+   AND session.modified >= '2011-08-01'
+   AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                 else
+                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                        '-01' as date)
+   and session.modified >= cast(params.year::text || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then  1 else params.month end)
+                                 else
+                                      params.quarter * 3 - 2 end), 'FM09') ||
+                        '-01' as date);]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Problematic Risks" id="2106">
+            <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">title</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">title</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">title</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">num_unanswered</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">num_unanswered</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">num_unanswered</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">title</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">num_unanswered</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="rowFetchLimit">10</property>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">title</property>
+                    <property name="nativeName">title</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">num_unanswered</property>
+                    <property name="nativeName">num_unanswered</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select max(tree.title) as title, count(tree.id) as num_unanswered
+  from tree, risk, session, params, account
+ where risk.identification IS NULL and tree.session_id = session.id and tree.id = risk.id and session.zodb_path = params.tool and session.account_id = account.id
+   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+   AND session.modified >= '2011-08-01'
+   AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                 else
+                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                        '-01' as date)
+   and session.modified >= cast(params.year::text || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then  1 else params.month end)
+                                 else
+                                      params.quarter * 3 - 2 end), 'FM09') ||
+                        '-01' as date)
+   AND NOT (EXISTS (
+        SELECT tree_parent.id
+          FROM tree tree_parent
+         WHERE tree.session_id = tree_parent.session_id
+           AND tree.depth > tree_parent.depth
+           AND tree.path::text ~~ (tree_parent.path::text || '%'::text)
+           AND tree_parent.skip_children = true
+   ))
+group by tree.zodb_path order by num_unanswered desc;
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Num Custom Risks" id="2125">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">total</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">total</text-property>
+                    <text-property name="heading">total</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">tool</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">tool</text-property>
+                    <text-property name="heading">tool</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">total</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">tool</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">total</property>
+                    <property name="nativeName">total</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">tool</property>
+                    <property name="nativeName">tool</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select count(tree.id) as total, count((session.zodb_path = params.tool) or NULL) as tool
+  from params, risk, tree, session, account
+ where tree.session_id = session.id
+   and tree.id = risk.id
+   and is_custom_risk = true
+   and session.account_id = account.id
+   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+   AND session.modified >= '2011-08-01'
+   AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                 else
+                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                        '-01' as date)
+   and session.modified >= cast(params.year::text || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then  1 else params.month end)
+                                 else
+                                      params.quarter * 3 - 2 end), 'FM09') ||
+                        '-01' as date);
+]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Custom Risks Per Session" id="2144">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">case</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">case</text-property>
+                    <text-property name="heading">case</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">case</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">case</property>
+                    <property name="nativeName">case</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select case when count(distinct(session.id))!=0 then count(risk.is_custom_risk = true or NULL)::numeric / count(distinct(session.id)) else 0 end
+  from params, risk, tree, session, account
+ where session.zodb_path = params.tool and session.account_id = account.id
+   and tree.session_id = session.id
+   and tree.id = risk.id
+   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+   AND session.modified >= '2015-11-01'
+   AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                 else
+                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                        '-01' as date)
+   and session.modified >= cast(params.year::text || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then  1 else params.month end)
+                                 else
+                                      params.quarter * 3 - 2 end), 'FM09') ||
+                        '-01' as date);]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Custom Risks Ratio" id="2158">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">case</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">case</text-property>
+                    <text-property name="heading">case</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">case</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">case</property>
+                    <property name="nativeName">case</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+select case when count(distinct(risk.id))!=0 then count(risk.is_custom_risk = true or NULL)::numeric / count(distinct(risk.id)) else 0 end
+  from params, risk, tree, session, account
+ where session.zodb_path = params.tool and session.account_id = account.id
+   and tree.session_id = session.id
+   and tree.id = risk.id
+   and risk.identification = 'no'
+   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+   AND session.modified >= '2015-11-01'
+   AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                 else
+                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                        '-01' as date)
+   and session.modified >= cast(params.year::text || '-' ||
+                        to_char((case when params.quarter=0 then
+                                      (case when params.month = 0 then  1 else params.month end)
+                                 else
+                                      params.quarter * 3 - 2 end), 'FM09') ||
+                        '-01' as date);]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+      <design:criteria/>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Custom Risks With Measures" id="2172">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">custom_risks_with_measures</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">custom_risks_with_measures</text-property>
+                    <text-property name="heading">custom_risks_with_measures</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">tool</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_5</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isOptional">false</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">custom_risks_with_measures</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">custom_risks_with_measures</property>
+                    <property name="nativeName">custom_risks_with_measures</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with custom_risks_measures as (
+    with relevant_sessions as (
+        with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
+        select session.id
+        from params, risk, session, tree, action_plan, account
+        where tree.id = action_plan.risk_id
+        and session.zodb_path = params.tool and session.account_id = account.id
+        and tree.id = risk.id and tree.session_id = session.id
+        and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
+        AND session.modified >= '2015-11-01'
+        AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                             to_char((case when params.quarter=0 then
+                                           (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                      else
+                                           (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                             '-01' as date)
+        and session.modified >= cast(params.year::text || '-' ||
+                             to_char((case when params.quarter=0 then
+                                           (case when params.month = 0 then  1 else params.month end)
+                                      else
+                                           params.quarter * 3 - 2 end), 'FM09') ||
+                             '-01' as date)
+        group by session.id
+    )
+    select risk.id, count(action_plan.action_plan) as measures
+    from relevant_sessions, session, risk, tree left join action_plan on tree.id = action_plan.risk_id
+    where tree.id = risk.id and tree.session_id = session.id and relevant_sessions.id = session.id and risk.is_custom_risk group by risk.id
+)
+select case when count(id) > 0 then count(measures>0 or NULL)::numeric / count(id) else 0 end as custom_risks_with_measures
+from custom_risks_measures;]]></xml-property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>2.0</Version>
+  <DataSetParameters>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>1</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>2</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>3</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>4</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+    <parameter>
+      <design:ParameterDefinition>
+        <design:inOutMode>In</design:inOutMode>
+        <design:attributes>
+          <design:identifier>
+            <design:name></design:name>
+            <design:position>5</design:position>
+          </design:identifier>
+          <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+          <design:precision>0</design:precision>
+          <design:scale>0</design:scale>
+          <design:nullability>Unknown</design:nullability>
+        </design:attributes>
+      </design:ParameterDefinition>
+    </parameter>
+  </DataSetParameters>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>risks_with_measures</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>2</design:nativeDataTypeCode>
+            <design:precision>0</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Unknown</design:nullability>
+            <design:uiHints>
+              <design:displayName>risks_with_measures</design:displayName>
+            </design:uiHints>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>risks_with_measures</design:label>
+            <design:formattingHints>
+              <design:displaySize>131089</design:displaySize>
             </design:formattingHints>
           </design:usageHints>
         </design:resultColumnDefinitions>
@@ -2150,7 +4439,7 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="rowSpan">1</property>
                     <text-data id="1756">
                         <property name="style">heading1</property>
-                        <expression name="valueExpr">getCountryNameByCode(params["tool"].value.match(/^[^\/]*/)[0]) + ' - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value)</expression>
+                        <expression name="valueExpr">getCountryNameByCode(params["tool"].value.match(/^[^\/]*/)[0]) + ' - ' + (params["quarter"].value != 0 ? String(params["quarter"].value) + '. Quarter ' : params["month"].value != 0 ? [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ][params["month"] - 1] + ' ' : '') + String(params["year"].value) + (params["testsessions"].value == 1 ? ' ONLY test sessions are considered' : '')</expression>
                         <property name="contentType">html</property>
                     </text-data>
                 </cell>
@@ -2237,35 +4526,80 @@ order by all_dates.date desc;]]></xml-property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
-        <table id="126">
-            <property name="width">2.4895833333333335in</property>
+        <table id="2209">
             <property name="dataSet">Number Of Accounts</property>
             <list-property name="boundDataColumns">
                 <structure>
-                    <property name="name">count</property>
-                    <text-property name="displayName">count</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["count"]</expression>
+                    <property name="name">regular</property>
+                    <text-property name="displayName">regular</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["regular"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">guest</property>
+                    <text-property name="displayName">guest</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["guest"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">converted</property>
+                    <text-property name="displayName">converted</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["converted"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <column id="135">
-                <property name="width">2.4895833333333335in</property>
-            </column>
+            <column id="2228"/>
+            <column id="2229"/>
+            <column id="2230"/>
+            <column id="2233"/>
             <header>
-                <row id="127">
-                    <cell id="128">
-                        <label id="129">
+                <row id="2210">
+                    <cell id="2211">
+                        <label id="2212">
+                            <text-property name="text">Regular Accounts</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2213">
+                        <label id="2214">
+                            <text-property name="text">Guest Accounts</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2215">
+                        <label id="2216">
+                            <text-property name="text">Converted Accounts</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2231">
+                        <label id="2234">
+                            <property name="fontWeight">bold</property>
                             <text-property name="text">Total Number Of Accounts Created (For the complete OiRA platform)</text-property>
                         </label>
                     </cell>
                 </row>
             </header>
             <detail>
-                <row id="130">
-                    <cell id="131">
-                        <data id="132">
-                            <property name="resultSetColumn">count</property>
+                <row id="2217">
+                    <cell id="2218">
+                        <data id="2219">
+                            <property name="resultSetColumn">regular</property>
                         </data>
+                    </cell>
+                    <cell id="2220">
+                        <data id="2221">
+                            <property name="resultSetColumn">guest</property>
+                        </data>
+                    </cell>
+                    <cell id="2222">
+                        <data id="2223">
+                            <property name="resultSetColumn">converted</property>
+                        </data>
+                    </cell>
+                    <cell id="2232">
+                        <text-data id="2235">
+                            <property name="fontWeight">bold</property>
+                            <expression name="valueExpr">row["regular"] + row["guest"] + row["converted"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
                     </cell>
                 </row>
             </detail>
@@ -2285,37 +4619,67 @@ Account creation time is not recorded in the system. This number represents the 
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Number of times a user with an existing assessment using this tool has logged in during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
-        <table id="1887">
-            <property name="width">2.5in</property>
+        <table id="2186">
             <property name="dataSet">Logins</property>
             <list-property name="boundDataColumns">
                 <structure>
-                    <property name="name">count</property>
-                    <text-property name="displayName">count</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["count"]</expression>
+                    <property name="name">converted</property>
+                    <text-property name="displayName">converted</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["converted"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">regular</property>
+                    <text-property name="displayName">regular</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["regular"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
             </list-property>
-            <column id="1896">
-                <property name="width">2.5in</property>
+            <column id="2201"/>
+            <column id="2200">
+                <property name="repeat">1</property>
+            </column>
+            <column id="2205">
+                <property name="repeat">1</property>
             </column>
             <header>
-                <row id="1888">
-                    <property name="height">0.3645833333333333in</property>
-                    <cell id="1889">
-                        <label id="1890">
-                            <text-property name="text">Number of logins</text-property>
+                <row id="2187">
+                    <cell id="2190">
+                        <label id="2191">
+                            <text-property name="text">Regular Users</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2188">
+                        <label id="2189">
+                            <text-property name="text">Converted Users</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2202">
+                        <label id="2206">
+                            <property name="fontWeight">bold</property>
+                            <text-property name="text">Total</text-property>
                         </label>
                     </cell>
                 </row>
             </header>
             <detail>
-                <row id="1891">
-                    <property name="height">0.3125in</property>
-                    <cell id="1892">
-                        <data id="1893">
-                            <property name="resultSetColumn">count</property>
+                <row id="2192">
+                    <cell id="2195">
+                        <data id="2196">
+                            <property name="resultSetColumn">regular</property>
                         </data>
+                    </cell>
+                    <cell id="2193">
+                        <data id="2194">
+                            <property name="resultSetColumn">converted</property>
+                        </data>
+                    </cell>
+                    <cell id="2203">
+                        <text-data id="2208">
+                            <property name="fontWeight">bold</property>
+                            <expression name="valueExpr">row["converted"] + row["regular"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
                     </cell>
                 </row>
             </detail>
@@ -2323,7 +4687,7 @@ Account creation time is not recorded in the system. This number represents the 
         <text id="1920">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[This only counts the number of logins. A user may or may not have accessed the tool while he/she was logged in.]]></text-property>
+            <text-property name="content"><![CDATA[This only counts the number of logins - a user may or may not have accessed the tool while he/she was logged in. There are no guest user logins - a guest account must be converted to log in.]]></text-property>
         </text>
         <label id="481">
             <property name="style">heading1</property>
@@ -2719,6 +5083,524 @@ Users refers to the number of users that have created these assessments (sometim
                 </row>
             </footer>
         </table>
+        <label id="2057">
+            <property name="style">heading1</property>
+            <text-property name="text">Risk identification</text-property>
+        </label>
+        <text id="2058">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Ratio of not present, identified, postponed and unanswered risks. Average over all assessments in the report period.]]></text-property>
+        </text>
+        <table id="2029">
+            <property name="dataSet">Risk Identification Overview</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">not_present</property>
+                    <text-property name="displayName">not_present</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["not_present"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">_identified</property>
+                    <text-property name="displayName">_identified</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["_identified"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">postponed</property>
+                    <text-property name="displayName">postponed</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["postponed"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">unanswered</property>
+                    <text-property name="displayName">unanswered</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["unanswered"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2053"/>
+            <column id="2054"/>
+            <column id="2055"/>
+            <column id="2056"/>
+            <header>
+                <row id="2030">
+                    <cell id="2031">
+                        <label id="2032">
+                            <text-property name="text">Not present</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2033">
+                        <label id="2034">
+                            <text-property name="text">Identified</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2035">
+                        <label id="2036">
+                            <text-property name="text">Postponed</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2037">
+                        <label id="2038">
+                            <text-property name="text">Unanswered</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2039">
+                    <cell id="2040">
+                        <data id="2041">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">not_present</property>
+                        </data>
+                    </cell>
+                    <cell id="2042">
+                        <data id="2043">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">_identified</property>
+                        </data>
+                    </cell>
+                    <cell id="2044">
+                        <data id="2045">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">postponed</property>
+                        </data>
+                    </cell>
+                    <cell id="2046">
+                        <data id="2047">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">unanswered</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <label id="2077">
+            <property name="style">heading1</property>
+            <text-property name="text">Average Risks and Measures per Assessment</text-property>
+        </label>
+        <text id="2078">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Average number of identified risks and defined measures per assessment.]]></text-property>
+        </text>
+        <table id="2061">
+            <property name="dataSet">Risks and Measures Per Session</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">_identified</property>
+                    <text-property name="displayName">_identified</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["_identified"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">measures</property>
+                    <text-property name="displayName">measures</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["measures"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2075"/>
+            <column id="2076"/>
+            <header>
+                <row id="2062">
+                    <cell id="2063">
+                        <label id="2064">
+                            <text-property name="text">Identified Risks</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2065">
+                        <label id="2066">
+                            <text-property name="text">Measures</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2067">
+                    <cell id="2068">
+                        <data id="2069">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">_identified</property>
+                        </data>
+                    </cell>
+                    <cell id="2070">
+                        <data id="2071">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">measures</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <label id="2090">
+            <property name="style">heading1</property>
+            <text-property name="text">Ratio of Risks with Defined Measures</text-property>
+        </label>
+        <text id="2091">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Percentage of all identified risks that have defined measures.]]></text-property>
+        </text>
+        <table id="2080">
+            <property name="dataSet">Risks with Measures</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">risks_with_measures</property>
+                    <text-property name="displayName">risks_with_measures</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["risks_with_measures"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2089"/>
+            <header>
+                <row id="2081">
+                    <cell id="2082">
+                        <label id="2083">
+                            <text-property name="text">Risks With Measures</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2084">
+                    <cell id="2085">
+                        <data id="2086">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">risks_with_measures</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <label id="2103">
+            <property name="style">heading1</property>
+            <text-property name="text">Continued Assessments</text-property>
+        </label>
+        <text id="2104">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Percentage of all assessments that were continued later on.]]></text-property>
+        </text>
+        <table id="2093">
+            <property name="dataSet">Continued Sessions</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">continued</property>
+                    <text-property name="displayName">continued</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["continued"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2102"/>
+            <header>
+                <row id="2094">
+                    <cell id="2095">
+                        <label id="2096">
+                            <text-property name="text">Continued Assessments</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2097">
+                    <cell id="2098">
+                        <data id="2099">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">continued</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="2105">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA["Continued later on" is defined as: A modification was made to the assessment after one day or more had passed since the assessment was started.
+Only assessments that were modified within the reporting period are counted.]]></text-property>
+        </text>
+        <label id="2123">
+            <property name="style">heading1</property>
+            <text-property name="text">Most Unanswered/Postponed Risks</text-property>
+        </label>
+        <text id="2124">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Risks that were left unanswered or postponed the most.]]></text-property>
+        </text>
+        <table id="2107">
+            <property name="dataSet">Problematic Risks</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">title</property>
+                    <text-property name="displayName">title</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["title"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">num_unanswered</property>
+                    <text-property name="displayName">num_unanswered</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["num_unanswered"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2121"/>
+            <column id="2122"/>
+            <header>
+                <row id="2108">
+                    <cell id="2109">
+                        <label id="2110">
+                            <text-property name="text">Risk Title</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2111">
+                        <label id="2112">
+                            <text-property name="text">Num. Unanswered or Postponed</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2113">
+                    <cell id="2114">
+                        <data id="2115">
+                            <property name="resultSetColumn">title</property>
+                        </data>
+                    </cell>
+                    <cell id="2116">
+                        <data id="2117">
+                            <property name="resultSetColumn">num_unanswered</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <label id="2142">
+            <property name="style">heading1</property>
+            <text-property name="text">Number of Custom Risks</text-property>
+        </label>
+        <text id="2143">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Number of risks that were created by users, total and this tool only.]]></text-property>
+        </text>
+        <table id="2126">
+            <property name="dataSet">Num Custom Risks</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">total</property>
+                    <text-property name="displayName">total</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["total"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">tool</property>
+                    <text-property name="displayName">tool</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["tool"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2140"/>
+            <column id="2141"/>
+            <header>
+                <row id="2127">
+                    <cell id="2128">
+                        <label id="2129">
+                            <text-property name="text">Total</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2130">
+                        <label id="2131">
+                            <text-property name="text">Tool</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2132">
+                    <cell id="2133">
+                        <data id="2134">
+                            <property name="resultSetColumn">total</property>
+                        </data>
+                    </cell>
+                    <cell id="2135">
+                        <data id="2136">
+                            <property name="resultSetColumn">tool</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <label id="2155">
+            <property name="style">heading1</property>
+            <text-property name="text">Custom Risks per Assessment</text-property>
+        </label>
+        <text id="2156">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Average number of custom risks per assessment.]]></text-property>
+        </text>
+        <table id="2145">
+            <property name="dataSet">Custom Risks Per Session</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">case</property>
+                    <text-property name="displayName">case</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["case"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2154"/>
+            <header>
+                <row id="2146">
+                    <cell id="2147">
+                        <label id="2148">
+                            <text-property name="text">Custom Risks per Assessment</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2149">
+                    <cell id="2150">
+                        <data id="2151">
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">case</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="2157">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Only assessments that were modified after the "custom risk" feature was introduced (Nov 2015) are counted.]]></text-property>
+        </text>
+        <label id="2169">
+            <property name="style">heading1</property>
+            <text-property name="text">Custom Risks Ratio</text-property>
+        </label>
+        <text id="2170">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Percentage of custom risks of the total number of identified risks.]]></text-property>
+        </text>
+        <table id="2159">
+            <property name="dataSet">Custom Risks Ratio</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">case</property>
+                    <text-property name="displayName">case</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["case"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2168"/>
+            <header>
+                <row id="2160">
+                    <cell id="2161">
+                        <label id="2162">
+                            <text-property name="text">Custom Risks Ratio</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2163">
+                    <cell id="2164">
+                        <data id="2165">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">case</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="2171">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Only assessments that were modified after the "custom risk" feature was introduced (Nov 2015) are counted.]]></text-property>
+        </text>
+        <label id="2183">
+            <property name="style">heading1</property>
+            <text-property name="text">Custom Risks With Measures Ratio</text-property>
+        </label>
+        <text id="2184">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Percentage of custom risks with measures of the total number of custom risks associated with assessments that have an action plan.]]></text-property>
+        </text>
+        <table id="2173">
+            <property name="dataSet">Custom Risks With Measures</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">custom_risks_with_measures</property>
+                    <text-property name="displayName">custom_risks_with_measures</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["custom_risks_with_measures"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2182"/>
+            <header>
+                <row id="2174">
+                    <cell id="2175">
+                        <label id="2176">
+                            <text-property name="text">Custom Risks With Measures</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2177">
+                    <cell id="2178">
+                        <data id="2179">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="resultSetColumn">custom_risks_with_measures</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="2185">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Only assessments that were modified after the "custom risk" feature was introduced (Nov 2015) are counted.]]></text-property>
+        </text>
         <label id="1461">
             <property name="style">report-heading</property>
             <text-property name="text">Descriptive data based on survey results</text-property>
