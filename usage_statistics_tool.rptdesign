@@ -5404,12 +5404,12 @@ Users refers to the number of users that have created these assessments (sometim
         </table>
         <label id="2090">
             <property name="style">heading1</property>
-            <text-property name="text">Ratio of Risks with Defined Measures</text-property>
+            <text-property name="text">Ratio of Risks with Preventive Measures</text-property>
         </label>
         <text id="2091">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Percentage of all identified risks that have defined measures.]]></text-property>
+            <text-property name="content"><![CDATA[Percentage of all identified risks that have preventive measures.]]></text-property>
         </text>
         <table id="2080">
             <property name="dataSet">Risks with Measures</property>
