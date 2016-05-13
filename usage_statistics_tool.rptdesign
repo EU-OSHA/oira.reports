@@ -5345,7 +5345,7 @@ Users refers to the number of users that have created these assessments (sometim
         <text id="2078">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Average number of identified risks and defined measures per assessment.]]></text-property>
+            <text-property name="content"><![CDATA[Average number of identified risks and preventive measures per assessment.]]></text-property>
         </text>
         <table id="2061">
             <property name="dataSet">Risks and Measures Per Session</property>
