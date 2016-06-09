@@ -5791,10 +5791,20 @@ group by country order by sessions desc;]]></xml-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%' || params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
             <text-property name="text">User Accounts</text-property>
+        </label>
+        <label id="2006">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["sector"].value != '%' || params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Guest User Accounts</text-property>
         </label>
         <text id="1390">
             <property name="style">description</property>
@@ -5860,7 +5870,23 @@ Account creation time is not recorded in the system. This number represents the 
         </text>
         <label id="481">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Countries by Assessments and Users</text-property>
+        </label>
+        <label id="2003">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Countries by Assessments and Guest Users</text-property>
         </label>
         <table id="1391">
             <property name="dataSet">Assessments By Country</property>
@@ -6799,11 +6825,11 @@ Account creation time is not recorded in the system. This number represents the 
                 </row>
             </footer>
         </table>
-        <text id="1416">
+        <text-data id="2000">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by number of assessments and users during this month. Every assessment that has been started using a tool that belongs to the country is counted.]]></text-property>
-        </text>
+            <expression name="valueExpr">"All countries by number of assessments and " + (params["testsessions"].value == 1 ? "guest " : "") + "users during this month. Every assessment that has been started using a tool that belongs to the country is counted."</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <table id="109">
             <property name="dataSet">Assessments By Country</property>
             <list-property name="boundDataColumns">
@@ -7735,7 +7761,22 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                     <cell id="1083">
                         <label id="1087">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Users</text-property>
+                        </label>
+                        <label id="2002">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Guest Users</text-property>
                         </label>
                     </cell>
                 </row>
@@ -7781,7 +7822,23 @@ Account creation time is not recorded in the system. This number represents the 
         </table>
         <label id="1121">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Countries by Accumulated Assessments and Users</text-property>
+        </label>
+        <label id="2004">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Countries by Accumulated Assessments and Guest Users</text-property>
         </label>
         <table id="1122">
             <property name="dataSet">Assessments By Country Accumulated</property>
@@ -8762,11 +8819,11 @@ Account creation time is not recorded in the system. This number represents the 
                 </row>
             </footer>
         </table>
-        <text id="1417">
+        <text-data id="2001">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by number of accumulated assessments and users since August 2011. Every assessment that has been started between August 2011 and the end of the report period using a tool that belongs to the country is counted.]]></text-property>
-        </text>
+            <expression name="valueExpr">"All countries by number of accumulated assessments and  " + (params["testsessions"].value == 1 ? "guest " : "") + "users since August 2011. Every assessment that has been started between August 2011 and the end of the report period using a tool that belongs to the country is counted."</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <table id="1494">
             <property name="dataSet">Assessments By Country Accumulated</property>
             <list-property name="boundDataColumns">
@@ -9703,7 +9760,22 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                     <cell id="1500">
                         <label id="1501">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Accumulated Users</text-property>
+                        </label>
+                        <label id="2005">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Accumulated Guest Users</text-property>
                         </label>
                     </cell>
                 </row>
@@ -10172,13 +10244,13 @@ started assessments</text-property>
         </label>
         <label id="1696">
             <property name="style">heading1</property>
-            <text-property name="text">Number of Survey Responses</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Number of Survey Responses</text-property>
         </label>
         <table id="1674">
             <property name="dataSet">Survey Responses per Assessment</property>
@@ -10256,23 +10328,23 @@ started assessments</text-property>
         </table>
         <label id="1697">
             <property name="style">description</property>
-            <text-property name="text">Accumulated data since August 2011.</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Accumulated data since August 2011.</text-property>
         </label>
         <label id="1149">
             <property name="style">heading1</property>
-            <text-property name="text">Number of Survey Responses per Country</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Number of Survey Responses per Country</text-property>
         </label>
         <table id="1150">
             <property name="dataSet">Survey Responses By Country</property>
@@ -11222,14 +11294,14 @@ started assessments</text-property>
         </table>
         <text id="1425">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All countries by number of responses. ]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[All countries by number of responses. ]]></text-property>
         </text>
         <table id="1521">
             <property name="dataSet">Survey Responses By Country</property>
@@ -12179,24 +12251,24 @@ started assessments</text-property>
         </table>
         <text id="1462">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011.]]></text-property>
         </text>
         <label id="1168">
             <property name="style">heading1</property>
-            <text-property name="text">Number of Employees</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Number of Employees</text-property>
         </label>
         <table id="1169">
             <property name="dataSet">Survey Employees</property>
@@ -14192,24 +14264,24 @@ started assessments</text-property>
         </table>
         <text id="1461">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
         </text>
         <label id="1194">
             <property name="style">heading1</property>
-            <text-property name="text">Assessment conducted by</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Assessment conducted by</text-property>
         </label>
         <table id="1196">
             <property name="dataSet">Survey ConductedBy</property>
@@ -16205,24 +16277,24 @@ started assessments</text-property>
         </table>
         <text id="1464">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
         </text>
         <label id="1223">
             <property name="style">heading1</property>
-            <text-property name="text">Learned about OiRA</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Learned about OiRA</text-property>
         </label>
         <table id="1225">
             <property name="dataSet">Survey Referer</property>
@@ -18198,24 +18270,24 @@ started assessments</text-property>
         </table>
         <text id="1465">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
         </text>
         <label id="1251">
             <property name="style">heading1</property>
-            <text-property name="text">Workers were invited</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Workers were invited</text-property>
         </label>
         <table id="1253">
             <property name="dataSet">Survey WorkersParticipated</property>
@@ -20197,24 +20269,24 @@ started assessments</text-property>
         </table>
         <text id="1466">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
         </text>
         <label id="1703">
             <property name="style">heading1</property>
-            <text-property name="text">Needs were met</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Needs were met</text-property>
         </label>
         <table id="1704">
             <property name="dataSet">Survey NeedsMet</property>
@@ -21348,24 +21420,24 @@ started assessments</text-property>
         </table>
         <text id="1731">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
         </text>
         <label id="1760">
             <property name="style">heading1</property>
-            <text-property name="text">Would recommend tool</text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <text-property name="text">Would recommend tool</text-property>
         </label>
         <table id="1761">
             <property name="dataSet">Survey Recommend</property>
@@ -22511,14 +22583,14 @@ started assessments</text-property>
         </table>
         <text id="1813">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
             <list-property name="visibility">
                 <structure>
                     <property name="format">all</property>
                     <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
                 </structure>
             </list-property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
         </text>
     </body>
 </report>

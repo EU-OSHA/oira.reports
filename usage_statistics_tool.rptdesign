@@ -4691,14 +4691,29 @@ Account creation time is not recorded in the system. This number represents the 
         </text>
         <label id="481">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Assessments and Users</text-property>
         </label>
-        <text id="1416">
+        <label id="2003">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Assessments and Guest Users</text-property>
+        </label>
+        <text-data id="1416">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Assessments refers to the number of assessments started during the month.
-Users refers to the number of users that have created these assessments (sometimes a user creates more than one assessment).]]></text-property>
-        </text>
+            <property name="contentType">html</property>
+            <expression name="valueExpr">"Assessments refers to the number of assessments started during the month.  " + (params["testsessions"].value == 1 ? "Guest " : "") + "Users refers to the number of " + (params["testsessions"].value == 1 ? "guest " : "") + "users that have created these assessments (sometimes a " + (params["testsessions"].value == 1 ? "guest " : "") + "user creates more than one assessment)."</expression>
+        </text-data>
         <table id="1463">
             <property name="dataSet">Assessments And Users By Month</property>
             <list-property name="boundDataColumns">
@@ -4774,7 +4789,22 @@ Users refers to the number of users that have created these assessments (sometim
                     </cell>
                     <cell id="1467">
                         <label id="1468">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Users</text-property>
+                        </label>
+                        <label id="2002">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Guest Users</text-property>
                         </label>
                     </cell>
                 </row>
@@ -4820,13 +4850,29 @@ Users refers to the number of users that have created these assessments (sometim
         </table>
         <label id="1121">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Accumulated Assessments and Users</text-property>
         </label>
-        <text id="1417">
+        <label id="2501">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Accumulated Assessments and Guest Users</text-property>
+        </label>
+        <text-data id="1417">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Number of accumulated assessments and users since August 2011. Every assessment that has been started between August 2011 and the end of the given month using this tool is counted.]]></text-property>
-        </text>
+            <property name="contentType">html</property>
+            <expression name="valueExpr">"Number of accumulated assessments and " + (params["testsessions"].value == 1 ? "guest " : "") + "users since August 2011. Every assessment that has been started between August 2011 and the end of the given month using this tool is counted."</expression>
+        </text-data>
         <table id="1558">
             <property name="dataSet">Assessments And Users By Month Accumulated</property>
             <list-property name="boundDataColumns">
@@ -4870,7 +4916,22 @@ Users refers to the number of users that have created these assessments (sometim
                     </cell>
                     <cell id="1562">
                         <label id="1563">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Accumulated users</text-property>
+                        </label>
+                        <label id="2502">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Accumulated guest users</text-property>
                         </label>
                     </cell>
                 </row>
@@ -5405,11 +5466,11 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">heading1</property>
             <text-property name="text">Number of Custom Risks</text-property>
         </label>
-        <text id="2143">
+        <text-data id="2143">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Number of risks that were created by users, total and this tool only.]]></text-property>
-        </text>
+            <property name="contentType">html</property>
+            <expression name="valueExpr">"Number of risks that were created by " + (params["testsessions"].value == 1 ? "guest " : "") + "users, total and this tool only."</expression>
+        </text-data>
         <table id="2126">
             <property name="dataSet">Num Custom Risks</property>
             <list-property name="boundDataColumns">

@@ -3266,7 +3266,23 @@ function getCountryNameByCode(strValue) {
         </text>
         <label id="1113">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">User Accounts</text-property>
+        </label>
+        <label id="2006">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Guest User Accounts</text-property>
         </label>
         <text id="1390">
             <property name="style">description</property>
@@ -3314,7 +3330,23 @@ Account creation time is not recorded in the system. This number represents the 
         </text>
         <label id="481">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Tools by Assessments and Users</text-property>
+        </label>
+        <label id="2003">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Tools by Assessments and Guest Users</text-property>
         </label>
         <table id="109">
             <property name="dataSet">Assessments By Tool</property>
@@ -4430,11 +4462,11 @@ Account creation time is not recorded in the system. This number represents the 
                 </row>
             </footer>
         </table>
-        <text id="1416">
+        <text-data id="2000">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Assessments and users for all tools during the report period.]]></text-property>
-        </text>
+            <property name="contentType">html</property>
+            <expression name="valueExpr">"Assessments and " + (params["testsessions"].value == 1 ? "guest " : "") + "users for all tools during the report period."</expression>
+        </text-data>
         <table id="1502">
             <property name="dataSet">Assessments By Tool</property>
             <list-property name="boundDataColumns">
@@ -5365,7 +5397,22 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                     <cell id="1508">
                         <label id="1509">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Users</text-property>
+                        </label>
+                        <label id="2002">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Guest Users</text-property>
                         </label>
                     </cell>
                 </row>
@@ -5608,7 +5655,23 @@ Account creation time is not recorded in the system. This number represents the 
         </text>
         <label id="1121">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Tools by Accumulated Assessments and Users</text-property>
+        </label>
+        <label id="2004">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Tools by Accumulated Assessments and Guest Users</text-property>
         </label>
         <table id="1122">
             <property name="dataSet">Assessments By Tool Accumulated</property>
@@ -6583,11 +6646,11 @@ Account creation time is not recorded in the system. This number represents the 
                 </row>
             </footer>
         </table>
-        <text id="1417">
+        <text-data id="2001">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 per tool. Every assessment that has been started between August 2011 and the end of the report period is counted.]]></text-property>
-        </text>
+            <expression name="valueExpr">"Accumulated assessments and " + (params["testsessions"].value == 1 ? "guest " : "") + "users since August 2011 per tool. Every assessment that has been started between August 2011 and the end of the report period is counted."</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <table id="1529">
             <property name="dataSet">Assessments By Tool Accumulated</property>
             <list-property name="boundDataColumns">
@@ -7517,7 +7580,22 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                     <cell id="1535">
                         <label id="1536">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Accumulated Users</text-property>
+                        </label>
+                        <label id="2005">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Accumulated Guest Users</text-property>
                         </label>
                     </cell>
                 </row>
@@ -7563,13 +7641,29 @@ Account creation time is not recorded in the system. This number represents the 
         </table>
         <label id="1500">
             <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <text-property name="text">Accumulated Assessments and Users for all tools</text-property>
         </label>
-        <text id="1501">
+        <label id="2505">
+            <property name="style">heading1</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                </structure>
+            </list-property>
+            <text-property name="text">Accumulated Assessments and Guest Users for all tools</text-property>
+        </label>
+        <text-data id="1501">
             <property name="style">description</property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accumulated assessments and users since August 2011 for all tools. Every assessment that has been started between August 2011 and the end of the given month using a tool that belongs to the country is counted.]]></text-property>
-        </text>
+            <property name="contentType">html</property>
+            <expression name="valueExpr">"Accumulated assessments and " + (params["testsessions"].value == 1 ? "guest " : "") + "users since August 2011 for all tools. Every assessment that has been started between August 2011 and the end of the given month using a tool that belongs to the country is counted."</expression>
+        </text-data>
         <table id="1478">
             <property name="dataSet">Assessments By Month Accumulated</property>
             <list-property name="boundDataColumns">
@@ -7613,7 +7707,22 @@ Account creation time is not recorded in the system. This number represents the 
                     </cell>
                     <cell id="1482">
                         <label id="1483">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                                </structure>
+                            </list-property>
                             <text-property name="text">Accumulated users</text-property>
+                        </label>
+                        <label id="2506">
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 0</expression>
+                                </structure>
+                            </list-property>
+                            <text-property name="text">Accumulated guest users</text-property>
                         </label>
                     </cell>
                 </row>
