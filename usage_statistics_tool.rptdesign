@@ -5604,18 +5604,42 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1461">
             <property name="style">report-heading</property>
             <text-property name="text">Descriptive data based on survey results</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <text id="1462">
             <property name="style">heading2</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
         <label id="1149">
             <property name="style">heading1</property>
             <text-property name="text">Number of Survey Responses</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1761">
             <property name="dataSet">Survey Responses</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">responses</property>
@@ -5685,13 +5709,31 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1782">
             <property name="style">description</property>
             <text-property name="text">Accumulated data since publication of the tool.</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <label id="1168">
             <property name="style">heading1</property>
             <text-property name="text">Number of Employees</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1169">
             <property name="dataSet">Survey Employees</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">employees</property>
@@ -6684,9 +6726,21 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
         <table id="1608">
             <property name="dataSet">Survey Employees</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">employees</property>
@@ -7678,9 +7732,21 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1194">
             <property name="style">heading1</property>
             <text-property name="text">Assessment conducted by</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1196">
             <property name="dataSet">Survey ConductedBy</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -8673,9 +8739,21 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
         <table id="1635">
             <property name="dataSet">Survey ConductedBy</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -9667,9 +9745,21 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1223">
             <property name="style">heading1</property>
             <text-property name="text">Learned about OiRA</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1225">
             <property name="dataSet">Survey Referer</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -10655,9 +10745,21 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
         <table id="1662">
             <property name="dataSet">Survey Referer</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -11642,9 +11744,21 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1251">
             <property name="style">heading1</property>
             <text-property name="text">Workers were invited</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1253">
             <property name="dataSet">Survey WorkersParticipated</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -12630,9 +12744,21 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since publication of the tool.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
         <table id="1731">
             <property name="dataSet">Survey WorkersParticipated</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">count</property>
@@ -13617,9 +13743,21 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1703">
             <property name="style">heading1</property>
             <text-property name="text">Needs were met</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1704">
             <property name="dataSet">Survey NeedsMet</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">needs_met</property>
@@ -14614,9 +14752,21 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
         <table id="1783">
             <property name="dataSet">Survey NeedsMet</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">needs_met</property>
@@ -14744,9 +14894,21 @@ Only assessments that were modified within the reporting period are counted.]]><
         <label id="1832">
             <property name="style">heading1</property>
             <text-property name="text">Would recommend tool</text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </label>
         <table id="1833">
             <property name="dataSet">Survey Recommend</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">needs_met</property>
@@ -15745,6 +15907,12 @@ Only assessments that were modified within the reporting period are counted.]]><
         </table>
         <table id="1860">
             <property name="dataSet">Survey Recommend</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">needs_met</property>
@@ -15879,6 +16047,12 @@ Only assessments that were modified within the reporting period are counted.]]><
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accumulated data since August 2011 for all tools and countries.]]></text-property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr" type="javascript">params["testsessions"].value == 1</expression>
+                </structure>
+            </list-property>
         </text>
     </body>
 </report>
