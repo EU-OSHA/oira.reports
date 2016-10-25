@@ -2966,7 +2966,7 @@ select needs_met, count(session_id)
 from company,session
   join account on session.account_id = account.id, params
 where company.session_id = session.id
-and substring(zodb_path from '../(.*)/.*') like ?
+and substring(zodb_path from '../(.*)/.*') like params.sector
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified >= '2011-08-01'
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
