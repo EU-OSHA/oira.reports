@@ -4901,10 +4901,11 @@ Account creation time is not recorded in the system. This number represents the 
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[This only counts the number of logins - a user may or may not have accessed the tool while he/she was logged in. There are no guest user logins - a guest account must be converted to log in.]]></text-property>
         </text>
-        <label id="481">
+        <text-data id="2271">
             <property name="style">heading1</property>
-            <text-property name="text">Assessments and Users</text-property>
-        </label>
+            <expression name="valueExpr">'Assessments and' + (params["testsessions"].value == 1 ? ' Guest' : '') + ' Users'</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
@@ -5030,10 +5031,11 @@ Users refers to the number of users that have created these assessments (sometim
                 </row>
             </footer>
         </table>
-        <label id="1121">
+        <text-data id="2272">
             <property name="style">heading1</property>
-            <text-property name="text">Accumulated Assessments and Users</text-property>
-        </label>
+            <expression name="valueExpr">'Accumulated Assessments and' + (params["testsessions"].value == 1 ? ' Guest' : '') + ' Users'</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
