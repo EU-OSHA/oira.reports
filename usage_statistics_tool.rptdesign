@@ -337,6 +337,7 @@ where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) an
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
   and all_dates.date >= timestamp '2011-08-01'
+  and all_dates.date <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -525,6 +526,7 @@ where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) an
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
   and all_dates.date >= timestamp '2011-08-01'
+  and all_dates.date <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -1528,6 +1530,7 @@ WHERE statistics_sessions.session_id = session.id
   AND session.zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-01-01' end)::timestamp
+  AND session.modified <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -2209,6 +2212,7 @@ where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) an
                                 else
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
+  and all_dates.date <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
   and all_dates.date >= (case when params.testsessions = 0 then '2011-08-01' else '2016-01-01' end)::timestamp
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
