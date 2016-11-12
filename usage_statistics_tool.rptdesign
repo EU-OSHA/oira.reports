@@ -309,13 +309,14 @@
                     <property name="dataType">date-time</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with all_dates as (select to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') as month,
-                         (to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
-                     from generate_series(
-                     2011, (extract(year from now())::int + 2)
+            <xml-property name="queryText"><![CDATA[with
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
+     all_dates as (select to_char(year.year, 'FM0000') || '-' || to_char(month.month, 'FM00') as month,
+                         (to_char(year.year, 'FM0000') || '-' || to_char(month.month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
+                     from params, generate_series(
+                     (case when params.testsessions = 1 then 2016 else 2011 end), (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
        select session.id,
               account_id,
@@ -324,7 +325,7 @@
          from session
          join account on session.account_id = account.id, params
         where zodb_path = params.tool
-          and modified >= timestamp '2011-08-01'
+          and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
           and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
@@ -335,7 +336,8 @@ where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) an
                                 else
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
-  and all_dates.date >= timestamp '2011-08-01'
+  and all_dates.date >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
+  and all_dates.date <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -496,13 +498,14 @@ order by all_dates.date desc;]]></xml-property>
                     <property name="dataType">date-time</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[with all_dates as (select to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') as month,
-                         (to_char(year, 'FM0000') || '-' || to_char(month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
-                     from generate_series(
-                     2011, (extract(year from now())::int + 2)
+            <xml-property name="queryText"><![CDATA[with
+     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
+     all_dates as (select to_char(year.year, 'FM0000') || '-' || to_char(month.month, 'FM00') as month,
+                         (to_char(year.year, 'FM0000') || '-' || to_char(month.month, 'FM00') || '-01')::timestamp + interval '1 month' - interval '1 day' as date
+                     from params, generate_series(
+                     (case when params.testsessions = 1 then 2016 else 2011 end), (extract(year from now())::int + 2)
                                  ) as year
                 full outer join generate_series(1,12) as month on 't'),
-     params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions),
      session_tmp as (
        select session.id,
               account_id,
@@ -511,7 +514,7 @@ order by all_dates.date desc;]]></xml-property>
          from session
          join account on session.account_id = account.id, params
         where zodb_path = params.tool
-          and modified >= timestamp '2011-08-01'
+          and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
           and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
      )
 select count(session_tmp.id),count(distinct(account_id)) as users, all_dates.date as month
@@ -522,7 +525,8 @@ where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) an
                                 else
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
-  and all_dates.date >= timestamp '2011-08-01'
+  and all_dates.date >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
+  and all_dates.date <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -663,7 +667,7 @@ from company right outer join session
   on company.session_id = session.id
   join account on session.account_id = account.id, params
   where zodb_path = params.tool
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
@@ -829,7 +833,7 @@ join account on session.account_id = account.id, params
 where company.session_id = session.id
   and zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -995,7 +999,7 @@ from company,session
 where company.session_id = session.id
   and zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -1161,7 +1165,7 @@ from company,session
 where company.session_id = session.id
   and zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -1327,7 +1331,7 @@ from company,session
 where company.session_id = session.id
 and zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -1525,7 +1529,8 @@ FROM statistics_sessions, session
 WHERE statistics_sessions.session_id = session.id
   AND session.zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  AND session.modified >= '2011-08-01'
+  AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
+  AND session.modified <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
   AND modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -1714,7 +1719,7 @@ from company,session
 where company.session_id = session.id
 and zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -1877,7 +1882,7 @@ from company,session
 where company.session_id = session.id
 and zodb_path = params.tool
   and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-  and modified >= '2011-08-01'
+  and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
   and modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -2195,7 +2200,7 @@ where session.account_id = statistics_login.account_id
            where action_plan.risk_id = tree.id
              and tree.session_id = session.id
              and session.zodb_path = params.tool
-             and modified >= timestamp '2011-08-01'
+             and modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
              and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
         group by session.id
      )
@@ -2207,7 +2212,8 @@ where all_dates.date <  cast(case when (params.quarter=0 or params.quarter=4) an
                                 else
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
-  and all_dates.date >= timestamp '2011-08-01'
+  and all_dates.date <= (date_trunc('MONTH', now()) + INTERVAL '1 MONTH - 1 day')::DATE
+  and all_dates.date >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
 group by all_dates.date
 order by all_dates.date desc;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
@@ -2421,7 +2427,7 @@ select avg(cast(not_present as numeric)) as not_present,
       from tree, risk, params, session, account
      where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
        and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-       AND session.modified >= '2011-08-01'
+       AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
        AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                             to_char((case when params.quarter=0 then
                                           (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -2644,7 +2650,7 @@ select case when count(distinct session.id)!=0 then cast(count(risk.identificati
   from tree left join action_plan on action_plan.risk_id = tree.id, risk, params, session, account
  where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-   AND session.modified >= '2011-08-01'
+   AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
    AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                         to_char((case when params.quarter=0 then
                                       (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -2884,7 +2890,7 @@ select case when count(id)!=0 then cast(count(num_measures>0 or NULL) as numeric
       from tree left join action_plan on action_plan.risk_id = tree.id, risk, params, session, account
      where tree.id = risk.id and session.id = tree.session_id and session.zodb_path = params.tool and session.account_id = account.id
        and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-       AND session.modified >= '2011-08-01'
+       AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
        AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                             to_char((case when params.quarter=0 then
                                           (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -3102,7 +3108,7 @@ select case when count(created)!=0 then count(((modified - created) > '01:00:00'
   from params, session, account
  where session.zodb_path = params.tool and session.account_id = account.id
    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-   AND session.modified >= '2011-08-01'
+   AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
    AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                         to_char((case when params.quarter=0 then
                                       (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -3337,7 +3343,7 @@ select max(tree.title) as title, count(tree.id) as num_unanswered
   from tree, risk, session, params, account
  where risk.identification IS NULL and tree.session_id = session.id and tree.id = risk.id and session.zodb_path = params.tool and session.account_id = account.id
    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-   AND session.modified >= '2011-08-01'
+   AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
    AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                         to_char((case when params.quarter=0 then
                                       (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -3576,7 +3582,7 @@ select count(tree.id) as total, count((session.zodb_path = params.tool) or NULL)
    and is_custom_risk = true
    and session.account_id = account.id
    and ((params.testsessions=1 and account_type='guest') or (params.testsessions=0 and (account_type is Null or (account_type is not Null and account_type!='guest'))))
-   AND session.modified >= '2011-08-01'
+   AND session.modified >= (case when params.testsessions = 0 then '2011-08-01' else '2016-03-01' end)::timestamp
    AND session.modified < cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                         to_char((case when params.quarter=0 then
                                       (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
@@ -4895,10 +4901,11 @@ Account creation time is not recorded in the system. This number represents the 
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[This only counts the number of logins - a user may or may not have accessed the tool while he/she was logged in. There are no guest user logins - a guest account must be converted to log in.]]></text-property>
         </text>
-        <label id="481">
+        <text-data id="2271">
             <property name="style">heading1</property>
-            <text-property name="text">Assessments and Users</text-property>
-        </label>
+            <expression name="valueExpr">'Assessments and' + (params["testsessions"].value == 1 ? ' Guest' : '') + ' Users'</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <text id="1416">
             <property name="style">description</property>
             <property name="contentType">auto</property>
@@ -5024,10 +5031,11 @@ Users refers to the number of users that have created these assessments (sometim
                 </row>
             </footer>
         </table>
-        <label id="1121">
+        <text-data id="2272">
             <property name="style">heading1</property>
-            <text-property name="text">Accumulated Assessments and Users</text-property>
-        </label>
+            <expression name="valueExpr">'Accumulated Assessments and' + (params["testsessions"].value == 1 ? ' Guest' : '') + ' Users'</expression>
+            <property name="contentType">html</property>
+        </text-data>
         <text id="1417">
             <property name="style">description</property>
             <property name="contentType">auto</property>
