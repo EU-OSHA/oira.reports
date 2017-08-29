@@ -731,14 +731,27 @@ order by count desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
+
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Number Of Accounts" id="125">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">count</property>
+                    <property name="columnName">regular</property>
                     <property name="analysis">measure</property>
-                    <text-property name="displayName">count</text-property>
-                    <text-property name="heading">count</text-property>
+                    <text-property name="displayName">regular</text-property>
+                    <text-property name="heading">regular</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">guest</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">guest</text-property>
+                    <text-property name="heading">guest</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">converted</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">converted</text-property>
+                    <text-property name="heading">converted</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters"/>
@@ -746,7 +759,17 @@ order by count desc;]]></xml-property>
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">count</property>
+                        <property name="name">regular</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">guest</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">converted</property>
                         <property name="dataType">decimal</property>
                     </structure>
                 </list-property>
@@ -755,18 +778,32 @@ order by count desc;]]></xml-property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">count</property>
-                    <property name="nativeName">count</property>
+                    <property name="name">regular</property>
+                    <property name="nativeName">regular</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">guest</property>
+                    <property name="nativeName">guest</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">converted</property>
+                    <property name="nativeName">converted</property>
                     <property name="dataType">decimal</property>
                     <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[select distinct count(loginname)
+            <xml-property name="queryText"><![CDATA[select count(account_type is Null or null) as regular,
+       count(account_type = 'guest' or null) as guest,
+       count(account_type = 'converted' or null) as converted
 from account
 where
-	substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
-    and (account_type is Null or (account_type is not Null and account_type!='guest'))
-	]]></xml-property>
+    strpos(loginname, '@') = 0 or substring(loginname from '.*@(.*)') not in ('syslab.com', 'osha.europa.eu')]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Tools Published" id="1053">
             <list-property name="columnHints">
@@ -3731,6 +3768,100 @@ group by country order by sessions desc;]]></xml-property>
                 </cell>
             </row>
         </grid>
+
+        <label id="1113">
+            <property name="style">heading1</property>
+            <text-property name="text">User Accounts</text-property>
+        </label>
+        <text id="1390">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+        </text>
+        <table id="2209">
+            <property name="dataSet">Number Of Accounts</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">regular</property>
+                    <text-property name="displayName">regular</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["regular"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">guest</property>
+                    <text-property name="displayName">guest</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["guest"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">converted</property>
+                    <text-property name="displayName">converted</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["converted"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+            </list-property>
+            <column id="2228"/>
+            <column id="2229"/>
+            <column id="2230"/>
+            <column id="2233"/>
+            <header>
+                <row id="2210">
+                    <cell id="2211">
+                        <label id="2212">
+                            <text-property name="text">Regular Accounts</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2213">
+                        <label id="2214">
+                            <text-property name="text">Guest Accounts</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2215">
+                        <label id="2216">
+                            <text-property name="text">Converted Accounts</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2231">
+                        <label id="2234">
+                            <property name="fontWeight">bold</property>
+                            <text-property name="text">Total Number Of Accounts Created (For the complete OiRA platform)</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2217">
+                    <cell id="2218">
+                        <data id="2219">
+                            <property name="resultSetColumn">regular</property>
+                        </data>
+                    </cell>
+                    <cell id="2220">
+                        <data id="2221">
+                            <property name="resultSetColumn">guest</property>
+                        </data>
+                    </cell>
+                    <cell id="2222">
+                        <data id="2223">
+                            <property name="resultSetColumn">converted</property>
+                        </data>
+                    </cell>
+                    <cell id="2232">
+                        <text-data id="2235">
+                            <property name="fontWeight">bold</property>
+                            <expression name="valueExpr">row["regular"] + row["guest"] + row["converted"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="1457">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Accounts are not linked to a country or sector, therefore the total number of all accounts in the OiRA platform is shown here.
+Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
+        </text>
         <label id="1060">
             <property name="style">heading1</property>
             <text-property name="text">Published Tools</text-property>
@@ -5784,78 +5915,6 @@ group by country order by sessions desc;]]></xml-property>
             <property name="style">description</property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Tools that used to be published and were later retracted are not recorded in the system. This information represents the state at report creation time, not necessarily in the report period!]]></text-property>
-        </text>
-        <label id="1113">
-            <property name="style">heading1</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
-            <text-property name="text">User Accounts</text-property>
-        </label>
-        <text id="1390">
-            <property name="style">description</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
-        </text>
-        <table id="126">
-            <property name="width">2.4895833333333335in</property>
-            <property name="dataSet">Number Of Accounts</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
-            <list-property name="boundDataColumns">
-                <structure>
-                    <property name="name">count</property>
-                    <text-property name="displayName">count</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["count"]</expression>
-                    <property name="dataType">decimal</property>
-                </structure>
-            </list-property>
-            <column id="135">
-                <property name="width">2.4895833333333335in</property>
-            </column>
-            <header>
-                <row id="127">
-                    <cell id="128">
-                        <label id="129">
-                            <text-property name="text">Total Number Of Accounts Created (For the complete OiRA platform)</text-property>
-                        </label>
-                    </cell>
-                </row>
-            </header>
-            <detail>
-                <row id="130">
-                    <cell id="131">
-                        <data id="132">
-                            <property name="resultSetColumn">count</property>
-                        </data>
-                    </cell>
-                </row>
-            </detail>
-        </table>
-        <text id="1457">
-            <property name="style">description</property>
-            <list-property name="visibility">
-                <structure>
-                    <property name="format">all</property>
-                    <expression name="valueExpr" type="javascript">params["sector"].value != '%'</expression>
-                </structure>
-            </list-property>
-            <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Accounts are not linked to a country or sector, therefore the total number of all accounts in the OiRA platform is shown here.
-Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
         </text>
         <label id="481">
             <property name="style">heading1</property>
