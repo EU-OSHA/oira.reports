@@ -1964,7 +1964,7 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Logins" id="1886">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions" id="1886">
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">converted</property>
@@ -1977,6 +1977,12 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                     <property name="analysis">measure</property>
                     <text-property name="displayName">regular</text-property>
                     <text-property name="heading">regular</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">guest</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">guest</text-property>
+                    <text-property name="heading">guest</text-property>
                 </structure>
             </list-property>
             <list-property name="parameters">
@@ -2043,6 +2049,11 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                         <property name="name">regular</property>
                         <property name="dataType">decimal</property>
                     </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">guest</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
                 </list-property>
             </structure>
             <property name="dataSource">OiRA Postgres DB</property>
@@ -2061,23 +2072,31 @@ group by recommend_tool order by recommend_tool;]]></xml-property>
                     <property name="dataType">decimal</property>
                     <property name="nativeDataType">-5</property>
                 </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">guest</property>
+                    <property name="nativeName">guest</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+
             </list-property>
             <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as tool, ?::integer as testsessions)
 select count(account_type = 'converted' or null) as converted,
-       count(account_type is null or null) as regular
-  from session join account on session.account_id = account.id, statistics_login, params
-where session.account_id = statistics_login.account_id
-  and account.id = statistics_login.account_id
-  and zodb_path = params.tool
-  and substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu')
-  and statistics_login.time >= '2011-08-01'
-  and statistics_login.time <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+       count(account_type is null or null) as regular,
+       count(account_type = 'guest' or null) as guest
+  from session join account on session.account_id = account.id, params
+where
+  zodb_path = params.tool
+  and (substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu') or substring(loginname from '.*@(.*)') is null)
+  and session.modified >= '2011-08-01'
+  and session.modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
                                 else
                                      (params.quarter * 3) % 12 + 1 end), 'FM09') ||
                        '-01' as date)
-  and statistics_login.time >= cast(params.year::text || '-' ||
+  and session.modified >= cast(params.year::text || '-' ||
                        to_char((case when params.quarter=0 then
                                      (case when params.month = 0 then  1 else params.month           end)
                                 else
@@ -4731,15 +4750,15 @@ from custom_risks_measures;]]></xml-property>
         </grid>
         <label id="1898">
             <property name="style">heading1</property>
-            <text-property name="text">Logins</text-property>
+            <text-property name="text">Sessions</text-property>
         </label>
         <text id="1899">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Number of times a user with an existing assessment using this tool has logged in during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+            <text-property name="content"><![CDATA[Number of users that have worked on an assessment of this OiRA tool during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
         <table id="2186">
-            <property name="dataSet">Logins</property>
+            <property name="dataSet">Sessions</property>
             <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">converted</property>
@@ -4753,9 +4772,19 @@ from custom_risks_measures;]]></xml-property>
                     <expression name="expression" type="javascript">dataSetRow["regular"]</expression>
                     <property name="dataType">decimal</property>
                 </structure>
+                <structure>
+                    <property name="name">guest</property>
+                    <text-property name="displayName">guest</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["guest"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+
             </list-property>
             <column id="2201"/>
             <column id="2200">
+                <property name="repeat">1</property>
+            </column>
+            <column id="2205">
                 <property name="repeat">1</property>
             </column>
             <column id="2205">
@@ -4771,6 +4800,11 @@ from custom_risks_measures;]]></xml-property>
                     <cell id="2188">
                         <label id="2189">
                             <text-property name="text">Converted Users</text-property>
+                        </label>
+                    </cell>
+                    <cell id="21881">
+                        <label id="21891">
+                            <text-property name="text">Guest Users</text-property>
                         </label>
                     </cell>
                     <cell id="2202">
@@ -4793,10 +4827,15 @@ from custom_risks_measures;]]></xml-property>
                             <property name="resultSetColumn">converted</property>
                         </data>
                     </cell>
+                    <cell id="21931">
+                        <data id="21941">
+                            <property name="resultSetColumn">guest</property>
+                        </data>
+                    </cell>
                     <cell id="2203">
                         <text-data id="2208">
                             <property name="fontWeight">bold</property>
-                            <expression name="valueExpr">row["converted"] + row["regular"]</expression>
+                            <expression name="valueExpr">row["converted"] + row["regular"] + row["guest"]</expression>
                             <property name="contentType">html</property>
                         </text-data>
                     </cell>
@@ -4806,7 +4845,7 @@ from custom_risks_measures;]]></xml-property>
         <text id="1920">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[This only counts the number of logins - a user may or may not have accessed the tool while he/she was logged in. There are no guest user logins - a guest account must be converted to log in.]]></text-property>
+            <text-property name="content"><![CDATA[The table shows the number of separate sessions for this OiRA tool. A user may continue to work on an assessment of the same OiRA tool multiple times during the report period - this is only counted once. But a user might start more than one assessment of an OiRA tool - those are counted separately.]]></text-property>
         </text>
         <text-data id="2271">
             <property name="style">heading1</property>
