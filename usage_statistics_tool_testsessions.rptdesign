@@ -4755,7 +4755,7 @@ from custom_risks_measures;]]></xml-property>
         <text id="1899">
             <property name="style">description</property>
             <property name="contentType">auto</property>
-            <text-property name="content"><![CDATA[Number of users that have worked on an assessment of this OiRA tool during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+            <text-property name="content"><![CDATA[Number of sessions that have been worked on in an assessment of this OiRA tool during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
         </text>
         <table id="2186">
             <property name="dataSet">Sessions</property>
