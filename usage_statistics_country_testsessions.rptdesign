@@ -378,6 +378,145 @@ order by count desc;]]></xml-property>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
         </oda-data-set>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Sessions" id="11886">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">converted</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">converted</text-property>
+                    <text-property name="heading">converted</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">regular</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">regular</text-property>
+                    <text-property name="heading">regular</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">guest</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">guest</text-property>
+                    <text-property name="heading">guest</text-property>
+                </structure>
+            </list-property>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">param_1</property>
+                    <property name="paramName">year</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">1</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_2</property>
+                    <property name="paramName">month</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">2</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_3</property>
+                    <property name="paramName">quarter</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">3</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">param_4</property>
+                    <property name="paramName">country</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                    <property name="position">4</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+                <structure>
+                    <property name="name">testsessions</property>
+                    <property name="paramName">testsessions</property>
+                    <property name="nativeName"></property>
+                    <property name="dataType">integer</property>
+                    <property name="nativeDataType">4</property>
+                    <property name="position">5</property>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">converted</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">regular</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">guest</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">OiRA Postgres DB</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">converted</property>
+                    <property name="nativeName">converted</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">regular</property>
+                    <property name="nativeName">regular</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">guest</property>
+                    <property name="nativeName">guest</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">-5</property>
+                </structure>
+
+            </list-property>
+            <xml-property name="queryText"><![CDATA[with params as (select ?::integer as year, ?::integer as month, ?::integer as quarter, ?::text as country, ?::integer as testsessions)
+select count(account_type = 'converted' or null) as converted,
+       count(account_type is null or null) as regular,
+       count(account_type = 'guest' or null) as guest
+  from session join account on session.account_id = account.id, params
+where
+  zodb_path LIKE params.country || '/%'
+  and (substring(loginname from '.*@(.*)') not  in ('syslab.com', 'osha.europa.eu') or substring(loginname from '.*@(.*)') is null)
+  and session.modified >= '2011-08-01'
+  and session.modified <  cast(case when (params.quarter=0 or params.quarter=4) and (params.month = 0 or params.month = 12) then (params.year + 1)::text else params.year::text end || '-' ||
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then 1 else (params.month % 12) + 1 end)
+                                else
+                                     (params.quarter * 3) % 12 + 1 end), 'FM09') ||
+                       '-01' as date)
+  and session.modified >= cast(params.year::text || '-' ||
+                       to_char((case when params.quarter=0 then
+                                     (case when params.month = 0 then  1 else params.month           end)
+                                else
+                                     params.quarter * 3 - 2 end), 'FM09') ||
+                       '-01' as date)]]></xml-property>
+        </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Assessments By Tool" id="108">
             <property name="nullsOrdering">nulls lowest</property>
             <list-property name="parameters">
@@ -3399,6 +3538,105 @@ group by zodb_path order by sessions desc;]]></xml-property>
             <property name="contentType">auto</property>
             <text-property name="content"><![CDATA[Accounts are not linked to a country or sector, therefore the total number of all accounts in the OiRA platform is shown here.
 Account creation time is not recorded in the system. This number represents the state at report creation time, not necessarily in the report period!]]></text-property>
+        </text>
+        <label id="1898">
+            <property name="style">heading1</property>
+            <text-property name="text">Sessions</text-property>
+        </label>
+        <text id="1899">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Number of users that have worked on an assessment of an OiRA tool in this country during the report period. All accounts with domain @syslab.com and @osha.europa.eu are filtered out.]]></text-property>
+        </text>
+        <table id="2186">
+            <property name="dataSet">Sessions</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">converted</property>
+                    <text-property name="displayName">converted</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["converted"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">regular</property>
+                    <text-property name="displayName">regular</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["regular"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="name">guest</property>
+                    <text-property name="displayName">guest</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["guest"]</expression>
+                    <property name="dataType">decimal</property>
+                </structure>
+
+            </list-property>
+            <column id="2201"/>
+            <column id="2200">
+                <property name="repeat">1</property>
+            </column>
+            <column id="2205">
+                <property name="repeat">1</property>
+            </column>
+            <column id="2205">
+                <property name="repeat">1</property>
+            </column>
+            <header>
+                <row id="2187">
+                    <cell id="2190">
+                        <label id="2191">
+                            <text-property name="text">Regular Users</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2188">
+                        <label id="2189">
+                            <text-property name="text">Converted Users</text-property>
+                        </label>
+                    </cell>
+                    <cell id="21881">
+                        <label id="21891">
+                            <text-property name="text">Guest Users</text-property>
+                        </label>
+                    </cell>
+                    <cell id="2202">
+                        <label id="2206">
+                            <property name="fontWeight">bold</property>
+                            <text-property name="text">Total</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="2192">
+                    <cell id="2195">
+                        <data id="2196">
+                            <property name="resultSetColumn">regular</property>
+                        </data>
+                    </cell>
+                    <cell id="2193">
+                        <data id="2194">
+                            <property name="resultSetColumn">converted</property>
+                        </data>
+                    </cell>
+                    <cell id="21931">
+                        <data id="21941">
+                            <property name="resultSetColumn">guest</property>
+                        </data>
+                    </cell>
+                    <cell id="2203">
+                        <text-data id="2208">
+                            <property name="fontWeight">bold</property>
+                            <expression name="valueExpr">row["converted"] + row["regular"] + row["guest"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <text id="11920">
+            <property name="style">description</property>
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[The table shows the number of separate sessions for OiRA tools of this country. A user may continue to work on an assessment of the same OiRA tool multiple times during the report period - this is only counted once. But a user might start more than one assessment of an OiRA tool - those are counted separately.]]></text-property>
         </text>
         <label id="1060">
             <property name="style">heading1</property>
