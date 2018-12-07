@@ -20,7 +20,7 @@ def run():
             txt = txt.replace("{{component.database_user}}", database_user)
             txt = txt.replace(
                 "{{component.database_password}}",
-                base64.b64encode(database_user))
+                base64.b64encode(database_password))
         with open(fname, 'w') as fh:
             fh.write(txt)
         print "Written: {}".format(fname)
